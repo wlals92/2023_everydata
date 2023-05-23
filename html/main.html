@@ -1,0 +1,152 @@
+<!--이지민 작성-->
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width", initial-scale="1.0">
+        <link rel="icon" sizes="192x192" href="../img/logo-green.png">
+        <!-- 바로가기 아이콘 -->
+        <script src="https://use.fontawesome.com/releases/v6.4.0/js/all.js"></script>
+        <!-- 폰트 -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+        <!-- 메인 페이지에서 사용하는 css, 자바스크립트 파일 -->
+        <link type="text/css" rel="stylesheet" href="../css/nav.css">
+        <link type="text/css" rel="stylesheet" href="../css/main.css">
+        <link type="text/css" rel="stylesheet" href="../css/footer.css">
+        <script type="text/javascript" defer src="../js/main.js"></script>
+        <script type="text/javascript" defer src="../js/page.js"></script>
+        <!-- jquery 라이브러리 -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <title>EVERYDATA</title>
+    </head>
+    <body>
+        <header>
+            <nav>
+                <ul id="nav-menu">
+                    <li><a href="./manageCredit.html">학점 관리</a></li>
+                    <li><a href="./scholarshipInformation.html">장학 정보</a></li>
+                    <li>
+                        <a>강의</a>
+                        <ul id="nav-menu_sub">
+                            <li><a href="./searchTimeTable.html">강의 목록</a></li>
+                            <li><a href="./recommendProcess.html">강의 추천</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <div id="nav-logo">
+                    <a href="main.html">
+                        <img id="nav-logo_img" src="../img/logo-text-green.png" alt="메인로고" height="30">
+                    </a>
+                    <!-- <a href="main.html">
+                        <span>EVERY</span><span class="nav-logo_data">DATA</span>
+                    </a> -->
+                </div>
+                <button id="nav-logout_button" type="button" onclick="logout()">로그아웃</button>
+            </nav>
+        </header>
+        <main>
+            <div class="main-container">
+                <div class="main-section">
+                    <div id="main-timetable_top">
+                        <span id="p-semester_date"></span>
+                        <button id="main-plus_button" onclick="openSubjectList()">+</button>
+                    </div>
+                    <table id="main-timetable">
+                    </table>
+                </div>
+                <div class="main-right">
+                    <div class="main-section">
+                        <div id="main-profile_top">
+                            <div id="profile-img_box">
+                                <img id="profile-img" src="../img/profile-gnu.png">
+                            </div>
+                            <span id="profile-name">이지민</span><span>님, 환영합니다!</span>
+                        </div>
+                        <div class="main-profile">
+                            <div>이수학점</div>
+                            <span id="profile-user_credit">76</span><span>/</span><span id="profile-total_credit">130</span>
+                            <a href="./myPage.html">마이페이지 바로가기</a>
+                        </div>
+                        <table class="main-profile">
+                            <tr>
+                                <th><div>학과</div></th>
+                                <td id="profile-major">컴퓨터과학과</td>
+                                <th><div>상태</div></th>
+                                <td id="profile-status">학부생/재학</td>
+                            </tr>
+                            <tr>
+                                <th><div>학번</div></th>
+                                <td id="profile-student_id">2023000000</td>
+                                <th><div>학년</div></th>
+                                <td id="profile-grade">3</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="main-section">
+                        <h2>바로가기</h2>
+                        <div id="main-shortcut">
+                            <div>
+                                <a href="https://www.gnu.ac.kr/main/main.do" target="_blank">
+                                    <div class="shortcut-circle"> 
+                                        <i class="fa-solid fa-school fa-2x"></i>
+                                    </div>
+                                    <div class="shortcut-name">학교 홈페이지</div>
+                                </a>
+                                <a href="https://portal.gnu.ac.kr/portal/default/stuMain" target="_blank">
+                                    <div class="shortcut-circle">
+                                        <i class="fa-solid fa-laptop fa-2x"></i>
+                                    </div>
+                                    <div class="shortcut-name">통합서비스</div>
+                                </a>
+                            </div>
+                            <div>
+                                <a href="https://sugang.gnu.ac.kr/login" target="_blank">
+                                    <div class="shortcut-circle">
+                                        <i class="fa-solid fa-calendar-days fa-2x"></i>
+                                    </div>
+                                    <div class="shortcut-name">수강신청</div>
+                                </a>
+                                <a href="https://nerum.gnu.ac.kr/index.do" target="_blank">
+                                    <div class="shortcut-circle">
+                                        <i class="fa-solid fa-graduation-cap fa-2x"></i>
+                                    </div>
+                                    <div class="shortcut-name">학생역량시스템</div>
+                                </a>
+                            </div>
+                            <div>
+                                <a href="https://www.rec.ac.kr/gnu" target="_blank">
+                                    <div class="shortcut-circle">
+                                        <i class="fa-solid fa-book fa-2x"></i>
+                                    </div>
+                                    <div class="shortcut-name">LMS</div>
+                                </a>
+                                <a href="https://gelc.or.kr/main/MainView.dunet#main" target="_blank">
+                                    <div class="shortcut-circle">
+                                        <i class="fa-solid fa-chalkboard-user fa-2x"></i>
+                                    </div>
+                                    <div class="shortcut-name">교류용이러닝</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="subject-list-popup" style="display: none;">
+                <div id="subject-list"></div>
+            </div>
+        </main>
+        <footer>
+            <div id="footer-left">
+                <div>2023 - 1 소프트웨어설계PBL : EVERYDATA</div>
+                <div>팀 오합지졸 - 남서린 | 민희진 | 이지민 | 훌랑</div>
+                <div>Copyright 2023. 오합지졸 All rights reserved.</div>
+            </div>
+            <div id="footer-right">
+                <img src="../img/logo-white.png" width="80">
+            </div>
+        </footer>
+    </body>
+</html>

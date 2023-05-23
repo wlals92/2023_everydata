@@ -1,0 +1,143 @@
+<!--이지민 작성-->
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width", initial-scale="1.0">
+        <link type="text/css" rel="stylesheet" href="../css/searchTimeTable.css">
+        <link type="text/css" rel="stylesheet" href="../css/nav.css">
+        <link type="text/css" rel="stylesheet" href="../css/footer.css">
+        <script type="text/javascript" defer src="../js/searchTimeTable.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <title>EVERYDATA</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+        <link rel="icon" sizes="192x192" href="../img/logo-green.png">
+        <script src="https://use.fontawesome.com/releases/v6.4.0/js/all.js"></script>
+    </head>
+    <body>
+        <header>
+            <nav>
+                <ul id="nav-menu">
+                    <li><a href="./manageCredit.html">학점 관리</a></li>
+                    <li><a href="./scholarshipInformation.html">장학 정보</a></li>
+                    <li>
+                        <a style="color: black;">강의</a>
+                        <ul id="nav-menu_sub">
+                            <li><a href="./searchTimeTable.html">강의 목록</a></li>
+                            <li><a href="./recommendProcess.html">강의 추천</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <div id="nav-logo">
+                    <a href="main.html">
+                        <img id="nav-logo_img" src="../img/logo-text-green.png" alt="메인로고" height="30">
+                    </a>
+                </div>
+                <button id="nav-logout_button" type="button" onclick="">로그아웃</button>
+            </nav>
+        </header>
+        <section id="section-block">
+            <div id="div-class_box">
+                <p><strong style="color: black;">강의 > 강의목록</strong></p>
+            </div>
+            <div id="section-search_box">
+                <form id="div-search_time_table">
+                    <input type="text" id="form-search_text" placeholder="강의명 검색">
+                    <button id="form-search_button"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </form>
+            </div>
+            <div id="section-class_category">
+                <table id="div-class_category_table">
+                    <tr>
+                        <th>년도</th>
+                        <td colspan="9">
+                            <div id="p-semester_date"></div> 
+                        </td>
+                        <!--<th>구분</th>-->
+                        <td>
+                            <!--<select id="table-ge_category">
+                                <optgroup label="교양">
+                                    <option value="교양">교양</option>
+                                    <option value="균형교양"><b>*--통합교양--*</b></option>
+                                    <option value="문학과문화">1영역(문학과 문화)</option>
+                                    <option value="역사와철학">2영역(역사와 철학)</option>
+                                    <option value="인간과사회">3영역(인간과 사회)</option>
+                                    <option value="생명과환경">4영역(생명과 환경)</option>
+                                    <option value="과학과기술">5영역(과학과 기술)</option>
+                                    <option value="예술과체육">6영역(예술과 체육)</option>
+                                    <option value="융복합영역">7영역(융복합 영역)</option>
+                                    <option value="진로와개척">8영역(진로와 개척)</option>
+                                    <option value="핵심교양"><b>*--핵심교양--*</b></option>
+                                    <option value="영어">영어</option>
+                                    <option value="글쓰기">글쓰기</option>
+                                    <option value="디지털리터러시">디지털 리터러시</option>
+                                    <option value="기초교양"><b>*--기초교양--*</b></option>
+                                    <option value="외국어">외국어</option>
+                                    <option value="인문">인문사회</option>
+                                    <option value="자연">자연계열</option>
+                                </optgroup>
+                                <optgroup label="전공">
+                                    <option value="전공"><b>*--전공--*</b></option>
+                                    <option value="전공선택">전공선택</option>
+                                    <option value="전공필수">전공필수</option>
+                                    <option value="교직">교직</option>
+                                </optgroup>
+                            </select>-->
+                        </td>
+                    </tr>
+                    <tr>
+                        <!-- 요일은 하나만! -->
+                        <th>요일</th>
+                        <td><label><input type="checkbox" class="table-select_day" name="table-select_day" value="월" onclick="filterSubjectList('월')">월</label></td>
+                        <td><label><input type="checkbox" class="table-select_day" name="table-select_day" value="화" onclick="filterSubjectList('화')">화</label></td>
+                        <td><label><input type="checkbox" class="table-select_day" name="table-select_day" value="수" onclick="filterSubjectList('수')">수</label></td>
+                        <td><label><input type="checkbox" class="table-select_day" name="table-select_day" value="목" onclick="filterSubjectList('목')">목</label></td>
+                        <td><label><input type="checkbox" class="table-select_day" name="table-select_day" value="금" onclick="filterSubjectList('금')">금</label></td>
+                        <td><label><input type="checkbox" class="table-select_day" name="table-select_day" value="토" onclick="filterSubjectList('토')">토</label></td>
+                      </tr>
+                      <tr>
+                        <th>교시</th>
+                        <td><label><input type="checkbox" class="table-select_hour" name="table-select_time" value="1" onclick="filterSubjectList(1)">1</label></td>
+                        <td><label><input type="checkbox" class="table-select_hour" name="table-select_time" value="2" onclick="filterSubjectList(2)">2</label></td>
+                        <td><label><input type="checkbox" class="table-select_hour" name="table-select_time" value="3" onclick="filterSubjectList(3)">3</label></td>
+                        <td><label><input type="checkbox" class="table-select_hour" name="table-select_time" value="4" onclick="filterSubjectList(4)">4</label></td>
+                        <td><label><input type="checkbox" class="table-select_hour" name="table-select_time" value="5" onclick="filterSubjectList(5)">5</label></td>
+                        <td><label><input type="checkbox" class="table-select_hour" name="table-select_time" value="6" onclick="filterSubjectList(6)">6</label></td>
+                        <td><label><input type="checkbox" class="table-select_hour" name="table-select_time" value="7" onclick="filterSubjectList(7)">7</label></td>
+                        <td><label><input type="checkbox" class="table-select_hour" name="table-select_time" value="8" onclick="filterSubjectList(8)">8</label></td>
+                        <td><label><input type="checkbox" class="table-select_hour" name="table-select_time" value="9" onclick="filterSubjectList(9)">9</label></td>
+                      </tr>                     
+                      
+                </table>
+            </div>
+            <div id="section-class_list">
+                <table id="div-class_list_table">
+                    <tr>
+                        <th><div>강의명</div></th>
+                        <th><div>교수</div></th>
+                        <th><div id="table-class_category">구분</div></th>
+                        <th><div>학수번호</div></th>
+                        <th><div>시간</div></th>
+                        <th><div>강의실</div></th>
+                        <th><div>시간표 추가</div></th>
+                    </tr>
+                </table>
+            </div>
+        </section>
+        <footer>
+            <div id="footer-left">
+                <div>2023 - 1 소프트웨어설계PBL : EVERYDATA</div>
+                <div>팀 오합지졸 - 남서린 | 민희진 | 이지민 | 훌랑</div>
+                <div>Copyright 2023. 오합지졸 All rights reserved.</div>
+            </div>
+            <div id="footer-right">
+                <img src="../img/logo-white.png" width="80">
+            </div>
+        </footer>
+    </body>
+</html>
+
+
