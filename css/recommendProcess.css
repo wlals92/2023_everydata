@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+
+body{
+    margin: 0;
+    background-color: #fcfcfc;
+    background-image: url('../img/background-main.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+a{
+    text-decoration: none;
+    color: #40BBCA;
+}
+li{
+    list-style: none;
+}
+main{
+    margin-top: 30px;
+    min-height: 830px;
+}
+.main-container{
+    width: 1060px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 660px 380px;
+    grid-template-rows: 800px;
+    gap: 10px;
+}
+.main-section{
+    width: 100%;
+    height: 100%;
+    background-color: #FFFFFF;
+    border: 2px solid #d3f0f0;
+    border-radius: 10px;
+    box-shadow: 0px 5px 6px rgba(0,0,0,0.1);
+    z-index: 2;
+}
+.main-right{
+    display: flex;
+    flex-direction: column;
+    border: none;
+    gap: 10px;
+}
+.main-right > div:first-child{
+    width: 100%;
+    flex: 1;
+}
+.main-right > div:last-child{
+    width: 100%;
+    flex: 2;
+}
+#main-timetable_top{
+    display: flex;
+    margin-top: 15px;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 30px;
+    padding-right: 30px;
+
+    font-family: Montserrat;
+    font-weight: bold;
+    font-size: 24px;
+    color: #40BBCA;
+}
+#main-plus_button{
+    background-color: transparent;
+    border: 0px;
+
+    font-size: 52px;
+    font-weight: 500;
+    color: #40BBCA;
+}
+
+/* 남서린 작성---------------------------------------------------------------------------------------- */
+/* 강의추천 기본 텍스트박스 */
+#section-block{
+    /* 내용 박스 디자인(색, 모양 등) */
+    background-color: white;
+    border: 3px solid rgb(233,247,246);
+    box-shadow: 1px 3px 3px 3px rgb(200, 200, 200);
+    border-radius: 5px;
+
+    align-self: center;
+    width: 1000px;
+    height: 700px;
+    padding-bottom: 10px;
+    /* margin설정하니까 페이지 가운데로 자동정렬되네요! */
+    margin: 0 auto;
+}
+strong{
+    color: #40BBCA;
+}
+#div-class_box>p{
+    background-color: rgb(233,247,246);
+    padding: 10px;
+    margin: 0 auto;
+}
+/* 설문지 내 글자 리스트 */
+div>ol>li{
+    font-size: 20px;
+}
+/* 요일 버튼 */
+#section-class_day>li{
+    margin-right: 70px;
+    float: left;
+}
+/* 강의추천받기 버튼 */
+#input-recommend_submit{
+    width: 300px;
+    height: 80px;
+    font-size: 30px;
+    margin: 30px auto;
+    display: block;
+    background-color: #62D3DA;
+    border-radius: 10px;
+    color: white;
+    border: white;
+    font-weight: bold;
+}
+/* 추천학점 입력 */
+#div-fill_credit{
+    height: 30px;
+    width: 50px;
+    margin-left: 50px;
+    padding: 2px;
+    font-size: 15px;
+}
+
+/* 3번 문항 */
+table{
+    border-spacing: 10px;
+    margin-left: 50px;
+}
+/* 3번문항-교양 영역 */
+tr>th{
+    color:#40BBCA;
+}
+td{
+    width: 300px;
+}

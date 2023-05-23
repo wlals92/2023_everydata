@@ -1,0 +1,146 @@
+/*--이지민 작성--*/
+
+*{
+    padding: 0;
+    margin: 0;
+    border: none;
+}
+body{
+    font-size: 14px;
+    margin: 0;
+    background-image: url('../img/background-login.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+div{
+    background-color: #ffffff;
+    margin-bottom: 3px;
+}
+span{
+    background-color: #ffffff;
+    color: red;
+}
+option{
+    background-color: #ffffff;
+}
+
+
+
+.update-wrapper{
+    position: relative;
+    z-index: 2;
+    width: 400px;
+    min-height: 100vh;
+    padding: 40px;
+    box-sizing: border-box;
+    margin: auto;
+    background-color: #ffffff;
+    border: 2px solid #D3F0F0;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.15);
+}
+.update-wrapper > h2{
+    font-size: 28px;
+    color: #40BBCA;
+    background-color: #ffffff;
+}
+.update-wrapper > div{
+    margin-bottom: 10px;
+    color: red;
+}
+#update-form{
+    background-color: #ffffff;
+}
+#update-form > div {
+    margin-top: 10px;
+}
+#update-form input, select{
+    width: 100%;
+    height: 32px;
+    padding: 0 10px;
+    box-sizing: border-box;
+    margin-bottom: 2px;
+    border-radius: 5px;
+    background-color: #ffffff;
+    border: 1px solid #A5A5A5;
+}
+#update-form > input::placeholder{
+    color: #A5A5A5;
+}
+#update-threebox {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+#update-threebox > div > select{
+    width: 103px;
+    height: 32px;
+    padding: 0 10px;
+    box-sizing: border-box;
+    margin-bottom: 2px;
+    border-radius: 5px;
+    background-color: #ffffff;
+    border: 1px solid #A5A5A5;
+}
+#file-checktext {
+    color: #A5A5A5;
+    font-size: 11.2px;
+}
+
+
+#filebox {
+    display: flex;
+    background-color: #ffffff;
+    border-radius: 5px;
+}
+#filebox label {
+    color: #40BBCA;
+    background-color: #ffffff;
+    border: 1px solid #62D3DA;
+    text-align: center;
+    cursor: pointer;
+    height: 30px;
+    border-radius: 5px;
+    line-height: 30px;
+    justify-content: center;
+    width: 100px;
+    margin: 3px;
+}
+
+#filebox input[type="file"]{
+    height: 30px;
+    line-height: 30px;
+    margin: 3px;
+}
+#filebox input::file-selector-button {
+    display: none;
+}
+
+#update-form > input[type="submit"]{
+    color: #ffffff;
+    font-size: 16px;
+    height: 38px;
+    background-color: #62D3DA;
+    margin-top: 15px;
+    border: 0px;
+}
+
+.input-check {
+    font-size: 10px;
+    background-color: transparent;
+    margin-left: 2.5px;
+}
+#update-form > input[type="button"]{
+    color: #ffffff;
+    font-size: 16px;
+    height: 38px;
+    background-color: #D9D9D9;
+    border: 0px;
+    margin-top: 10px;
+}
+
+[disabled] {
+    background-color: #D9D9D9 !important;
+}
+  
