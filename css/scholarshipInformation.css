@@ -1,0 +1,110 @@
+/*--이지민 작성--*/
+
+body{
+    margin: 0;
+    background-color: #fcfcfc;
+    background-image: url('../img/background-main.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+a{
+    text-decoration: none;
+    color: #40BBCA;
+}
+li{
+    list-style: none;
+}
+
+/* 남서린 작성 */
+#section-block{
+    /* 내용 박스 디자인(색, 모양 등) */
+    background-color: white;
+    border: 3px solid rgb(233,247,246);
+    box-shadow: 1px 3px 3px 3px rgb(200, 200, 200);
+    border-radius: 5px;
+
+    align-self: center;
+    width: 1000px;
+    height: auto;
+    /* margin설정하니까 페이지 가운데로 자동정렬되네요! */
+    margin: 0 auto;
+}
+
+/* 대학정보>장학금 문구 */
+#section-class_box > p{
+    background-color: rgb(233,247,246);
+    padding: 10px;
+    margin: 0 auto;
+}
+/* 검색창 전체 div */
+#section-search_box{
+    width: 50%;
+    height: auto;
+    margin: 10px auto;
+    display: block;
+}
+/* 검색창 form */
+#div-search_time_table{
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+/* 검색창 텍스트 입력하는 부분 */
+#form-search_text{
+    width: 80%;
+    height: auto;
+    font-size: 20px;
+    background-color: #FFFFFF;
+    border: 1.5px solid #62D3DA;
+    border-radius: 10px;
+    padding: 10px;
+}
+/* 검색하기 버튼 */
+#form-search_button{
+    width: 40px;
+    height: auto;
+    background-color: white;
+    border: none;
+    padding: 8px;
+}
+.fa-magnifying-glass{
+    color: #62D3DA;
+    height: auto;
+    width: auto;
+}
+/* 정보 검색 결과 div */
+#section-information_list{
+    width: 95%;
+    height: 700px;
+    background-color: #FFFFFF;
+    margin: 10px auto;
+    overflow: auto;
+}
+/* 정보 검색 결과 div내의 테이블 */
+#div-information_list_table{
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+/* 정보 검색 결과 테이블의 제목(장학금 기관명 마감날짜 등등) */
+#div-information_list_table div{
+    background-color: #D3F0F0;
+    border-radius: 5px;
+    padding: 5px;
+    width: auto;
+
+}
+#div-information_list_table th{
+    position: sticky;
+    top: 0;
+    background-color: white;
+}
+
+#div-information_list_table th, #div-information_list_table td{
+    border-bottom: 1px solid #d0d0d0;
+    padding: 10px;
+}
+#div-information_list_table td{
+    text-align: left;
+}

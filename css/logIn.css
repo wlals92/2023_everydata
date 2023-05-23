@@ -1,0 +1,123 @@
+/*--이지민 작성--*/
+
+*{
+    padding: 0;
+    margin: 0;
+    border: none;
+}
+body{
+    font-size: 14px;
+    margin: 0;
+    background-image: url('../img/background-login.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+
+/* 로그인 윗 부분 */
+.login-top{
+    position: relative;
+    z-index: 3;
+    margin-top: 100px;
+    text-align: center;
+    margin-bottom: 10px;
+    background-color: transparent;
+}
+#login-logo{
+    display: inline-block;
+    padding-left: 0;
+    font-family: 'Bebas Neue', cursive;
+    color: #ffffff;
+    font-size: 40px;
+    padding-left: 70px;
+}
+.login-top > img {
+    position: relative;
+    top: 35px;
+    background-color: transparent;
+}
+
+
+/* 로그인 박스 */
+.login-wrapper{
+    position: relative;
+    z-index: 2;
+    width: 400px;
+    height: 350px;
+    padding: 40px;
+    box-sizing: border-box;
+    margin: auto;
+    background-color: #ffffff;
+    border-radius: 30px;
+    border: 2px solid #D3F0F0;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.15);
+}
+.login-wrapper > h2{
+    font-size: 28px;
+    color: #40BBCA;
+    background-color: #ffffff;
+    margin-bottom: 15px;
+}
+
+
+/* 로그인 폼 */
+#login-form{
+    background-color: #ffffff;
+}
+#login-form > input{
+    width: 100%;
+    height: 40px;
+    padding: 0 10px;
+    box-sizing: border-box;
+    margin-bottom: 12px;
+    border-radius: 5px;
+    background-color: #ffffff;
+    border: 1px solid #A5A5A5;
+}
+#login-form > input::placeholder{
+    color: #A5A5A5;
+}
+#login-form > input[type="submit"]{
+    color: #ffffff;
+    font-size: 16px;
+    background-color: #62D3DA;
+    margin-top: 10px;
+    border: 0px;
+}
+#login-form > input[type="checkbox"]{
+    display: none;
+    padding-right: 5px;
+}
+#login-form > label{
+    background-color: #ffffff;
+    color: #A5A5A5;
+}
+
+/* 아이디 저장 */
+#save-id {
+    accent-color: #62D3DA;
+}
+
+/* 로그인 */
+#login-form input[type="checkbox"] + label{
+    cursor: pointer;
+    padding-left: 26px;
+    background-image: url("../img/checkbox.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+
+/* 이동 */
+#login-signup_pwsearch {
+    background-color: #ffffff;
+    display: flex;
+    justify-content: space-between;
+}
+#login-signup_pwsearch > a{
+    background-color: #ffffff;
+    text-decoration: none;
+    color: #000000;
+}
