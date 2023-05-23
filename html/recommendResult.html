@@ -1,0 +1,153 @@
+<!--이지민 작성-->
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width", initial-scale="1.0">
+        <link type="text/css" rel="stylesheet" href="../css/recommendResult.css">
+        <link type="text/css" rel="stylesheet" href="../css/nav.css">
+        <link type="text/css" rel="stylesheet" href="../css/footer.css">
+        <script type="text/javascript" defer src="../js/recommendResult.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <title>EVERYDATA</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+        <link rel="icon" sizes="192x192" href="../img/logo-green.png">
+        <script src="https://use.fontawesome.com/releases/v6.4.0/js/all.js"></script>
+    </head>
+    <body>
+        <header>
+            <nav>
+                <ul id="nav-menu">
+                    <li><a href="./manageCredit.html">학점 관리</a></li>
+                    <li><a href="./scholarshipInformation.html">장학 정보</a></li>
+                    <li>
+                        <a style="color: black;">강의</a>
+                        <ul id="nav-menu_sub">
+                            <li><a href="./searchTimeTable.html">강의 목록</a></li>
+                            <li><a href="./recommendProcess.html">강의 추천</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <div id="nav-logo">
+                    <a href="main.html">
+                        <img id="nav-logo_img" src="../img/logo-text-green.png" alt="메인로고" height="30">
+                    </a>
+                </div>
+                <button id="nav-logout_button" type="button" onclick="">로그아웃</button>
+            </nav>
+        </header>
+        <!-- 강의추천 - 과정 -->
+        <section id="section-block">
+            <div id="section-class_box">
+                <p><strong>남서린</strong>님을 위한 강의 추천을 받아보세요!
+                *<strong>교양 교과목</strong>만 추천됩니다.</p>
+            </div>
+            <br>
+            <p style="text-align: center;"><strong>에브리데이터</strong>가 이 강의를 추천했어요!</p>
+            <br>
+            <div id="section-time_table">
+                <table id="div-recommend_time_table">
+                    <tr>
+                        <th> </th>
+                        <th>월</th>
+                        <th>화</th>
+                        <th>수</th>
+                        <th>목</th>
+                        <th>금</th>
+                    </tr>
+                    <tr>
+                        <th>9</th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>10</th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>11</th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>12</th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>1</th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>2</th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>3</th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>4</th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>5</th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+            <div id="section-recommend_list">
+            </div>
+        </section>
+        <div id="section-button_group">
+            <input type="submit" value="다시 추천 받기" id="section-re_recommend" >
+            <input type="submit" value="시간표에 추가" id="section-add_in_time_table">
+        </div>
+        <footer>
+            <div id="footer-left">
+                <div>2023 - 1 소프트웨어설계PBL : EVERYDATA</div>
+                <div>팀 오합지졸 - 남서린 | 민희진 | 이지민 | 훌랑</div>
+                <div>Copyright 2023. 오합지졸 All rights reserved.</div>
+            </div>
+            <div id="footer-right">
+                <img src="../img/logo-white.png" width="80">
+            </div>
+        </footer>
+    </body>
+</html>

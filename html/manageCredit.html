@@ -1,0 +1,153 @@
+<!--이지민 작성-->
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width", initial-scale="1.0">
+        <link type="text/css" rel="stylesheet" href="../css/manageCredit.css">
+        <link type="text/css" rel="stylesheet" href="../css/nav.css">
+        <link type="text/css" rel="stylesheet" href="../css/footer.css">
+        <script type="text/javascript" defer src="../js/manageCredit.js"></script>
+        <script defer src="https://unpkg.com/axios/dist/axios.min.js"></script> <!--axios cdn-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <title>EVERYDATA</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+        <link rel="icon" sizes="192x192" href="../img/logo-green.png">
+        <script src="https://use.fontawesome.com/releases/v6.4.0/js/all.js"></script>
+    </head>
+    <body>
+        <header>
+            <nav>
+                <ul id="nav-menu">
+                    <li><a href="./manageCredit.html" style="color: black;">학점 관리</a></li>
+                    <li><a href="./scholarshipInformation.html">장학 정보</a></li>
+                    <li>
+                        <a>강의</a>
+                        <ul id="nav-menu_sub">
+                            <li><a href="./searchTimeTable.html">강의 목록</a></li>
+                            <li><a href="./recommendProcess.html">강의 추천</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <div id="nav-logo">
+                    <a href="main.html">
+                        <img id="nav-logo_img" src="../img/logo-text-green.png" alt="메인로고" height="30">
+                    </a>
+                </div>
+                <button id="nav-logout_button" type="button" onclick="">로그아웃</button>
+            </nav>
+        </header>
+        <section id="section-block">
+            <div id="div-class_box">
+                <p><strong>남서린</strong>님의 이수내역</p>
+            </div>
+            <div id="section-left_credit_until_graduate">
+                <p><b>졸업까지 남은 학점은 ... </b></p>
+                <table id="div-left_credit_until_graduate_table">
+                    <tr>
+                        <td></td>
+                        <th colspan="4"><div>교양</div></th>
+                        <th colspan="8" style="border-left: 1.5px solid #62d3da"><div>전공</div></th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td colspan="4"></td>
+                        <td colspan="2" style="border-left: 1.5px solid #62d3da"><div>본전공</div></td>
+                        <td colspan="2"><div>복수전공</div></td>
+                        <td colspan="2"><div>부전공</div></td>
+                        <td><div>교직</div></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>핵심(역량)</td>
+                        <td>균형(통합)</td>
+                        <td>기초</td>
+                        <td>일반</td>
+                        <td style="border-left: 1.5px solid #62d3da">필수</td>
+                        <td>선택</td>
+                        <td>필수</td>
+                        <td>선택</td>
+                        <td>필수</td>
+                        <td>선택</td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td>소요</td>
+                        <td id="core-capacity-need"></td>
+                        <td id="balance-integration-need"></td>
+                        <td id="foundation-need"></td>
+                        <td id="general-need"></td>
+                        <td style="border-left: 1.5px solid #62d3da" id="major-essential-need"></td>
+                        <td id="major-elective-need"></td>
+                        <td id="minor-essential-need"></td>
+                        <td id="minor-elective-need"></td>
+                        <td id="teaching-need"></td>
+                        <td id="remaining1-need"></td>
+                        <td colspan="2" id="remaining2-need"></td>
+                      </tr>
+                    <tr>
+                        <td>취득</td>
+                        <td id="core-capacity-acquire"></td>
+                        <td id="balance-integration-acquire"></td>
+                        <td id="foundation-acquire"></td>
+                        <td id="general-acquire"></td>
+                        <td style="border-left: 1.5px solid #62d3da" id="major-essential-acquire"></td>
+                        <td id="major-elective-acquire"></td>
+                        <td id="minor-essential-acquire"></td>
+                        <td id="minor-elective-acquire"></td>
+                        <td id="teaching-acquire"></td>
+                        <td id="remaining1-acquire"></td>
+                        <td colspan="2" id="remaining2-acquire"></td>                        
+                    </tr>
+                    <tr id="table-left_credit" style="border-top: 1.5px solid #62d3da">
+                        <td>잔여</td>
+                        <td id="core-capacity-remaining"></td>
+                        <td id="balance-integration-remaining"></td>
+                        <td id="foundation-remaining"></td>
+                        <td id="general-remaining"></td>
+                        <td style="border-left: 1.5px solid #62d3da" id="major-essential-remaining"></td>
+                        <td id="major-elective-remaining"></td>
+                        <td id="minor-essential-remaining"></td>
+                        <td id="minor-elective-remaining"></td>
+                        <td id="teaching-remaining"></td>
+                        <td id="remaining1-remaining"></td>
+                        <td colspan="2" id="remaining2-remaining"></td>    
+                    </tr>
+                </table>
+                <div id="div-completed_balance">
+                    <ul id="completed-credits"></ul>
+                    <p id="graduation-requirement"></p>
+                </div>
+            </div>
+            <p><button id="section-origin_table">이수내역확인표 원본 보기</button></p>
+            <hr style="border: 1px solid rgb(229, 229, 229); width: 95%;">
+            <div id="section-opened_major_in_semester">
+                <p>
+                    <div id="p-semester_date"></div>
+                    <!--<input type="button" id="section-add_in_time_table" value="시간표에 추가"></input>-->
+                </p>
+                <div id="section-opened_lecture">
+                    <table id="div-search_major"> <!--axios cdn or patch 링크를 head에 추가-->
+                    </table>
+                </div>
+                <div id="section-time_table">
+                    <table id="main-timetable">
+                    </table>
+                </div>
+            </div>
+        </section>
+        <footer>
+            <div id="footer-left">
+                <div>2023 - 1 소프트웨어설계PBL : EVERYDATA</div>
+                <div>팀 오합지졸 - 남서린 | 민희진 | 이지민 | 훌랑</div>
+                <div>Copyright 2023. 오합지졸 All rights reserved.</div>
+            </div>
+            <div id="footer-right">
+                <img src="../img/logo-white.png" width="80">
+            </div>
+        </footer>
+    </body>
+</html>
