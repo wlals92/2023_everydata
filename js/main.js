@@ -18,7 +18,7 @@ const tempSubjects = [
 
 //사용자 프로필--------------------------------------------------------------
 $.ajax({
-  url: "/user",
+  url: "../php/getProfile.php",
   type: "GET",
   dataType: "json",
   success: function(data) {
