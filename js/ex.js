@@ -326,6 +326,38 @@ const isLastSubject = i === dayTimePairs.length - 1; //마지막 교시인지 �
     }
     const startCellIndex = mergedRowStart.cellIndex;
 
+
+    const form = document.querySelector('#signup-form');
+form.addEventListener("submit", function(event) {
+    event.preventDefault(); // 폼 제출 이벤트 취소
+  
+    const isValid = validateForm();
+  
+    try {
+      if (isValid) {
+        const formData = new FormData(form); // 폼 데이터 가져오기
+  
+        // 폼 데이터 전송
+        fetch('../php/signUp.php', {
+          method: 'POST',
+          body: formData
+        })
+          .then(response => response.text())
+          .then(data => {
+            console.log(data); // 서버에서 반환한 데이터 출력
+            window.location.href = '../index.html'; // 페이지 이동
+          })
+          .catch(error => {
+            console.log(error); // 오류 처리
+          });
+      } else {
+        alert("입력한 내용을 다시 확인해주세요.");
+        return false;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
   <!-- <tr>
                             <th> </th>
                             <th>월</th>
