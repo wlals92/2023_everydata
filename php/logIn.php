@@ -13,6 +13,7 @@ $row = $res->fetch_array(MYSQLI_ASSOC);
 if ($row !== null) {
     session_start();
     $_SESSION['name']=$row['name'];
+    $_SESSION['id']=$id;
     echo json_encode(true);
 } else {            
     echo json_encode(false);   
