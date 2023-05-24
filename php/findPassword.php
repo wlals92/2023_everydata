@@ -1,6 +1,7 @@
-<?php
+<?
+// 이지민 작성
 require_once("dbConfig.php"); 
-$_POST = JSON_DECODE(file_get_contents("php://input"), true);
+// $_POST = JSON_DECODE(file_get_contents("php://input"), true);
 
 $id = $_POST["id"];/
 $name = $_POST["name"];

@@ -182,27 +182,33 @@ const myChart = new Chart(ctx, {
     }
 });
 
-//사용자 프로필 : 메인 기준, 마이페이지용 확인---------------
+//사용자 프로필
 $.ajax({
-    url: "/user",
+    url: "../php/getProfile.php",
     type: "GET",
     dataType: "json",
     success: function(data) {
       const name = data.name;
-      const user_credit = data.user_credit;
-      const total_credit = data.total_credit;
-      const major = data.major;
       const status = data.status;
       const academic_number = data.academic_number;
       const grade = data.grade;
+      const user_credit = data.user_credit;
+      const total_credit = data.total_credit;
+      const curriculum_year = data.curriculum_year;
+      const major = data.major;
+      const minor = data.minor;
+      const double_major = data.double_major;
   
       document.getElementById("profile-name").innerHTML = name;
+      document.getElementById("profile-status").innerHTML = status;
+      document.getElementById("profile-student_id").innerHTML = academic_number;
+      document.getElementById("profile-grade").innerHTML = grade;
       document.getElementById("profile-user_credit").innerHTML = user_credit;
       document.getElementById("profile-total_credit").innerHTML = total_credit;
+      document.getElementById("profile-curriculum_year").innerHTML = curriculum_year;
       document.getElementById("profile-major").innerHTML = major;
-      document.getElementById("profile-status").innerHTML = status;
-      document.getElementById("profile-academic_number").innerHTML = academic_number;
-      document.getElementById("profile-grade").innerHTML = grade;
+      document.getElementById("profile-minor").innerHTML = minor;
+      document.getElementById("profile-double_major").innerHTML = double_major;
     },
     error: function(xhr, status, error){
       console.log(xhr);
