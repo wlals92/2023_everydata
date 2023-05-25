@@ -1,7 +1,23 @@
 # pip install tika # tika 라이브러리 설치
+<<<<<<< HEAD
 
 from tika import parser # pdf를 txt파일로 변환
 pdf_path = "C:\mysql_data\skatjfls.pdf"
+=======
+import pymysql
+from tika import parser # pdf를 txt파일로 변환
+
+conn = pymysql.connect(
+    host='localhost',
+    port=3306,
+    user='root',
+    password='123456',
+    db='everydata',
+    charset='utf8mb4'
+)
+
+pdf_path = "report_server.jsp.pdf"
+>>>>>>> aa4d38d8bd05f78394f0ebb73de87261ec1ba657
 parsed = parser.from_file(pdf_path)
 txt = open('output.txt', 'w', encoding = 'utf-8')
 print(parsed['content'], file = txt)

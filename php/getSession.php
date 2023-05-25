@@ -3,10 +3,10 @@
 session_start();
 
 // 세션 확인
-if (isset($_SESSION['name'])) {
+if (isset($_SESSION['id'])) {
     // 세션이 있는 경우 사용자 정보를 반환
     $userInfo = array(
-        'name' => $_SESSION['name']
+        'id' => $_SESSION['id']
     );
     echo json_encode($userInfo);
 } else {
