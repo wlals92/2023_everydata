@@ -1,31 +1,20 @@
-pip install tika # tika 라이브러리 설치
+# pip install tika # tika 라이브러리 설치
 
 from tika import parser # pdf를 txt파일로 변환
-pdf_path = "report_server.jsp.pdf"
+pdf_path = "C:\mysql_data\skatjfls.pdf"
 parsed = parser.from_file(pdf_path)
 txt = open('output.txt', 'w', encoding = 'utf-8')
 print(parsed['content'], file = txt)
 txt.close()
 
-def read_txt(filename, sep='') : # txt파일을 리스트로
-
+def read_txt(filename, sep='', encoding='utf-8'):
     str = ''
+    with open(filename, 'r', encoding=encoding) as file:
+        str = file.readlines()
+        for i in range(len(str)):
+            str[i] = str[i].strip().split(sep)
+    return str
 
-
-
-    file = open(filename,'r')
-
-
-
-    str = file.readlines()
-
-
-
-    for i in range(0, len(str)) :
-
-        str[i] = str[i].strip().split(sep)  
-    return(str)
-    
     file.close()
 
 l1 = read_txt("output.txt", "\n") # 리스트를 띄어쓰기별로 구분
