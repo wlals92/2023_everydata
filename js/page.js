@@ -25,7 +25,7 @@ const logout = () => {
         url: '../php/logOut.php',
         success: function(response) {
             alert("로그아웃되었습니다.")
-            window.location.href = 'index.html';
+            window.location.href = '../index.html';
         },
         error: function(error) {
             // 서버와의 통신에 실패한 경우 예외 처리
