@@ -90,16 +90,12 @@ main{
 }
 #main-timetable td{
     position: relative;
-    padding: 10px;
-    padding: 2px;
-    width: 101px;
+    padding: 0 3px;
+    width: 105px;
     height: 70px;
     font-size: 12.5px;
-
-    /* overflow: hidden;
-    text-overflow: ellipsis; */
 }
-#main-timetable td > div {
+/* #main-timetable td > div {
     position: absolute;
     top: 0;
     left: 0;
@@ -107,7 +103,7 @@ main{
     height: 100%;
     overflow: hidden;
     padding: 2px;
-}
+} */
 .delete-button {
     position: absolute;
     top: 50%;
