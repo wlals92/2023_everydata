@@ -3,7 +3,7 @@
 require_once("dbConfig.php"); 
 // $_POST = JSON_DECODE(file_get_contents("php://input"), true);
 
-$id = $_POST["id"];/
+$id = $_POST["id"];
 $name = $_POST["name"];
 $student_id = $_POST["student_id"];
 
