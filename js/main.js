@@ -47,8 +47,8 @@ $.ajax({
 
 //강의목록 팝업창 : 메인 '+' 버튼 onclick ------------------------------------
 const openSubjectList = () => {
-  const url = 'sample.html';
-  // const url = 'searchTimeTable.html';
+  // const url = 'sample.html';
+  const url = 'searchTimeTable.html';
   window.open(url, 'subject-list-popup', 'width=1200,height=800');
 };
 

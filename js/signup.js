@@ -226,7 +226,7 @@ form.addEventListener("submit", async function(event) {
         if (isValid) {
             const formData = new FormData(form); // 폼 데이터 가져오기
 
-            // 아이디 중복 확인을 위한 AJAX 요청
+            // 아이디 중복 확인
             const response = await fetch("../php/checkID.php", {
                 method: "POST",
                 headers: {
