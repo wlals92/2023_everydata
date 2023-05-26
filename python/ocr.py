@@ -25,4 +25,16 @@ for row in l2:
         new_row.extend(elem.split())
     final_lst.append(new_row)
 
-print(final_lst)
+# ['공통(12년)/공통(13년)/역량(17년)/핵심(22년)'] 요소 이전의 모든 요소를 제거
+new_list = final_lst[final_lst.index(['공통(12년)/공통(13년)/역량(17년)/핵심(22년)']):]
+# 이수한 과목(년도, 학수번호, 과목명, 영역구분, 학점(credit), 성적)이 들어있는 값만 새로이 저장. 기준은 첫번째 요소가 '2'로 시작하면 됨 
+my_list = new_list = [item for item in new_list if isinstance(item, list) and len(item) > 0 and str(item[0]).startswith('2')]
+
+
+print(my_list)
+def save_list_to_txt(lst, filename, encoding='utf-8'):
+    with open(filename, 'w', encoding=encoding) as file:
+        for item in lst:
+            file.write(' '.join(item) + '\n')
+
+save_list_to_txt(my_list, "my_list.txt")

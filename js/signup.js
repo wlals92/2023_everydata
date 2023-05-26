@@ -234,6 +234,7 @@ form.addEventListener("submit", async function(event) {
                 },
                 body: new URLSearchParams(formData)
             });
+            console.log(response);
 
             if (response.ok) {
                 const data = await response.json();
