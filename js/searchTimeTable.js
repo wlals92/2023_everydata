@@ -1,12 +1,5 @@
 // 개설 교양 목록 가져오기-------------------------------------------------
-const tempSubjects = [
-  {id: 1, name: "프로그래밍언어론", professor:"홍길동", category: "전공필수", subject_code: "1", time:"월1, 월2, 수3", room: "030-0304"},
-  {id: 2, name: "소프트웨어설계PBL", professor:"홍길동", category: "전공필수", subject_code:"2", time:"월2, 월3", room: "030-0304"},
-  {id: 3, name: "데이터베이스", professor:"홍길동", category: "전공필수", subject_code: "3", time:"금1, 금2", room: "030-0304"},
-  {id: 4, name: "데이터과학", professor:"홍길동", category: "전공필수", subject_code: "4", time:"월11, 월12", room: "030-0304"},
-  {id: 5, name: "컴퓨터네트워크", professor:"홍길동", category: "전공필수", subject_code: "5", time:"화6, 화7, 수3", room: "030-0304"},
-  {id: 6, name: "환경과오염", professor: "김둘선", category: "균형교양(통합교양) 5영역(과학과 기술)", subject_code: "6", time: "월4, 토5", room: "024-0135"}
-];
+const tempSubjects = [];
 // 현재 날짜 기반으로 년도와 학기 출력 : 남서린 작성
 let today = new Date();
 let year = today.getFullYear();
@@ -20,39 +13,38 @@ const categorySelect = document.getElementById("table-ge_category");
 
 
 // 강의 목록을 표시하는 함수
-function displaySubjectList(subjects) {
-  // 기존 테이블 내용 삭제
-  while (table.firstChild) {
-    table.firstChild.remove();
-  }
+function displaySubjectList(subjectsList) {
+  // // 기존 테이블 내용 삭제
+  // while (table.firstChild) {
+  //   table.firstChild.remove();
+  // }
 
-  // 헤더 생성
-  const thRow = document.createElement("tr");
-  thRow.innerHTML = `
-    <th><div>과목명</div></th>
-    <th><div>교수명</div></th>
-    <th><div>분류</div></th>
-    <th><div>과목 코드</div></th>
-    <th><div>시간</div></th>
-    <th><div>강의실</div></th>
-    <th><div>추가</div></th>
-  `;
-  table.appendChild(thRow);
+  //이지민 작성
+  fetch('../php/getSubjectsList.php', {
+    method: 'GET'
+  })
+    .then(response => response.json())
+    .then(data => {
+      subjectsList.push(...data);
 
-  subjects.forEach(subject => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${subject.name}</td>
-      <td>${subject.professor}</td>
-      <td style="width: 120px;">${subject.category}</td>
-      <td>${subject.subject_code}</td>
-      <td>${subject.time}</td>
-      <td>${subject.room}</td>
-      <td><button type="button" onclick="addSubjectFromList(${subject.id})">시간표에 추가</button></td>
-    `;
-    table.appendChild(tr);
-  });
-}
+      subjectsList.forEach(subject => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${subject.subject_name}</td>
+          <td>${subject.professor}</td>
+          <td>${subject.category}${subject.ge_category ? `<br>(${subject.ge_category})` : ''}</td>
+          <td>${subject.subject_code}</td>
+          <td>${subject.lecture_time}</td>
+          <td>${subject.lecture_room}</td>
+          <td><button type="button" onclick="addSubjectFromList(${subject['1st_subject_id']})">시간표에 추가</button></td>
+        `;
+        table.appendChild(tr);
+      });
+    })
+    .catch(error => {
+      console.error('데이터를 가져오는 도중 오류가 발생했습니다.', error);
+    });
+};
 
 // 초기 페이지 로드 시 전체 강의 목록 표시
 displaySubjectList(tempSubjects);
@@ -93,3 +85,78 @@ function filterSubjectList() {
 }
 
 
+//이지민 작성 시간표에 강의 추가-------------------------------------------------
+// 서버에 강의 추가 요청 전송
+const addSubjectToServer = (subject) => {
+  // AJAX 요청
+  $.ajax({
+    url: '../php/addSubject.php',
+    type: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify(subject),
+    success: function (response) {
+      console.log('강의 추가 요청이 성공적으로 전송되었습니다.');
+
+      localStorage.setItem('subjectAdded', 'true');
+    },
+    error: function (xhr, status, error) {
+      console.error('강의 추가 요청이 실패하였습니다.');
+    }
+  });
+};
+
+// 서버에서 현재 강의 목록 가져오기
+const getTimetableFromServer = () => {
+  return $.ajax({
+    url: '../php/getTimetable.php',
+    type: 'GET',
+    success: function (subjects) {
+      return subjects;
+    },
+    error: function (xhr, status, error) {
+      console.error('강의 목록을 가져오는 도중 오류가 발생하였습니다.', error);
+      return [];
+    }
+  });
+};
+
+// 이미 추가된 강의인지 확인하는 함수
+const isAlreadyAdded = async (subject) => {
+  const subjects = await getTimetableFromServer();
+  const alreadyAdded = subjects.find((addedSubject) => addedSubject.id === subject.id);
+  return alreadyAdded !== undefined;
+};
+
+// 강의 시간 충돌 여부 확인하는 함수
+const isTimeConflict = async (day, time) => {
+  const subjects = await getTimetableFromServer();
+  const cell = subjects[day][time];
+  return cell && cell.length > 0;
+};
+
+// 강의목록에서 강의 추가
+const addSubjectFromList = async (id) => {
+  console.log('강의 추가');
+  const subject = tempSubjects.find((subject) => subject.id === id);
+  if (subject) {
+    const dayTimePairs = subject.time.split(", ");
+
+    for (let i = 0; i < dayTimePairs.length; i++) {
+      const [day, time] = dayTimePairs[i].split(/([^\uAC00-\uD7A3]+)/);
+
+      const isAdded = await isAlreadyAdded(subject);
+      if (isAdded) {
+        alert('이미 추가된 강의입니다.');
+      } else {
+        const isConflict = await isTimeConflict(day, time);
+        if (isConflict) {
+          alert('해당 시간에 이미 다른 강의가 있습니다.');
+        } else {
+          addSubjectToServer(subject);
+        }
+      }
+    }
+  } else {
+    console.log('해당 강의를 찾을 수 없습니다.');
+  }
+}; 
