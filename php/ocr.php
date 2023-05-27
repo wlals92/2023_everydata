@@ -39,7 +39,7 @@ if ($lastChar === "1") {
 }
 
 $score = $items[5];  // score에는 B+이 들어감
-$semester_completed = $lastChar; // semester_completed는 학기를 구분하는 변수 (1 or 2의 값을 가짐)
+$semester_completed = $lastChar; // semester_completed는 학기를 구분하는 변수 (1 혹은 2의 값을 가짐)
 
 // 우선 불러올 sql문을 적어주고 적은 후에 db에서 찾아줌
 $subjects_completed_id_sql = "SELECT `$semester_id` FROM `$semester_table` WHERE `subject_code` = '$subject_code'"; // 학기별 테이블의 학수번호가 11021126이면 그 과목의 id 가져오기
