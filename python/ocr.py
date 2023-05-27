@@ -5,9 +5,12 @@ import mysql.connector
 # DB 연결
 db = mysql.connector.connect(
   host="localhost",
+  port=3307,
+  
   user="root",
-  password="123456",
+  password="0000",
   database="everydata"
+  
 )
 
 # SQL 쿼리
@@ -18,6 +21,7 @@ cursor = db.cursor()
 
 cursor.execute(user_query)
 user_results = cursor.fetchall()
+
 
 cursor.execute(completed_query)
 completed_results = cursor.fetchall()

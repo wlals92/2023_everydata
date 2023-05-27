@@ -1,23 +1,22 @@
 <?php
 // 남서린 작성
-require_once("dbConfig.php"); 
-// $query = "SELECT * FROM 2nd_subjects";
-// $result = $db->query($query);
+require_once("dbConfig.php");
 
-// $data = "2021/1 11021121 대학영어1 역교 2 A0";
-// $data = "2021/1 11020882 고사와성어의탐구 통교 2 A0";
-$data = "2021/1 11021126 GNU인성 역교 2 B+"; //0, 1, 2, 3, 4, 5, 6 순서
+$user_id = $_POST['id'];
+
+$query = "SELECT * FROM 2nd_subjects";
+$result = $db->query($query);
+
+$data = "2021/2 11021126 GNU인성 역교 2 B+"; //0, 1, 2, 3, 4, 5, 6 순서
 $items = explode(" ", $data);
 
-$name = $items[2];
-$subject_code = $items[1];
+$name = $items[2];  // name에는 GNU인성이 들어감
+$subject_code = $items[1]; // subject_code에는 11021126이 들어감
 
+$st_subjects_id = 0;  // st_subject_id는 학기가 1인 경우 1학기 테이블에서 해당 과목의 identity를 받아올 변수
+$nd_subjects_id = 0; // nd_subject_id는 학기가 2인 경우 2학기 테이블에서 해당 과목의 identity를 받아올 변수
+$lastChar = substr($items[0], -1);  // lastChar는 학기를 구분하는 변수 (1 or 2의 값을 가짐)
 
-$user_id = isset($_POST["id"]) ? $_POST["id"] : null;
-// $1st_subjects_id = ;
-// $2nd_subjects_id = ;
-$lastChar = substr($items[0], -1);
-echo $lastChar;
 if ($lastChar === "1") {
     $semester_table = "1st_subjects";
     $semester_id = "1st_subjects_id";
@@ -25,24 +24,37 @@ if ($lastChar === "1") {
     $semester_table = "2nd_subjects";
     $semester_id = "2nd_subjects_id";
 } else {
-    $semester_table = "1st_subjects"; //계절 강의목록을 만들지 않았기 때문에 임의 설정
+    $semester_table = "1st_subjects"; // 계절 강의목록을 만들지 않았기 때문에 임의 설정
     $semester_id = "1st_subjects_id";
 }
-$score = $items[5];
-//우선 불러올 sql문을 적어주고 적은 후에 db에서 찾아줌
-$semester_completed_id_sql = "SELECT $semester_id FROM $semester_table WHERE subject_code = $subject_code";
-$result = $db->query($semester_completed_id_sql);
-$row = $result->fetch_assoc();
 
-echo "semester_table: " . $semester_id . "\n";
+$score = $items[5];  // score에는 B+이 들어감
+$semester_completed = $lastChar; // semester_completed는 학기를 구분하는 변수 (1 or 2의 값을 가짐)
+
+// 우선 불러올 sql문을 적어주고 적은 후에 db에서 찾아줌
+$subjects_completed_id_sql = "SELECT `$semester_id` FROM `$semester_table` WHERE `subject_code` = '$subject_code'"; // 학기별 테이블의 학수번호가 11021126이면 그 과목의 id 가져오기
+$result = $db->query($subjects_completed_id_sql);  // 실제 db에서 id 가져오기
+$row = $result->fetch_assoc();  // 학수번호가 일치하는 과목의 열에서 id 가져오기
+
+if ($semester_completed == 1) {
+    $st_subjects_id = $row[$semester_id];
+    $nd_subjects_id = 0;
+} elseif ($semester_completed == 2) {
+    $nd_subjects_id = $row[$semester_id];
+    $st_subjects_id = 0;
+} else {
+    $st_subjects_id = $row[$semester_id];
+    $nd_subjects_id = 0;
+}
+
+echo "user_id: " . $user_id . "\n";
+echo "st_subjects_id: " . $st_subjects_id . "\n";
+echo "nd_subjects_id: " . $nd_subjects_id . "\n";
+echo "semester_completed: " . $semester_completed . "\n";
 echo "score: " . $score . "\n";
-echo "semester_completed_id: ";
-print_r($row[$semester_id]); //echo는 배열 출력이 안되서 print_r로 출력해뒀어요!
 
+$sql = "INSERT INTO `subjects_completed` (`user_id`, `1st_subjects_id`, `2nd_subjects_id`, `semester_completed`, `score`)
+VALUES ('$user_id', '$st_subjects_id', '$nd_subjects_id', '$semester_completed', '$score')";
 
-
-
-// $sql = "INSERT INTO `subjects_completed` (`semester_completed_id`, `user_id`,`1st_subjects_id`,`2nd_subjects_id`,`semester_completed`,`score`) 
-// VALUES (`$semester_completed_id`, `$user_id`,`$1st_subjects_id`,`$2nd_subjects_id`,`$semester_completed`,`$score`);";
-$db->close();
+mysqli_close($db);
 ?>
