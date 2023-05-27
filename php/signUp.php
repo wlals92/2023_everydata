@@ -16,10 +16,11 @@ $minor = isset($_POST["minor"]) ? $_POST["minor"] : null;
 $file = isset($_FILES["file"]) ? $_FILES["file"] : null;
 
 if ($file !== null) {
-    $fileData = file_get_contents($file["tmp_name"]);
-    $fileData = $db->real_escape_string($fileData);
+    $pdf_path = "./pdf/" . $id . ".pdf";
+    $save_path = "../pdf/" . $id . ".pdf";
+    move_uploaded_file($file["tmp_name"], $save_path);
     $sql = "INSERT INTO `user` (`user_id`, `user_pw`,`name`,`academic_number`,`status`,`curriculum_year`, `grade`, `major`, `double_major`,`minor`,`subjects_completed_pdf`) 
-    VALUES ('$id','$password','$name','$student_id','$academic_status', '$curriculum_year', '$grade', '$major', '$double_major', '$minor', '$fileData');";
+    VALUES ('$id','$password','$name','$student_id','$academic_status', '$curriculum_year', '$grade', '$major', '$double_major', '$minor', '$pdf_path');";
 } else {
     $sql = "INSERT INTO `user` (`user_id`, `user_pw`,`name`,`academic_number`,`status`,`curriculum_year`, `grade`, `major`, `double_major`,`minor`,`subjects_completed_pdf`) 
     VALUES ('$id','$password','$name','$student_id','$academic_status', '$curriculum_year', '$grade', '$major', '$double_major', '$minor', null);";

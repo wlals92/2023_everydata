@@ -1,9 +1,51 @@
+
 from tika import parser # pdf를 txt파일로 변환
-pdf_path = "C:\mysql_data\skatjfls.pdf"
-parsed = parser.from_file(pdf_path)
-txt = open('output.txt', 'w', encoding = 'utf-8')
-print(parsed['content'], file = txt)
-txt.close()
+import mysql.connector
+
+# DB 연결
+db = mysql.connector.connect(
+  host="localhost",
+  user="root",
+  password="123456",
+  database="everydata"
+)
+
+# SQL 쿼리
+user_query = "SELECT user_id, subjects_completed_pdf FROM user"
+completed_query = "SELECT user_id FROM subjects_completed"
+
+cursor = db.cursor()
+
+cursor.execute(user_query)
+user_results = cursor.fetchall()
+
+cursor.execute(completed_query)
+completed_results = cursor.fetchall()
+
+user_ids = [result[0] for result in user_results]
+completed_ids = [result[0] for result in completed_results]
+missing_ids = [user_id for user_id in user_ids if user_id not in completed_ids]
+
+
+for file_id in missing_ids:
+    pdf_path_query = "SELECT subjects_completed_pdf FROM user WHERE user_id = %s"
+    cursor.execute(pdf_path_query, (file_id,))
+    result = cursor.fetchone()
+    pdf_path = result[0] if result else None
+
+    if pdf_path:
+        parsed = parser.from_file(pdf_path)
+        txt = open(f'output_{file_id}.txt', 'w', encoding='utf-8')
+        print(parsed['content'], file = txt)
+        txt.close()
+        
+db.close()
+
+# pdf_path = "C:\mysql_data\skatjfls.pdf"/
+# parsed = parser.from_file(pdf_path)
+# txt = open('output.txt', 'w', encoding = 'utf-8')
+# print(parsed['content'], file = txt)
+# txt.close()
 
 def read_txt(filename, sep='', encoding='utf-8'):
     str = ''
