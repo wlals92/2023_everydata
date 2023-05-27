@@ -2,12 +2,22 @@
 // 남서린 작성
 require_once("dbConfig.php");
 
-$user_id = $_POST['id'];
+// user 테이블에서 user_id 가져오기
+$query = "SELECT user_id FROM user";
+$result = $db->query($query);
+
+if ($result->num_rows > 0) {
+    // 결과에서 첫 번째 행의 user_id 가져오기
+    $row = $result->fetch_assoc();
+    $user_id = $row["user_id"];
+} else {
+    echo "No records found.";
+}
 
 $query = "SELECT * FROM 2nd_subjects";
 $result = $db->query($query);
 
-$data = "2021/2 11021126 GNU인성 역교 2 B+"; //0, 1, 2, 3, 4, 5, 6 순서
+$data = "2021/2 11021126 GNU인성 역교 2 A+"; //0, 1, 2, 3, 4, 5, 6 순서
 $items = explode(" ", $data);
 
 $name = $items[2];  // name에는 GNU인성이 들어감
@@ -34,27 +44,54 @@ $semester_completed = $lastChar; // semester_completed는 학기를 구분하는
 // 우선 불러올 sql문을 적어주고 적은 후에 db에서 찾아줌
 $subjects_completed_id_sql = "SELECT `$semester_id` FROM `$semester_table` WHERE `subject_code` = '$subject_code'"; // 학기별 테이블의 학수번호가 11021126이면 그 과목의 id 가져오기
 $result = $db->query($subjects_completed_id_sql);  // 실제 db에서 id 가져오기
-$row = $result->fetch_assoc();  // 학수번호가 일치하는 과목의 열에서 id 가져오기
 
-if ($semester_completed == 1) {
-    $st_subjects_id = $row[$semester_id];
-    $nd_subjects_id = 0;
-} elseif ($semester_completed == 2) {
-    $nd_subjects_id = $row[$semester_id];
-    $st_subjects_id = 0;
+// ...
+
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();  // 학수번호가 일치하는 과목의 열에서 id 가져오기
+
+    if ($semester_completed == 1) {
+        $st_subjects_id = $row[$semester_id];
+        $nd_subjects_id = null;  // 2학기 과목 ID를 NULL로 설정
+    } elseif ($semester_completed == 2) {
+        $nd_subjects_id = $row[$semester_id];
+        $st_subjects_id = null;  // 1학기 과목 ID를 NULL로 설정
+    } else {
+        $st_subjects_id = $row[$semester_id];
+        $nd_subjects_id = null;  // 2학기 과목 ID를 NULL로 설정
+    }
+
+    echo "user_id: " . $user_id . "\n";
+    echo "st_subjects_id: " . $st_subjects_id . "\n";
+    echo "nd_subjects_id: " . $nd_subjects_id . "\n";
+    echo "semester_completed: " . $semester_completed . "\n";
+    echo "score: " . $score . "\n";
+
+    $sql = "INSERT INTO `subjects_completed` (`user_id`, `1st_subjects_id`, `2nd_subjects_id`, `semester_completed`, `score`)
+            VALUES ('$user_id', ";
+
+    if ($st_subjects_id === null) {
+        $sql .= "NULL, ";
+    } else {
+        $sql .= "'$st_subjects_id', ";
+    }
+
+    if ($nd_subjects_id === null) {
+        $sql .= "NULL, ";
+    } else {
+        $sql .= "'$nd_subjects_id', ";
+    }
+
+    $sql .= "'$semester_completed', '$score')";
+
+    if ($db->query($sql) === TRUE) {
+        echo "Record inserted successfully.";
+    } else {
+        echo "Error inserting record: " . $db->error;
+    }
 } else {
-    $st_subjects_id = $row[$semester_id];
-    $nd_subjects_id = 0;
+    echo "No matching subjects found.";
 }
-
-echo "user_id: " . $user_id . "\n";
-echo "st_subjects_id: " . $st_subjects_id . "\n";
-echo "nd_subjects_id: " . $nd_subjects_id . "\n";
-echo "semester_completed: " . $semester_completed . "\n";
-echo "score: " . $score . "\n";
-
-$sql = "INSERT INTO `subjects_completed` (`user_id`, `1st_subjects_id`, `2nd_subjects_id`, `semester_completed`, `score`)
-VALUES ('$user_id', '$st_subjects_id', '$nd_subjects_id', '$semester_completed', '$score')";
 
 mysqli_close($db);
 ?>

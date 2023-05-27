@@ -1,16 +1,14 @@
-
-from tika import parser # pdf를 txt파일로 변환
+from tika import parser
 import mysql.connector
+import os
 
 # DB 연결
 db = mysql.connector.connect(
   host="localhost",
   port=3307,
-  
   user="root",
   password="0000",
   database="everydata"
-  
 )
 
 # SQL 쿼리
@@ -19,68 +17,54 @@ completed_query = "SELECT user_id FROM subjects_completed"
 
 cursor = db.cursor()
 
+# 사용자 정보 쿼리 실행
 cursor.execute(user_query)
 user_results = cursor.fetchall()
 
-
+# 완료된 과목 정보 쿼리 실행
 cursor.execute(completed_query)
 completed_results = cursor.fetchall()
 
+# 사용자 ID 목록과 완료된 ID 목록 추출
 user_ids = [result[0] for result in user_results]
 completed_ids = [result[0] for result in completed_results]
+
+# 미완료된 ID 목록 추출
 missing_ids = [user_id for user_id in user_ids if user_id not in completed_ids]
 
+# 텍스트 파일 출력 폴더 생성
+output_folder = 'txt'
+os.makedirs(output_folder, exist_ok=True)
 
+# 미완료된 ID에 대해 처리 수행
 for file_id in missing_ids:
+    # PDF 경로 쿼리 실행
     pdf_path_query = "SELECT subjects_completed_pdf FROM user WHERE user_id = %s"
     cursor.execute(pdf_path_query, (file_id,))
     result = cursor.fetchone()
     pdf_path = result[0] if result else None
 
     if pdf_path:
+        # PDF를 텍스트로 변환
         parsed = parser.from_file(pdf_path)
-        txt = open(f'output_{file_id}.txt', 'w', encoding='utf-8')
-        print(parsed['content'], file = txt)
-        txt.close()
+        output_filename = f'output_{file_id}.txt'
+        output_path = os.path.join(output_folder, output_filename)
         
-db.close()
+        # 텍스트 파일로 출력
+        with open(output_path, 'w', encoding='utf-8') as txt_file:
+            txt_file.write(parsed['content'])
 
-# pdf_path = "C:\mysql_data\skatjfls.pdf"/
-# parsed = parser.from_file(pdf_path)
-# txt = open('output.txt', 'w', encoding = 'utf-8')
-# print(parsed['content'], file = txt)
-# txt.close()
-
-def read_txt(filename, sep='', encoding='utf-8'):
-    str = ''
-    with open(filename, 'r', encoding=encoding) as file:
-        str = file.readlines()
-        for i in range(len(str)):
-            str[i] = str[i].strip().split(sep)
-    return str
-
-    
-    file.close()
-
-l1 = read_txt("output.txt", "\n") # 리스트를 띄어쓰기별로 구분
-l2 = [elem for elem in l1 if elem != ['']]
-final_lst = []
-for row in l2:
-    new_row = []
-    for elem in row:
-        new_row.extend(elem.split())
-    final_lst.append(new_row)
-
-# ['공통(12년)/공통(13년)/역량(17년)/핵심(22년)'] 요소 이전의 모든 요소를 제거
-new_list = final_lst[final_lst.index(['공통(12년)/공통(13년)/역량(17년)/핵심(22년)']):]
-# 이수한 과목(년도, 학수번호, 과목명, 영역구분, 학점(credit), 성적)이 들어있는 값만 새로이 저장. 기준은 첫번째 요소가 '2'로 시작하면 됨 
-my_list = new_list = [item for item in new_list if isinstance(item, list) and len(item) > 0 and str(item[0]).startswith('2')]
+# 파일명 변경 및 txt 폴더로 이동
+for file_id in missing_ids:
+    original_filename = f'output_{file_id}.txt'
+    user_id_str = file_id.decode('utf-8')  # bytes-like 객체인 경우 문자열로 변환
+    new_filename = f'output_{user_id_str}.txt'  # 변경된 파일명
+    new_filename = new_filename.replace("bytearray(b'", "").replace("')", "")  # bytearray 관련 부분 제거
+    original_path = os.path.join(output_folder, original_filename)  # 경로 수정
+    new_path = os.path.join(output_folder, new_filename)
+    os.replace(original_path, new_path)
 
 
-print(my_list)
-def save_list_to_txt(lst, filename, encoding='utf-8'):
-    with open(filename, 'w', encoding=encoding) as file:
-        for item in lst:
-            file.write(' '.join(item) + '\n')
 
-save_list_to_txt(my_list, "my_list.txt")
+
+
