@@ -2,10 +2,11 @@
 // 남서린 작성
 require_once("dbConfig.php");
 
-$user_id = $_POST['id'];
+// $user_id = $_POST['id'];
+$user_id = "jimin123";
 
-$query = "SELECT * FROM 2nd_subjects";
-$result = $db->query($query);
+// $query = "SELECT * FROM 2nd_subjects";
+// $result = $db->query($query);
 
 $data = "2021/2 11021126 GNU인성 역교 2 B+"; //0, 1, 2, 3, 4, 5, 6 순서
 $items = explode(" ", $data);
@@ -38,23 +39,24 @@ $row = $result->fetch_assoc();  // 학수번호가 일치하는 과목의 열에
 
 if ($semester_completed == 1) {
     $st_subjects_id = $row[$semester_id];
-    $nd_subjects_id = 0;
+    $nd_subjects_id = 'null';
 } elseif ($semester_completed == 2) {
     $nd_subjects_id = $row[$semester_id];
-    $st_subjects_id = 0;
+    $st_subjects_id = 'null';
 } else {
     $st_subjects_id = $row[$semester_id];
-    $nd_subjects_id = 0;
+    $nd_subjects_id = 'null';
 }
 
 echo "user_id: " . $user_id . "\n";
 echo "st_subjects_id: " . $st_subjects_id . "\n";
 echo "nd_subjects_id: " . $nd_subjects_id . "\n";
-echo "semester_completed: " . $semester_completed . "\n";
+echo "semester_completed: " . $items[0] . "\n";
 echo "score: " . $score . "\n";
 
 $sql = "INSERT INTO `subjects_completed` (`user_id`, `1st_subjects_id`, `2nd_subjects_id`, `semester_completed`, `score`)
-VALUES ('$user_id', '$st_subjects_id', '$nd_subjects_id', '$semester_completed', '$score')";
+VALUES ('$user_id', $st_subjects_id, $nd_subjects_id, '$items[0]', '$score');";
+if (!$db->query($sql)) { echo $db->error; }
 
 mysqli_close($db);
 ?>
