@@ -13,42 +13,47 @@ const categorySelect = document.getElementById("table-ge_category");
 
 
 // 강의 목록을 표시하는 함수
-function displaySubjectList(subjectsList) {
+async function displaySubjectList(subjectsList) {
   // // 기존 테이블 내용 삭제
   // while (table.firstChild) {
   //   table.firstChild.remove();
   // }
 
-  //이지민 작성
-  fetch('../php/getSubjectsList.php', {
-    method: 'GET'
-  })
-    .then(response => response.json())
-    .then(data => {
-      subjectsList.push(...data);
-
-      subjectsList.forEach(subject => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${subject.subject_name}</td>
-          <td>${subject.professor}</td>
-          <td>${subject.category}${subject.ge_category ? `<br>(${subject.ge_category})` : ''}</td>
-          <td>${subject.subject_code}</td>
-          <td>${subject.lecture_time}</td>
-          <td>${subject.lecture_room}</td>
-          <td><button type="button" onclick="addSubjectFromList(${subject['1st_subject_id']})">시간표에 추가</button></td>
-        `;
-        table.appendChild(tr);
-      });
-    })
-    .catch(error => {
-      console.error('데이터를 가져오는 도중 오류가 발생했습니다.', error);
+  try {
+    const response = await fetch('../php/getSubjectsList.php', {
+      method: 'GET'
     });
-};
+    const data = await response.json();
+    subjectsList.push(...data);
+
+    subjectsList.forEach(subject => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${subject.subject_name}</td>
+        <td>${subject.professor}</td>
+        <td>${subject.category}${subject.ge_category ? `<br>(${subject.ge_category})` : ''}</td>
+        <td>${subject.subject_code}</td>
+        <td>${subject.lecture_time}</td>
+        <td>${subject.lecture_room}</td>
+        <td><button type="button" onclick="addSubjectFromList(${subject['1st_subjects_id']})">시간표에 추가</button></td>
+      `;
+      table.appendChild(tr);
+    });
+  } catch (error) {
+    console.error('데이터를 가져오는 도중 오류가 발생했습니다.', error);
+  }
+}
 
 // 초기 페이지 로드 시 전체 강의 목록 표시
-displaySubjectList(tempSubjects);
+async function initializePage() {
+  try {
+    await displaySubjectList(tempSubjects);
+  } catch (error) {
+    console.error('강의 목록 표시 중 오류가 발생했습니다.', error);
+  }
+}
 
+initializePage();
 
 // 요일과 교시에 따라 필터링된 강의 목록을 표시하는 함수
 function filterSubjectList() {
@@ -85,7 +90,7 @@ function filterSubjectList() {
 }
 
 
-//이지민 작성 시간표에 강의 추가-------------------------------------------------
+// 이지민 작성 : 시간표에 강의 추가-------------------------------------------------
 // 서버에 강의 추가 요청 전송
 const addSubjectToServer = (subject) => {
   // AJAX 요청
@@ -106,43 +111,48 @@ const addSubjectToServer = (subject) => {
 };
 
 // 서버에서 현재 강의 목록 가져오기
-const getTimetableFromServer = () => {
-  return $.ajax({
-    url: '../php/getTimetable.php',
-    type: 'GET',
-    success: function (subjects) {
-      return subjects;
-    },
-    error: function (xhr, status, error) {
-      console.error('강의 목록을 가져오는 도중 오류가 발생하였습니다.', error);
-      return [];
-    }
-  });
+const getTimetableFromServer = async () => {
+  try {
+    const subjects = await $.ajax({
+      url: '../php/getTimetable.php',
+      type: 'GET'
+    });
+    return subjects;
+  } catch (error) {
+    console.error('강의 목록을 가져오는 도중 오류가 발생하였습니다.', error);
+    return [];
+  }
 };
 
 // 이미 추가된 강의인지 확인하는 함수
 const isAlreadyAdded = async (subject) => {
   const subjects = await getTimetableFromServer();
-  const alreadyAdded = subjects.find((addedSubject) => addedSubject.id === subject.id);
+  const alreadyAdded = subjects.find((addedSubject) => addedSubject['subject_code'] == subject['subject_code']);
   return alreadyAdded !== undefined;
 };
 
-// 강의 시간 충돌 여부 확인하는 함수
+// 해당 시간에 강의가 이미 있는지 확인하는 함수
 const isTimeConflict = async (day, time) => {
   const subjects = await getTimetableFromServer();
-  const cell = subjects[day][time];
-  return cell && cell.length > 0;
+  const lectureTimes = subjects.map(subject => subject.lecture_time);
+  for (let i = 0; i < lectureTimes.length; i++) {
+    const lectureTime = lectureTimes[i];
+    if (lectureTime.includes(day + time)) {
+      return true; // 시간 충돌
+    }
+  }
+  return false; // 시간 겹치는 강의 없음
 };
 
-// 강의목록에서 강의 추가
-const addSubjectFromList = async (id) => {
-  console.log('강의 추가');
-  const subject = tempSubjects.find((subject) => subject.id === id);
-  if (subject) {
-    const dayTimePairs = subject.time.split(", ");
 
-    for (let i = 0; i < dayTimePairs.length; i++) {
-      const [day, time] = dayTimePairs[i].split(/([^\uAC00-\uD7A3]+)/);
+// 강의목록에서 강의 추가
+const addSubjectFromList = async (subjectId) => {
+  const subject = tempSubjects.find((subject) => subject['1st_subjects_id'] == subjectId);
+  if (subject) {
+    const dayTimePairs = subject.lecture_time.split(", ");
+
+    for (const dayTimePair of dayTimePairs) {
+      const [day, time] = dayTimePair.split(/([^\uAC00-\uD7A3]+)/);
 
       const isAdded = await isAlreadyAdded(subject);
       if (isAdded) {
@@ -159,4 +169,4 @@ const addSubjectFromList = async (id) => {
   } else {
     console.log('해당 강의를 찾을 수 없습니다.');
   }
-}; 
+};
