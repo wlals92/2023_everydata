@@ -83,12 +83,6 @@ if ($result->num_rows > 0) {
     }
 
     $sql .= "'$semester_completed', '$score')";
-
-    if ($db->query($sql) === TRUE) {
-        echo "Record inserted successfully.";
-    } else {
-        echo "Error inserting record: " . $db->error;
-    }
 } else {
     echo "No matching subjects found.";
 }
