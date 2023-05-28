@@ -83,7 +83,7 @@ main{
 
     align-self: center;
     width: 1000px;
-    height: 700px;
+    height: 750px;
     padding-bottom: 10px;
     /* margin설정하니까 페이지 가운데로 자동정렬되네요! */
     margin: 0 auto;
@@ -107,9 +107,9 @@ div>ol>li{
 }
 /* 강의추천받기 버튼 */
 #input-recommend_submit{
-    width: 300px;
-    height: 80px;
-    font-size: 30px;
+    width: 200px;
+    height: 65px;
+    font-size: 22px;
     margin: 30px auto;
     display: block;
     background-color: #62D3DA;
@@ -138,4 +138,13 @@ tr>th{
 }
 td{
     width: 300px;
+}
+
+/* 라디오 */
+input[type="radio"] {
+    accent-color: #40BBCA;
+}
+/* 체크박스*/
+input[type="checkbox"]{
+    accent-color: #62D3DA;
 }

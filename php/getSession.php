@@ -6,7 +6,8 @@ session_start();
 if (isset($_SESSION['id'])) {
     // 세션이 있는 경우 사용자 정보를 반환
     $userInfo = array(
-        'id' => $_SESSION['id']
+        'id' => $_SESSION['id'],
+        'name' => $_SESSION['name']
     );
     echo json_encode($userInfo);
 } else {

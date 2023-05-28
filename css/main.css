@@ -95,15 +95,6 @@ main{
     height: 70px;
     font-size: 12.5px;
 }
-/* #main-timetable td > div {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 98%;
-    height: 100%;
-    overflow: hidden;
-    padding: 2px;
-} */
 .delete-button {
     position: absolute;
     top: 50%;

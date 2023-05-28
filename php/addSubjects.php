@@ -1,5 +1,4 @@
 <?php
-// 이지민 작성
 require_once("dbConfig.php");
 session_start();
 
@@ -15,12 +14,20 @@ $id = $_SESSION['id'];
 
 $data = json_decode(file_get_contents("php://input"), true);
 
-// 추가할 강의 정보
-$subjects_id = $data['1st_subjects_id'];
+// 선택된 강의 배열
+$courses = $data['courses'];
 
-// 강의 정보를 subjects_now 테이블에 추가하는 쿼리
-$insert_query = "INSERT INTO subjects_now (user_id, 1st_subjects_id, 2nd_subjects_id)
-                VALUES ('$id', '$subjects_id', null)";
+// 선택된 강의를 subjects_now 테이블에 추가하는 쿼리
+$insert_query = "INSERT INTO subjects_now (user_id, 1st_subjects_id, 2nd_subjects_id) VALUES ";
+
+foreach ($courses as $index => $course) {
+    $insert_query .= "('$id', '$course', null)";
+
+    // 마지막 강의가 아닌 경우 콤마(,) 추가
+    if ($index !== count($courses) - 1) {
+        $insert_query .= ",";
+    }
+}
 
 if ($db->query($insert_query) === TRUE) {
     // 성공적으로 추가되었을 경우 응답
