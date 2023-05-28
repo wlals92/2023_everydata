@@ -10,6 +10,8 @@
         <link type="text/css" rel="stylesheet" href="../css/nav.css">
         <link type="text/css" rel="stylesheet" href="../css/footer.css">
         <script type="text/javascript" defer src="../js/recommendProcess.js"></script>
+        <script type="text/javascript" defer src="../js/page.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <title>EVERYDATA</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -48,19 +50,20 @@
                 <ol>
                     <li><b>1. 원하는 공강 요일을 선택해주세요.</b><br><br>
                         <ul id="section-class_day">
-                            <li><label><input type="radio" name="day" value="mon"> 월</label></li>
-                            <li><label><input type="radio" name="day" value="tue"> 화</label></li>
-                            <li><label><input type="radio" name="day" value="wed"> 수</label></li>
-                            <li><label><input type="radio" name="day" value="thr"> 목</label></li>
-                            <li><label><input type="radio" name="day" value="fri"> 금</label></li>
-                            <li><label><input type="radio" name="day" value="sat"> 토</label></li>
+                            <li><label><input type="radio" name="day" value="월"> 월</label></li>
+                            <li><label><input type="radio" name="day" value="화"> 화</label></li>
+                            <li><label><input type="radio" name="day" value="수"> 수</label></li>
+                            <li><label><input type="radio" name="day" value="목"> 목</label></li>
+                            <li><label><input type="radio" name="day" value="금"> 금</label></li>
+                            <li><label><input type="radio" name="day" value="토"> 토</label></li>
                         </ul>
                     </li>
                     <br>
                     <br>
                     <hr align="left" style="border: solid 1px #40BBCA; width:95%">
                     <br>
-                    <li><b>2. 강의 추천으로 채우고 싶은 학점을 입력해주세요. 최대 20학점까지 가능합니다.</b><br><br>
+                    <li><b>2. 강의 추천으로 채우고 싶은 학점을 입력해주세요. 최대 20학점까지 가능합니다.</b>
+                        <div style="font-size: 12px; color: #A5A5A5; margin: 2px 10px;">*선호하는 과목 조합으로 학점을 정확히 맞출 수 없는 경우 근접한 학점으로 추천할 수 있습니다.</div><br>
                         <input type="number" placeholder="ex) 5" id="div-fill_credit" min="1" max="20"> 학점
                     </li>
                     <br>
@@ -75,6 +78,11 @@
                                 <th>기초교양</th>
                             </tr>
                             <tr>
+                                <td><label><input type="checkbox" id="selectAllbalanceClass" name="balanceClass" onchange="toggleCheckboxes('balanceClass')">균형교양 모두 선택</label></td>
+                                <td><label><input type="checkbox" id="selectAllCoreClass" name="CoreClass" onchange="toggleCheckboxes('CoreClass')">핵심교양 모두 선택</label></td>
+                                <td><label><input type="checkbox" id="selectAllRootClass" name="RootClass" onchange="toggleCheckboxes('RootClass')">기초교양 모두 선택</label></td>
+                            </tr>
+                            <tr>
                                 <td><label><input type="checkbox" name="balanceClass" value="문학과문화">1영역(문학과 문화)</label></td>
                                 <td><label><input type="checkbox" name="CoreClass" value="영어">영어</label></td>
                                 <td><label><input type="checkbox" name="RootClass" value="외국어">외국어 영역</label></td>
@@ -82,7 +90,7 @@
                             <tr>
                                 <td><label><input type="checkbox" name="balanceClass" value="역사와철학">2영역(역사와 철학)</label></td>
                                 <td><label><input type="checkbox" name="CoreClass" value="글쓰기">글쓰기</label></td>
-                                <td><label><input type="checkbox" name="RootClass" value="인문">인문사회 영역</label></td>
+                                <td><label><input type="checkbox" name="RootClass" value="인문사회">인문사회 영역</label></td>
                             </tr>
                             <tr>
                                 <td><label><input type="checkbox" name="balanceClass" value="인간과사회">3영역(인간과 사회)</label></td>
@@ -105,14 +113,14 @@
                                 <td></td>
                             </tr>
                             <tr>
-                                <td><label><input type="checkbox" name="balanceClass" value="융복합영역">7영역(융복합 영역)</label></td>
+                                <td><label><input type="checkbox" name="balanceClass" value="융·복합">7영역(융복합 영역)</label></td>
                                 <td></td>
                                 <td></td>
                             </tr>
                             <tr>
                                 <td><label><input type="checkbox" name="balanceClass" value="진로와개척">8영역(진로와 개척)</label></td>
                                 <td></td>
-                                <td></td>
+                                <td><label><input type="checkbox" id="selectAll" onchange="toggleCheckboxes()">모두 선택</label></td>
                             </tr>
                         </table>
                     </li><br>

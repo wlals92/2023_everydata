@@ -358,6 +358,30 @@ form.addEventListener("submit", function(event) {
       console.log(error);
     }
   });
+
+  
+// // 강의 추천을 실행하는 함수
+// function recommendCourses() {
+//   // 사용자가 입력한 카테고리를 가져옴
+//   const category = getCategory();
+  
+//   // AJAX 요청을 보내서 강의 추천 결과를 가져오기
+//   $.ajax({
+//     url: "/recommend-courses",
+//     type: "POST",
+//     data: { category: category },
+//     dataType: "json",
+//     success: function(data) {
+//       // 강의 추천 결과를 화면에 표시합니다.
+//       displayResults(data.results);
+//     },
+//     error: function(xhr, status, error) {
+//       console.log(xhr);
+//       console.log(status);
+//       console.log(error);
+//     }
+//   });
+// }
   <!-- <tr>
                             <th> </th>
                             <th>월</th>

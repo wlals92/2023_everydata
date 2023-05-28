@@ -1,14 +1,14 @@
 import mysql.connector
 
-mydb = mysql.connector.connect(
+db = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="ryu0905*",
-    database="everydata_db",
+    password="123456",
+    database="everydata",
     charset="utf8"
 )
 
-mycursor = mydb.cursor()
+mycursor = db.cursor()
 
 
 # 선호 공강 요일(단일선택), 선호 영역(복수선택), 과목 아이디를 리스트안에
