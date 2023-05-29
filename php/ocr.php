@@ -1,17 +1,18 @@
 <?php
 require_once("dbConfig.php");
 
+// user 테이블에서 user_id 가져올 때 어떤 유저걸 가져올건지만 잘 생각해서 하면 될 것 같아요!
 // user 테이블에서 user_id 가져오기
-$query = "SELECT user_id FROM user";
-$result = $db->query($query);
+// $query = "SELECT user_id FROM user";
+// $result = $db->query($query);
 
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    $user_id = $row["user_id"];
-} else {
-    echo "No records found.";
-    exit;
-}
+// if ($result->num_rows > 0) {
+//     $row = $result->fetch_assoc();
+//     $user_id = $row["user_id"];
+// } else {
+//     echo "No records found.";
+//     exit;
+// }
 
 $user_id = 'dlwlals1234';
 // OCR.py에서 생성된 txt 파일 경로
@@ -69,9 +70,9 @@ foreach ($extractedSentences as $sentence) {
     }
 
     if (isset($items[5])) {
-        $score = $items[5];
+        $score = str_replace("\r", "", $items[5]);
     } else {
-        $score = 'F';
+        $score = NULL;
     }
     $semester_completed = $lastChar; // semester_completed는 학기를 구분하는 변수 (1 혹은 2의 값을 가짐)
 
@@ -91,13 +92,13 @@ foreach ($extractedSentences as $sentence) {
 
         if ($semester_completed == 1) {
             $st_subjects_id = intval($row[$semester_id]);
-            $nd_subjects_id = NULL;  // 2학기 과목 ID를 NULL로 설정
+            $nd_subjects_id = 'NULL';  // 2학기 과목 ID를 NULL로 설정
         } elseif ($semester_completed == 2) {
             $nd_subjects_id = intval($row[$semester_id]);
-            $st_subjects_id = NULL;  // 1학기 과목 ID를 NULL로 설정
+            $st_subjects_id = 'NULL';  // 1학기 과목 ID를 NULL로 설정
         } else {
             $st_subjects_id = intval($row[$semester_id]);
-            $nd_subjects_id = NULL;  // 2학기 과목 ID를 NULL로 설정
+            $nd_subjects_id = 'NULL';  // 2학기 과목 ID를 NULL로 설정
         }
 
 
@@ -108,32 +109,19 @@ foreach ($extractedSentences as $sentence) {
         echo "score: " . $score . "\n";
     
         
-        $st_subjects_id = mysqli_real_escape_string($db, $st_subjects_id);
-        $nd_subjects_id = mysqli_real_escape_string($db, $nd_subjects_id);
-        $semester_completed = mysqli_real_escape_string($db, $items[0]);
-        $score = mysqli_real_escape_string($db, $score);
-        
         $query = "INSERT INTO `subjects_completed` (`user_id`, `1st_subjects_id`, `2nd_subjects_id`, `semester_completed`, `score`)
-                VALUES ('$user_id', $st_subjects_id, $nd_subjects_id, '$semester_completed', '$score')";
+          VALUES ('$user_id', $st_subjects_id, $nd_subjects_id, '$semester_completed', '$score')";
+
+        echo $query;
         
         if ($db->query($query) === true) {
             echo "Data inserted successfully.";
         } else {
-            echo "Error inserting data: " . $db->error;
+            echo "Error inserting data: " . $db->error ."\n";
         }
     } else {
-        // 데이터가 없는 경우에 대한 처리를 수행합니다.
-        // 예를 들어, 에러 메시지를 출력하거나 다른 작업을 수행할 수 있습니다.
         echo "No matching records found.";
     }
-
-    if ($db->query($query) === true) {
-        echo "Data inserted successfully.";
-    } else {
-        echo "Error inserting data: " . $db->error;
-    }
-    
-
 }
 // 성적이 없는 경우(점검 과목 일부)에는 null을 삽입하도록 수정
 // 현재 개설과목에 없는 경우에는 안됨. 과목명이 바뀐 경우를 추가(대학영어1, 대학영어2)
