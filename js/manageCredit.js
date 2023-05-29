@@ -13,22 +13,22 @@ const data = [
 
 //개설전공 DB
 const major_data=[
-  { grade: 1, category: "전필", credit: 1, subject_name: "C프로그래밍", major:"컴퓨터과학과"},
-  { grade: 1, category: "전필", credit: 3, subject_name: "식품자원경제학개론", major: "식품자원경제학과"},
-  { grade: 1, category: "전필", credit: 1, subject_name: "C프로그래밍", major:"컴퓨터과학과"},
-  { grade: 1, category: "전필", credit: 3, subject_name: "식품자원경제학개론", major: "식품자원경제학과"},
-  { grade: 1, category: "전필", credit: 1, subject_name: "C프로그래밍", major:"컴퓨터과학과"},
-  { grade: 1, category: "전필", credit: 3, subject_name: "식품자원경제학개론", major: "식품자원경제학과"},
-  { grade: 1, category: "전필", credit: 1, subject_name: "C프로그래밍", major:"컴퓨터과학과"},
-  { grade: 1, category: "전필", credit: 3, subject_name: "식품자원경제학개론", major: "식품자원경제학과"},
-  { grade: 1, category: "전필", credit: 1, subject_name: "C프로그래밍", major:"컴퓨터과학과"},
-  { grade: 1, category: "전필", credit: 3, subject_name: "식품자원경제학개론", major: "식품자원경제학과"},
-  { grade: 1, category: "전필", credit: 1, subject_name: "C프로그래밍", major:"컴퓨터과학과"},
-  { grade: 1, category: "전필", credit: 3, subject_name: "식품자원경제학개론", major: "식품자원경제학과"},
-  { grade: 1, category: "전필", credit: 1, subject_name: "C프로그래밍", major:"컴퓨터과학과"},
-  { grade: 1, category: "전필", credit: 3, subject_name: "식품자원경제학개론", major: "식품자원경제학과"},
-  { grade: 1, category: "전필", credit: 1, subject_name: "C프로그래밍", major:"컴퓨터과학과"},
-  { grade: 1, category: "전필", credit: 3, subject_name: "식품자원경제학개론", major: "식품자원경제학과"}
+  { grade: 1, category: "전필", credit: 1, subject_name: "C프로그래밍", major:"컴퓨터과학과", professor: "홍길동"},
+  { grade: 1, category: "전필", credit: 3, subject_name: "식품자원경제학개론", major: "식품자원경제학과", professor: "홍길동"},
+  { grade: 1, category: "전필", credit: 1, subject_name: "C프로그래밍", major:"컴퓨터과학과", professor: "홍길동"},
+  { grade: 1, category: "전필", credit: 3, subject_name: "식품자원경제학개론", major: "식품자원경제학과", professor: "홍길동"},
+  { grade: 1, category: "전필", credit: 1, subject_name: "C프로그래밍", major:"컴퓨터과학과", professor: "홍길동"},
+  { grade: 1, category: "전필", credit: 3, subject_name: "식품자원경제학개론", major: "식품자원경제학과", professor: "홍길동"},
+  { grade: 1, category: "전필", credit: 1, subject_name: "C프로그래밍", major:"컴퓨터과학과", professor: "홍길동"},
+  { grade: 1, category: "전필", credit: 3, subject_name: "식품자원경제학개론", major: "식품자원경제학과", professor: "홍길동"},
+  { grade: 1, category: "전필", credit: 1, subject_name: "C프로그래밍", major:"컴퓨터과학과", professor: "홍길동"},
+  { grade: 1, category: "전필", credit: 3, subject_name: "식품자원경제학개론", major: "식품자원경제학과", professor: "홍길동"},
+  { grade: 1, category: "전필", credit: 1, subject_name: "C프로그래밍", major:"컴퓨터과학과", professor: "홍길동"},
+  { grade: 1, category: "전필", credit: 3, subject_name: "식품자원경제학개론", major: "식품자원경제학과", professor: "홍길동"},
+  { grade: 1, category: "전필", credit: 1, subject_name: "C프로그래밍", major:"컴퓨터과학과", professor: "홍길동"},
+  { grade: 1, category: "전필", credit: 3, subject_name: "식품자원경제학개론", major: "식품자원경제학과", professor: "홍길동"},
+  { grade: 1, category: "전필", credit: 1, subject_name: "C프로그래밍", major:"컴퓨터과학과", professor: "홍길동"},
+  { grade: 1, category: "전필", credit: 3, subject_name: "식품자원경제학개론", major: "식품자원경제학과", professor: "홍길동"}
 ];
 
 // 졸업요건 충족했는지 여부를 판단하는 함수
@@ -262,43 +262,20 @@ var message = year + '년 ' + semester + '학기에 개설된 전공';
 
 document.getElementById('p-semester_date').innerHTML = message;
 
-// 학기별 개설 전공을 데이터베이스(mysql에서 가져오기)--------------------
+// 학기별 개설 전공을 데이터베이스(mysql에서 가져오기)------------------------------------------------------
 const user_major = "식품자원경제학과"; // 사용자의 전공
 
-// 테이블 요소 선택
-const table = document.getElementById('div-search_major');
-
 // 테이블 헤더 추가
-const headerRow = table.insertRow();
-const header1 = headerRow.insertCell(0);
-const header2 = headerRow.insertCell(1);
-const header3 = headerRow.insertCell(2);
-const header4 = headerRow.insertCell(3);
-header1.innerHTML = '학년';
-header2.innerHTML = '이수구분';
-header3.innerHTML = '학점';
-header4.innerHTML = '교과목명';
+// const headerRow = table.insertRow();
+// const header1 = headerRow.insertCell(0);
+// const header2 = headerRow.insertCell(1);
+// const header3 = headerRow.insertCell(2);
+// const header4 = headerRow.insertCell(3);
+// header1.innerHTML = '학년';
+// header2.innerHTML = '이수구분';
+// header3.innerHTML = '학점';
+// header4.innerHTML = '교과목명';
 
-// 데이터 추가
-for (let i = 0; i < major_data.length; i++) {
-  const grade = major_data[i].grade;
-  const category = major_data[i].category;
-  const credit = major_data[i].credit;
-  const subject_name = major_data[i].subject_name;
-  const major = major_data[i].major;
-
-  if (major === user_major) {
-    const row = table.insertRow();
-    const cell1 = row.insertCell(0);
-    const cell2 = row.insertCell(1);
-    const cell3 = row.insertCell(2);
-    const cell4 = row.insertCell(3);
-    cell1.textContent = grade;
-    cell2.textContent = category;
-    cell3.textContent = credit;
-    cell4.textContent = subject_name;
-  }
-}
 
 document.getElementById("section-origin_table").addEventListener("click", function() {
   // AJAX 요청을 통해 이수내역확인표를 받아오는 코드
@@ -317,238 +294,129 @@ document.getElementById("section-origin_table").addEventListener("click", functi
   });
 });
 
-//임의 DB
-const tempSubjects = [
-  { id: 1, name: '프로그래밍언어론', professor: '홍길동', category: '전공필수', time: '금4, 금5, 목6', room: '030-0304' },
-  { id: 2, name: '소프트웨어설계PBL', professor: '홍길동', category: '전공필수', time: '목1, 목2, 목3', room: '030-0304' },
-  { id: 3, name: '데이터베이스', professor: '홍길동', category: '전공필수', time: '금3, 월1, 월2', room: '030-0304' },
-  { id: 4, name: '데이터과학', professor: '홍길동', category: '전공필수', time: '토1, 토2', room: '030-0304' },
-  { id: 5, name: '컴퓨터네트워크', professor: '홍길동', category: '전공필수', time: '수3, 수4, 수5, 수6', room: '030-0304' }
-];
-
-// 시간표 업데이트 함수-------------------------------------------------------
-const updateTimetable = (subjects) => {
-  // 시간표 초기화
-  initializeTimetable();
-
-  // 강의를 시간표에 추가
-  subjects.forEach((subject) => {
-    addSubjectToTimetable(subject);
-  });
-};
-
-
-const MAX_TIMETABLE_HOURS =  9; // 최대 시간표 교시 수
-
-// 시간표 초기화 및 기본 행 생성----------------------------------------------
-const initializeTimetable = () => {
-  const timetable = document.getElementById("main-timetable");
-
-  // 기존 행 삭제
-  while (timetable.firstChild) {
-    timetable.firstChild.remove();
+// 이지민 작성 : 개설전공 목록 및 시간표에 추가--------------------------------------------------------
+const tempSubjects = [];
+(async () => {
+  try {
+    const response = await fetch('../php/getSubjectsList.php', {
+      method: 'GET'
+    });
+    const data = await response.json();
+    tempSubjects.push(...data);
+  } catch (error) {
+    console.error('데이터를 가져오는 도중 오류가 발생했습니다.', error);
   }
+})();
 
-  // 머리글 행 생성
-  const headerRow = document.createElement("tr");
-  headerRow.innerHTML = `
-    <th></th>
-    <th>월</th>
-    <th>화</th>
-    <th>수</th>
-    <th>목</th>
-    <th>금</th>
-    ${hasSaturdaySubject(tempSubjects) ? '<th>토</th>' : ''}
-  `;
-  timetable.appendChild(headerRow);
+(async () => {
+  try {
+    const response = await fetch('../php/getMajor.php');
+    if (!response.ok) {
+      throw new Error('서버 요청 실패');
+    }
+    const data = await response.json();
+    const table = document.getElementById('div-search_major');
 
-  // 기본 행 생성
-  const days = ["월", "화", "수", "목", "금"];
-  if (hasSaturdaySubject(tempSubjects)) {
-    days.push("토");
-    timetable.classList.add("has-saturday");
+    data.forEach((row) => {
+      const newRow = table.insertRow();
+      const cell1 = newRow.insertCell(0);
+      const cell2 = newRow.insertCell(1);
+      const cell3 = newRow.insertCell(2);
+      const cell4 = newRow.insertCell(3);
+      const cell5 = newRow.insertCell(4);
+      const cell6 = newRow.insertCell(5);
+      const cell7 = newRow.insertCell(6);
+      const button = row.professor === '미개설' ?
+        "<button type='button' id='unopened'>시간표에 추가</button>" :
+        `<button type='button' onclick='addSubjectFromList(${row['1st_subjects_id']})'>시간표에 추가</button>`;
+
+      cell1.textContent = row.curriculum_grade;
+      cell2.textContent = row.category;
+      cell3.textContent = row.credit;
+      cell4.textContent = row.subject_name;
+      cell5.textContent = row.professor;
+      cell6.textContent = row.lecture_time;
+      cell7.innerHTML = button;
+    });
+  } catch (error) {
+    console.error('서버 요청 실패.', error);
   }
+})();
 
-  const maxSubjectHour = findMaxSubjectHour(tempSubjects); // tempSubjects를 전달
-  const timetableHours = maxSubjectHour > MAX_TIMETABLE_HOURS ? maxSubjectHour : MAX_TIMETABLE_HOURS;
-
-  for (let i = 1; i <= timetableHours; i++) {
-    const row = document.createElement("tr");
-    const th = document.createElement("th");
-    const time = (8 + i) % 12 || 12; // 9, 10, 11, 12, 1, 2, ... 5
-    th.textContent = time;
-    row.appendChild(th);
-
-    for (const day of days) {
-      const td = document.createElement("td");
-      td.dataset.day = day;
-      td.dataset.time = i.toString();
-      row.appendChild(td);
-    }
-
-    timetable.appendChild(row);
-  }
-};
-
-// 토요일 강의 여부 확인 (시간표 열 확장용)-----------------------------------------
-const hasSaturdaySubject = (subjects) => {
-  for (const subject of subjects) {
-    const dayTimePairs = subject.time.split(", ");
-    for (const pair of dayTimePairs) {
-      const [day, _] = pair.split(/([^\uAC00-\uD7A3]+)/);
-      if (day === '토') {
-        return true;
-      }
-    }
-  }
-  
-  return false;
-};
-
-
-// 가장 큰 교시 확인 (시간표 행 확장용)----------------------------------------
-const findMaxSubjectHour = (subjects) => {
-  let maxSubjectHour = 0;
-  
-  for (const subject of subjects) {
-    const dayTimePairs = subject.time.split(", ");
-    for (const pair of dayTimePairs) {
-      const [_, time] = pair.split(/([^\uAC00-\uD7A3]+)/);
-      const numericTime = Number(time);
-      if (numericTime > maxSubjectHour) {
-        maxSubjectHour = numericTime;
-      }
-    }
-  }
-  return maxSubjectHour;
-};
-
-// 시간표에 강의를 추가---------------------------------------------------------
-const addSubjectToTimetable = (subject) => {
-
-  const timetable = document.getElementById("main-timetable");
-  const dayTimePairs = subject.time.split(", ");
-  let mergedRows = 1; // 통합된 행 수
-  let mergedRowStart = null; // 통합된 행 시작 인덱스
-  const days = ["월", "화", "수", "목", "금", "토"];
-
-  const colorArray = ["#FFEDEC", "#E7F5F4", "#FFF9D2", "#F2ECF7", "#FFEFDD", "#E0F3EB", "#F2FAD2", "#F4EBEA"]; // 배경색 배열
-
-  for (let i = 0; i < dayTimePairs.length; i++) {
-    const [day, time] = dayTimePairs[i].split(/([^\uAC00-\uD7A3]+)/);
-    const cell = document.querySelector(`#main-timetable td[data-day="${day}"][data-time="${time}"]`);
-
-    
-
-    //시간표 셀 확인
-    if (!cell) {
-      console.error(`시간표 셀을 찾을 수 없습니다. [day: ${day}, time: ${time}]`);
-      continue;
-    }
-
-    //해당 시간에 이미 다른 강의가 있는지 확인
-    if (cell.children.length > 0) {
-      return;
-    }
-
-    const isLastSubject = i === dayTimePairs.length - 1; //마지막 교시인지 확인
-    //연속된 강의면 mergedRows++
-    if (i > 0) {
-      const prevSubject = dayTimePairs[i - 1];
-      const [prevDay, prevTime] = prevSubject.split(/([^\uAC00-\uD7A3]+)/);
-      const currentTime = Number(time);
-      const prevTimeEnd = Number(prevTime) + 1;
-      if (day === prevDay && currentTime === prevTimeEnd) {
-        mergedRows++;
-        // continue;
-        if (!isLastSubject) {
-          continue;
-        }
-      }
-    }
-
-    const div = document.createElement("div");
-    div.innerHTML = `
-      <div style="font-weight: bold; font-size: 15px; " class="subject_info">${subject.name}</div>
-      <div class="subject_info">${subject.professor}</div>
-      <div class="subject_info">${subject.room}</div>
-      <button class="delete-button" onclick="removeSubjectFromTimetable()">삭제</button>
-    `;
-
-  
-    //연속된 강의면 rowspan 속성 설정 및 셀 삭제
-    if (mergedRows > 1) {
-      const startCellIndex = mergedRowStart.cellIndex;
-      const rowspan = mergedRows;
-      const prevRow = mergedRowStart.parentNode;
-
-      for (let j = 1; j < mergedRows; j++) {
-        const currentRowIndex = prevRow.rowIndex + j;
-        const currentRow = timetable.rows[currentRowIndex];
-        const currentDay = days[startCellIndex-1];
-        const cellToRemove = currentRow.querySelector(`#main-timetable td[data-day="${currentDay}"][data-time="${currentRowIndex}"]`);
-        if (cellToRemove) {
-          cellToRemove.remove();
-        }
-      }
-      mergedRowStart.setAttribute("rowspan", rowspan);
-    }
-    mergedRows = 1;
-    mergedRowStart = cell;
-
-    
-    cell.appendChild(div);
-    cell.classList.add("added");
-
-    const colorIndex = subject.id - 1
-    const color = colorArray[colorIndex % colorArray.length];
-    cell.style.backgroundColor = color;
-  }
-};
-
-// 시간표 업데이트
-updateTimetable(tempSubjects);
-
-
-//강의 삭제------------------------------------------------------------------
-const removeSubjectFromTimetable = (subject) => {
-  const dayTimePairs = subject.time.split(", ");
-  for (const pair of dayTimePairs) {
-    const [day, time] = pair.split(/([^\uAC00-\uD7A3]+)/);
-    const cell = document.querySelector(`#main-timetable td[data-day="${day}"][data-time="${time}"]`);
-    const div = cell.querySelector(`div[data-subject="${subject.name}"]`);
-    if (div) {
-      cell.removeChild(div);
-    }
-  }
-
-  // 서버 강의 삭제 요청
+const addSubjectToServer = (subject) => {
+  // AJAX 요청
   $.ajax({
-    url: '/api/remove-subject',
-    method: 'POST',
-    data: { subjectId: subject.id },
+    url: '../php/addSubject.php',
+    type: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify(subject),
     success: function (response) {
-      // 서버 응답 처리
-      console.log('강의 삭제 요청이 성공적으로 처리되었습니다.');
+      console.log('강의 추가 요청이 성공적으로 전송되었습니다.');
+
+      localStorage.setItem('subjectAdded', 'true');
     },
     error: function (xhr, status, error) {
-      // 서버 요청이 실패한 경우 에러 처리
-      console.error('강의 삭제 요청이 실패하였습니다.', error);
+      console.error('강의 추가 요청이 실패하였습니다.');
     }
   });
+};
 
-  updateTimetable(tempSubjects);
+// 서버에서 현재 강의 목록 가져오기
+const getTimetableFromServer = async () => {
+  try {
+    const subjects = await $.ajax({
+      url: '../php/getTimetable.php',
+      type: 'GET'
+    });
+    return subjects;
+  } catch (error) {
+    console.error('강의 목록을 가져오는 도중 오류가 발생하였습니다.', error);
+    return [];
+  }
+};
+// 이미 추가된 강의인지 확인하는 함수
+const isAlreadyAdded = async (subject) => {
+  const subjects = await getTimetableFromServer();
+  const alreadyAdded = subjects.find((addedSubject) => addedSubject['subject_code'] == subject['subject_code']);
+  return alreadyAdded !== undefined;
+};
+
+// 해당 시간에 강의가 이미 있는지 확인하는 함수
+const isTimeConflict = async (day, time) => {
+  const subjects = await getTimetableFromServer();
+  const lectureTimes = subjects.map(subject => subject.lecture_time);
+  for (let i = 0; i < lectureTimes.length; i++) {
+    const lectureTime = lectureTimes[i];
+    if (lectureTime.includes(day + time)) {
+      return true; // 시간 충돌
+    }
+  }
+  return false; // 시간 겹치는 강의 없음
 };
 
 
-//시간표 강의가 추가됐는지 확인하고 추가(변경)됐으면 함수 호출---------------------
-// 로컬 스토리지 확인
-setInterval(function() {
-  if (localStorage.getItem('subjectAdded') === 'true') {
-    // 실행할 함수 호출
-    updateTimetable(tempSubjects);
+// 강의목록에서 강의 추가
+const addSubjectFromList = async (subjectId) => {
+  const subject = tempSubjects.find((subject) => subject['1st_subjects_id'] == subjectId);
+  if (subject) {
+    const dayTimePairs = subject.lecture_time.split(", ");
 
-    // 상태 변경 감지 후 값 초기화
-    localStorage.setItem('subjectAdded', 'false');
+    for (const dayTimePair of dayTimePairs) {
+      const [day, time] = dayTimePair.split(/([^\uAC00-\uD7A3]+)/);
+
+      const isAdded = await isAlreadyAdded(subject);
+      if (isAdded) {
+        alert('이미 추가된 강의입니다.');
+      } else {
+        const isConflict = await isTimeConflict(day, time);
+        if (isConflict) {
+          alert('해당 시간에 이미 다른 강의가 있습니다.');
+        } else {
+          addSubjectToServer(subject);
+        }
+      }
+    }
+  } else {
+    console.log('해당 강의를 찾을 수 없습니다.');
   }
-}, 1000); // 1초마다 확인
+};

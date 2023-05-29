@@ -36,7 +36,6 @@ $.ajax({
   }
 });
 
-//임의 DB
 let tempSubjects = [];
 
 
@@ -269,7 +268,6 @@ const removeSubject = (subjects_now_id) => {
       console.error('강의 삭제 요청이 실패하였습니다.', error);
     }
   });
-
   updateTimetable(tempSubjects);
 };
 

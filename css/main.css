@@ -95,15 +95,6 @@ main{
     height: 70px;
     font-size: 12.5px;
 }
-/* #main-timetable td > div {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 98%;
-    height: 100%;
-    overflow: hidden;
-    padding: 2px;
-} */
 .delete-button {
     position: absolute;
     top: 50%;
@@ -178,9 +169,7 @@ td:hover .delete-button {
     height: 18px;
     border-radius: 10px;
     border: 1px solid #40BBCA;
-    padding: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 5px 10px;
     font-size: 13px;
     margin-left: 20px;
     margin-right: 25px;
