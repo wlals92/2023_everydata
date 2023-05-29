@@ -99,8 +99,6 @@ foreach ($extractedSentences as $sentence) {
         $stmt = $db->prepare($query);
         $stmt->bind_param("ssss", $user_id, $st_subjects_id, $nd_subjects_id, $semester_completed, $score);
         $stmt->execute();
-    } else {
-        echo "No matching subjects found.";
     }
 }
 
