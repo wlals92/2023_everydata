@@ -13,6 +13,7 @@ if ($result->num_rows > 0) {
     exit;
 }
 
+$user_id = 'dlwlals1234';
 // OCR.py에서 생성된 txt 파일 경로
 $txtFilePath = 'C:/Bitnami/wampstack-8.0.3-2/apache2/htdocs/txt/output_' . $user_id . '.txt';
 
@@ -67,40 +68,74 @@ foreach ($extractedSentences as $sentence) {
         $semester_id = "1st_subjects_id";
     }
 
-    $score = $items[5];  // score에는 B+이 들어감
+    if (isset($items[5])) {
+        $score = $items[5];
+    } else {
+        $score = 'F';
+    }
     $semester_completed = $lastChar; // semester_completed는 학기를 구분하는 변수 (1 혹은 2의 값을 가짐)
 
     // 우선 불러올 sql문을 적어주고 적은 후에 db에서 찾아줌
+    if ($subject_code == "11021121"){
+        $subject_code = "11021430";
+    } elseif($subject_code == "11021123"){
+        $subject_code = "11021398";
+    } elseif($subject_code == "11021122"){
+        $subject_code = "11021431";
+    }
     $subjects_completed_id_sql = "SELECT `$semester_id` FROM `$semester_table` WHERE `subject_code` = '$subject_code'"; // 학기별 테이블의 학수번호가 11021126이면 그 과목의 id 가져오기
     $result = $db->query($subjects_completed_id_sql);  // 실제 db에서 id 가져오기
-
+    
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();  // 학수번호가 일치하는 과목의 열에서 id 가져오기
 
         if ($semester_completed == 1) {
-            $st_subjects_id = $row[$semester_id];
-            $nd_subjects_id = null;  // 2학기 과목 ID를 NULL로 설정
+            $st_subjects_id = intval($row[$semester_id]);
+            $nd_subjects_id = NULL;  // 2학기 과목 ID를 NULL로 설정
         } elseif ($semester_completed == 2) {
-            $nd_subjects_id = $row[$semester_id];
-            $st_subjects_id = null;  // 1학기 과목 ID를 NULL로 설정
+            $nd_subjects_id = intval($row[$semester_id]);
+            $st_subjects_id = NULL;  // 1학기 과목 ID를 NULL로 설정
         } else {
-            $st_subjects_id = $row[$semester_id];
-            $nd_subjects_id = null;  // 2학기 과목 ID를 NULL로 설정
+            $st_subjects_id = intval($row[$semester_id]);
+            $nd_subjects_id = NULL;  // 2학기 과목 ID를 NULL로 설정
         }
+
 
         echo "user_id: " . $user_id . "\n";
         echo "st_subjects_id: " . $st_subjects_id . "\n";
         echo "nd_subjects_id: " . $nd_subjects_id . "\n";
-        echo "semester_completed: " . $semester_completed . "\n";
+        echo "semester_completed: " . $items[0] . "\n";
         echo "score: " . $score . "\n";
-
+    
+        
+        $st_subjects_id = mysqli_real_escape_string($db, $st_subjects_id);
+        $nd_subjects_id = mysqli_real_escape_string($db, $nd_subjects_id);
+        $semester_completed = mysqli_real_escape_string($db, $items[0]);
+        $score = mysqli_real_escape_string($db, $score);
+        
         $query = "INSERT INTO `subjects_completed` (`user_id`, `1st_subjects_id`, `2nd_subjects_id`, `semester_completed`, `score`)
-                VALUES (?, ?, ?, ?)";
-        $stmt = $db->prepare($query);
-        $stmt->bind_param("ssss", $user_id, $st_subjects_id, $nd_subjects_id, $semester_completed, $score);
-        $stmt->execute();
+                VALUES ('$user_id', $st_subjects_id, $nd_subjects_id, '$semester_completed', '$score')";
+        
+        if ($db->query($query) === true) {
+            echo "Data inserted successfully.";
+        } else {
+            echo "Error inserting data: " . $db->error;
+        }
+    } else {
+        // 데이터가 없는 경우에 대한 처리를 수행합니다.
+        // 예를 들어, 에러 메시지를 출력하거나 다른 작업을 수행할 수 있습니다.
+        echo "No matching records found.";
     }
-}
 
+    if ($db->query($query) === true) {
+        echo "Data inserted successfully.";
+    } else {
+        echo "Error inserting data: " . $db->error;
+    }
+    
+
+}
+// 성적이 없는 경우(점검 과목 일부)에는 null을 삽입하도록 수정
+// 현재 개설과목에 없는 경우에는 안됨. 과목명이 바뀐 경우를 추가(대학영어1, 대학영어2)
 $db->close();
 ?>
