@@ -326,22 +326,94 @@ const tempSubjects = [];
       const cell5 = newRow.insertCell(4);
       const cell6 = newRow.insertCell(5);
       const cell7 = newRow.insertCell(6);
+      const cell8 = newRow.insertCell(7);
+      const formattedLectureTime = formatLectureTime(row.lecture_time);
       const button = row.professor === '미개설' ?
         "<button type='button' id='unopened'>시간표에 추가</button>" :
         `<button type='button' onclick='addSubjectFromList(${row['1st_subjects_id']})'>시간표에 추가</button>`;
-
+    
       cell1.textContent = row.curriculum_grade;
       cell2.textContent = row.category;
       cell3.textContent = row.credit;
       cell4.textContent = row.subject_name;
       cell5.textContent = row.professor;
-      cell6.textContent = row.lecture_time;
+      cell6.textContent = formattedLectureTime;
       cell7.innerHTML = button;
+      cell8.textContent = row.department;
+      cell8.style.display = 'none';
     });
+    
   } catch (error) {
     console.error('서버 요청 실패.', error);
   }
 })();
+
+async function populateDepartmentDropdown() {
+  const dropdown = document.getElementById('departmentDropdown');
+  
+  try {
+    const response = await fetch('../php/getSession.php');
+    if (!response.ok) {
+      throw new Error('서버 요청 실패');
+    }
+    const departments = await response.json();
+
+    // 기존 옵션 제거
+    dropdown.innerHTML = '';
+
+    // 옵션 추가
+    if (departments.double_major !== 'none' || departments.minor !== 'none') {
+      const option = document.createElement('option');
+      option.value = '전체';
+      option.textContent = '전체'
+      dropdown.appendChild(option);
+    }
+    const majorOption = document.createElement('option');
+    majorOption.value = departments.major;
+    majorOption.textContent = departments.major;
+    dropdown.appendChild(majorOption);
+
+    if (departments.double_major !== 'none') {
+      const doubleMajorOption = document.createElement('option');
+      doubleMajorOption.value = departments.double_major;
+      doubleMajorOption.textContent = departments.double_major;
+      dropdown.appendChild(doubleMajorOption);
+    }
+    if (departments.minor !== 'none') {
+      const minorOption = document.createElement('option');
+      minorOption.value = departments.minor;
+      minorOption.textContent = departments.minor;
+      dropdown.appendChild(minorOption);
+    }
+  } catch (error) {
+    console.error('서버 요청 실패.', error);
+  }
+}
+
+// 페이지 로드 시 학과 드롭다운 메뉴 초기화
+window.onload = populateDepartmentDropdown;
+
+function filterSubjects() {
+  const dropdown = document.getElementById('departmentDropdown');
+  const selectedDepartment = dropdown.value;
+  let selectedComputer = '';
+  if (selectedDepartment == '컴퓨터과학과'){
+    selectedComputer = '컴퓨터과학부';
+  }
+  const table = document.getElementById('div-search_major');
+  const rows = table.getElementsByTagName('tr');
+
+  for (let i = 1; i < rows.length; i++) {
+    const row = rows[i];
+    const categoryCell = row.cells[7].textContent;
+
+    if (selectedDepartment === '전체' || categoryCell === selectedDepartment || categoryCell === selectedComputer) {
+      row.style.display = '';
+    } else {
+      row.style.display = 'none';
+    }
+  }
+}
 
 const addSubjectToServer = (subject) => {
   // AJAX 요청
@@ -420,3 +492,38 @@ const addSubjectFromList = async (subjectId) => {
     console.log('해당 강의를 찾을 수 없습니다.');
   }
 };
+
+function formatLectureTime(lectureTime) {
+  const times = lectureTime.split(','); // 시간을 쉼표로 분할하여 배열로 변환
+  const formattedTimes = [];
+
+  for (let i = 0; i < times.length; i++) {
+    const time = times[i].trim(); // 각 시간 문자열 앞뒤의 공백 제거
+
+    if (i > 0 && time.startsWith(times[i - 1].charAt(0))) {
+      // 이전 시간과 같은 요일인 경우
+      const prevTime = formattedTimes.pop(); // 이전 요일 + 시간
+      const currentTime = time.substring(1); //현재 시간
+      formattedTimes.push(prevTime + ', ' + currentTime); // 이전 요일과 현재 시간을 합쳐서 배열에 추가
+    } else {
+      formattedTimes.push(time); // 이전 시간과 요일이 다른 경우 그대로 배열에 추가
+    }
+  }
+
+  return formattedTimes.join(', '); // 변경된 시간들을 다시 쉼표로 연결하여 반환
+}
+
+fetch('../php/getSession.php')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('서버 요청이 실패하였습니다.');
+    }
+    return response.json();
+  })
+  .then(data => {
+    const user_name = document.getElementById('user_name');
+    user_name.innerHTML = data.name;
+  })
+  .catch(error => {
+    console.error('서버 요청이 실패하였습니다.', error);
+  });

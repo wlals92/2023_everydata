@@ -28,12 +28,13 @@ async function displaySubjectList(subjectsList) {
 
     subjectsList.forEach(subject => {
       const tr = document.createElement("tr");
+      const formattedLectureTime = formatLectureTime(subject.lecture_time);
       tr.innerHTML = `
         <td>${subject.subject_name}</td>
         <td>${subject.professor}</td>
         <td>${subject.category}${subject.ge_category ? `<br>(${subject.ge_category})` : ''}</td>
         <td>${subject.subject_code}</td>
-        <td>${subject.lecture_time}</td>
+        <td>${formattedLectureTime}</td>
         <td>${subject.lecture_room}</td>
         <td><button type="button" onclick="addSubjectFromList(${subject['1st_subjects_id']})">시간표에 추가</button></td>
       `;
@@ -90,7 +91,27 @@ function filterSubjectList() {
 }
 
 
-// 이지민 작성 : 시간표에 강의 추가-------------------------------------------------
+// 이지민 작성 : 시간표에 강의 추가 / 시간 형식 변환-------------------------------------------------
+function formatLectureTime(lectureTime) {
+  const times = lectureTime.split(','); // 시간을 쉼표로 분할하여 배열로 변환
+  const formattedTimes = [];
+
+  for (let i = 0; i < times.length; i++) {
+    const time = times[i].trim(); // 각 시간 문자열 앞뒤의 공백 제거
+
+    if (i > 0 && time.startsWith(times[i - 1].charAt(0))) {
+      // 이전 시간과 같은 요일인 경우
+      const prevTime = formattedTimes.pop(); // 이전 요일 + 시간
+      const currentTime = time.substring(1); //현재 시간
+      formattedTimes.push(prevTime + ', ' + currentTime); // 이전 요일과 현재 시간을 합쳐서 배열에 추가
+    } else {
+      formattedTimes.push(time); // 이전 시간과 요일이 다른 경우 그대로 배열에 추가
+    }
+  }
+
+  return formattedTimes.join(', '); // 변경된 시간들을 다시 쉼표로 연결하여 반환
+}
+
 // 서버에 강의 추가 요청 전송
 const addSubjectToServer = (subject) => {
   // AJAX 요청

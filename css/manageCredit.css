@@ -183,10 +183,19 @@ strong{
 #p-semester_date{
     font-size: 25px;
     display: inline-block;
-    margin-left: 25px;
+    margin-left: 30px;
     font-weight: bold;
     color:#40BBCA;
 }
+#departmentDropdown {
+    float: right;
+    width: 120px;
+    height: 30px;
+    margin-right: 30px;
+    border: 1px solid #A5A5A5;
+    border-radius: 5px;
+}
+
 
 /* 개설강의 div */
 #section-opened_lecture{
@@ -220,8 +229,6 @@ strong{
     font-weight: 500;
     padding: 3px;
 }
-
-
 /* 시간표에 추가 버튼 */
 #div-search_major button{
     background-color: #62D3DA;

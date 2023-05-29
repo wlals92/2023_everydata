@@ -222,7 +222,7 @@ strong{
 
 #div-class_list_table th, #div-class_list_table td{
     border-bottom: 1px solid #d0d0d0;
-    padding: 10px;
+    padding: 8px;
 }
 /* 시간표에 추가 버튼 */
 #div-class_list_table button{
