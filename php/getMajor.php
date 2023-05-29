@@ -35,42 +35,62 @@ if ($result) {
         $searchQuery = "SELECT * FROM 1st_subjects WHERE subject_name = '$subject_name'";
         $searchResult = $db->query($searchQuery);
 
-        if ($searchResult && $searchResult->num_rows > 0) {
-            // 검색 결과가 있을 경우
-            while ($searchRow = $searchResult->fetch_assoc()) {
-                $searchRow['curriculum_grade'] .= '-1';
-
-                if ($searchRow['department'] === $minor) {
-                    if ($row['minor_necessary'] === '◇') {
+        if ($row['department'] === $minor){
+            // 부전공인 경우
+            if ($row['minor_necessary'] === '◇') {
+                //부전공 전필일 경우
+                if ($searchResult && $searchResult->num_rows > 0){
+                    //개설
+                    while ($searchRow = $searchResult->fetch_assoc()){
+                        $searchRow['curriculum_grade'] .= '-1';
                         $searchRow['category'] = '전공필수';
-                    } else {
-                        $searchRow['category'] = '전공선택';
+                        $subjects[] = $searchRow;
                     }
-                }
-
-                // 가져온 정보를 배열에 추가
-                $subjects[] = $searchRow;
-            }
-        } else {
-            // 검색 결과가 없을 경우 기존의 $query에서 가져온 정보를 배열에 추가
-            $row['professor'] = '미개설';
-            $row['lecture_time'] = '미개설';
-
-            if ($row['department'] === $minor) {
-                if ($row['minor_necessary'] === '◇') {
+                }else {
+                    // 미개설
+                    $row['professor'] = '미개설';
+                    $row['lecture_time'] = '미개설';
                     $row['category'] = '전공필수';
-                } else {
+                    $subjects[] = $row;
+                }
+            }
+            else {
+                //부전공 전선일 경우
+                if ($searchResult && $searchResult->num_rows > 0){
+                    //개설
+                    while ($searchRow = $searchResult->fetch_assoc()){
+                        $searchRow['curriculum_grade'] .= '-1';
+                        $searchRow['category'] = '전공선택';
+                        $subjects[] = $searchRow;
+                    }
+                }else {
+                    // 미개설
+                    $row['professor'] = '미개설';
+                    $row['lecture_time'] = '미개설';
                     $row['category'] = '전공선택';
+                    $subjects[] = $row;
+                }
+            }
+        }else {
+            // 부전공이 아닐 경우
+            if ($searchResult && $searchResult->num_rows > 0) {
+                // 개설
+                while ($searchRow = $searchResult->fetch_assoc()) {
+                    $searchRow['curriculum_grade'] .= '-1';
+                    // 가져온 정보를 배열에 추가
+                    $subjects[] = $searchRow;
                 }
             } else {
+                // 미개설
+                $row['professor'] = '미개설';
+                $row['lecture_time'] = '미개설';
                 if ($row['category'] === '전필') {
                     $row['category'] = '전공필수';
                 } elseif ($row['category'] === '전선') {
                     $row['category'] = '전공선택';
                 }
+                $subjects[] = $row;
             }
-
-            $subjects[] = $row;
         }
     }
 

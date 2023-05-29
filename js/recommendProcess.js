@@ -100,7 +100,7 @@ document.getElementById('input-recommend_submit').onclick = function() {
 };
 
 
-// 이지민 작성 : 모두 선택
+// 이지민 작성 : 모두 선택, 이름 받아오기 ----------------------------------------------------------------
 function toggleCheckboxes(className) {
   if (className) {
     let selectAllCheckbox = document.getElementById("selectAll" + className);
@@ -121,3 +121,18 @@ function toggleCheckboxes(className) {
     }
   }
 }
+
+fetch('../php/getSession.php')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('서버 요청이 실패하였습니다.');
+    }
+    return response.json();
+  })
+  .then(data => {
+    const user_name = document.getElementById('user_name');
+    user_name.innerHTML = data.name;
+  })
+  .catch(error => {
+    console.error('서버 요청이 실패하였습니다.', error);
+  });
