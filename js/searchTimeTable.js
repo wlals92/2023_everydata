@@ -268,7 +268,7 @@ function showFilteredLectures() {
         }
       }
       
-
+      // selectedDay, selectedHours 둘다 선택된 경우
       if (selectedDay && selectedHours.length > 0) {
         shouldDisplay = true; // 기본값으로 true 설정
         for (let j = 0; j < selectedHours.length; j++) {
@@ -281,6 +281,7 @@ function showFilteredLectures() {
       }
       if (shouldDisplay) {
         row.style.display = ''; // 보여줌
+        // 검색어가 있을 경우
         if (searchValue!=''){
           if (!lectureName.includes(searchValue)) {
             row.style.display = 'none'; // 숨김
@@ -296,6 +297,7 @@ function showFilteredLectures() {
       const row = table.rows[i];
       const lectureName = row.cells[0].textContent;
       row.style.display = ''; // 보여줌
+      // 검색어가 있을 경우
       if (searchValue!=''){
         if (!lectureName.includes(searchValue)) {
           row.style.display = 'none'; // 숨김

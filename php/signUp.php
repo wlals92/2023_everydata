@@ -16,7 +16,7 @@ $minor = isset($_POST["minor"]) ? $_POST["minor"] : null;
 $file = isset($_FILES["file"]) ? $_FILES["file"] : null;
 
 if ($file !== null) {
-    $pdf_path = "./pdf/" . $id . ".pdf";
+    $pdf_path = "c:/Bitnami/wampstack-8.0.3-2/apache2/htdocs/pdf/" . $id . ".pdf";
     $save_path = "../pdf/" . $id . ".pdf";
     move_uploaded_file($file["tmp_name"], $save_path);
     $sql = "INSERT INTO `user` (`user_id`, `user_pw`,`name`,`academic_number`,`status`,`curriculum_year`, `grade`, `major`, `double_major`,`minor`,`subjects_completed_pdf`) 
