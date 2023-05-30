@@ -37,8 +37,13 @@ try:
     user_ids = [result[0] for result in user_results]
     completed_ids = [result[0] for result in completed_results]
 
+    # 중복된 값을 제거하여 유일한 값만 남김
+    completed_ids = list(filter(lambda x: x in user_ids, completed_ids))
+
     print("user_ids:", user_ids)
     print("completed_ids:", completed_ids)
+
+
 
     # 미완료된 ID 목록 추출
     missing_ids = [user_id for user_id in user_ids if user_id not in completed_ids]
