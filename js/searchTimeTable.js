@@ -208,6 +208,20 @@ searchInput.addEventListener('input', function() {
   showFilteredLectures();
 });
 
+const searchSelect = document.getElementById('form-search_select');
+searchSelect.addEventListener('change', handleSearchSelect);
+
+// 검색 종류 드롭다운
+function handleSearchSelect(){
+  const selectedValue = searchSelect.value;
+  if (selectedValue === 'lectureName'){
+    searchInput.placeholder = '강의명 검색';
+  }else{
+    searchInput.placeholder = '이수구분 검색';
+  }
+}
+
+
 // 카테고리별 강의목록 필터링----------------------------------------------------
 // 요일 체크박스 변경 시
 const dayCheckboxes = document.querySelectorAll('.table-select_day');
@@ -239,12 +253,19 @@ function showFilteredLectures() {
   const searchValue = searchInput.value;
   const selectedDay = document.querySelector('input[name="table-select_day"]:checked');
   const selectedHours = Array.from(document.querySelectorAll('input[name="table-select_time"]:checked')).map(checkbox => checkbox.value);
+  const selectedValue = searchSelect.value;
 
+  let cellNumber = 0;
+  if (selectedValue === 'lectureName'){
+    cellNumber = 0;
+  }else{
+    cellNumber = 2;
+  }
   if (selectedDay || selectedHours.length > 0) {
     for (let i = 1; i < table.rows.length; i++) {
       const row = table.rows[i];
       const lectureTime = row.cells[7].textContent;
-      const lectureName = row.cells[0].textContent;
+      const lectureCell = row.cells[cellNumber].textContent;
       let shouldDisplay = false;
 
       // selectedDay가 선택된 경우
@@ -283,7 +304,7 @@ function showFilteredLectures() {
         row.style.display = ''; // 보여줌
         // 검색어가 있을 경우
         if (searchValue!=''){
-          if (!lectureName.includes(searchValue)) {
+          if (!lectureCell.includes(searchValue)) {
             row.style.display = 'none'; // 숨김
           }
         }
@@ -295,11 +316,11 @@ function showFilteredLectures() {
     // 선택된 요일과 교시가 없을 때 전체 강의 보여주기
     for (let i = 1; i < table.rows.length; i++) {
       const row = table.rows[i];
-      const lectureName = row.cells[0].textContent;
+      const lectureCell = row.cells[cellNumber].textContent;
       row.style.display = ''; // 보여줌
       // 검색어가 있을 경우
       if (searchValue!=''){
-        if (!lectureName.includes(searchValue)) {
+        if (!lectureCell.includes(searchValue)) {
           row.style.display = 'none'; // 숨김
         }
       }
