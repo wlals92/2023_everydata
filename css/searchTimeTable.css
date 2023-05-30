@@ -131,6 +131,7 @@ strong{
     background-color: white;
     border: none;
     padding: 8px;
+    vertical-align: middle;
 }
 .fa-magnifying-glass{
     color: #62D3DA;
@@ -231,4 +232,9 @@ strong{
     color: white;
     border: none;
     padding: 7px;
+}
+
+/* 아이디 저장 */
+input[type="checkbox"] {
+    accent-color: #62D3DA;
 }
