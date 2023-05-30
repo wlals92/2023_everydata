@@ -1,5 +1,5 @@
 <?php
-// 이지민 작성 : 강의를 시간표에 추가하는 파일(강의 하나씩 추가)
+// 이지민 작성
 require_once("dbConfig.php");
 session_start();
 
