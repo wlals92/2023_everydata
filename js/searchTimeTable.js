@@ -37,6 +37,7 @@ async function displaySubjectList(subjectsList) {
         <td>${formattedLectureTime}</td>
         <td>${subject.lecture_room}</td>
         <td><button type="button" onclick="addSubjectFromList(${subject['1st_subjects_id']})">시간표에 추가</button></td>
+        <td style="display: none;">${subject.lecture_time}</td>
       `;
       table.appendChild(tr);
     });
@@ -198,10 +199,8 @@ const addSubjectFromList = async (subjectId) => {
 const searchInput = document.getElementById('form-search_text');
 const searchButton = document.getElementById('form-search_button');
 
-// 검색 버튼 클릭
 searchButton.addEventListener('click', function(event) {
   event.preventDefault();
-  performSearch();
 });
 
 // 검색어 입력
@@ -224,36 +223,85 @@ function performSearch() {
   }
 }
 
-// 요일과 교시에 따라 필터링된 강의 목록을 표시하는 함수
-function filterSubjectList() {
-  // 선택된 요일과 교시를 가져옴
-  const selectedDays = Array.from(document.querySelectorAll('.table-select_day:checked')).map(day => day.value);
-  const selectedHours = Array.from(document.querySelectorAll('.table-select_hour:checked')).map(hour => hour.value);
+// 카테고리별 강의목록 필터링----------------------------------------------------
+// 요일 체크박스 변경 시
+const dayCheckboxes = document.querySelectorAll('.table-select_day');
+const hourCheckboxes = document.querySelectorAll('.table-select_hour');
+dayCheckboxes.forEach(checkbox => {
+  checkbox.addEventListener('change', function () {
+    // 모든 체크박스 해제
+    if (this.checked) {
+      dayCheckboxes.forEach(cb => {
+        if (cb !== this) {
+          cb.checked = false;
+        }
+      });
+    } else {
+      this.checked = false;
+    }
+    showFilteredLectures()
+  });
+});
 
-  // 필터링된 강의 목록을 담을 배열
-  let filteredSubjects = [];
+hourCheckboxes.forEach(checkbox => {
+  checkbox.addEventListener('change', function () {
+    showFilteredLectures()
+  });
+});
 
-  // 선택된 요일과 교시가 없는 경우, 전체 강의 목록을 표시
-  if (selectedDays.length === 0 && selectedHours.length === 0) {
-    filteredSubjects = tempSubjects;
-  } else {
-    // 강의 목록을 순회하면서 필터링
-    tempSubjects.forEach(subject => {
-      // 강의 시간 정보를 가져옴
-      const subjectTimes = subject.time.split(', ');
+// 필터링된 강의 목록을 보여주는 함수
+function showFilteredLectures() {
+  const selectedDay = document.querySelector('input[name="table-select_day"]:checked');
+  const selectedHours = Array.from(document.querySelectorAll('input[name="table-select_time"]:checked')).map(checkbox => checkbox.value);
 
-      // 선택된 요일과 교시를 합쳐서 '월3'과 같은 형식의 문자열을 만듦
-      const selectedTime = selectedDays.map(day => selectedHours.map(hour => day + hour)).flat();
+  if (selectedDay || selectedHours.length > 0) {
+    for (let i = 1; i < table.rows.length; i++) {
+      const row = table.rows[i];
+      const lectureTime = row.cells[7].textContent;
+      let shouldDisplay = false;
 
-      // 선택된 시간과 강의의 시간을 비교하여 필터링
-      const hasMatchingTime = selectedTime.some(time => subjectTimes.includes(time));
-
-      if (hasMatchingTime) {
-        filteredSubjects.push(subject);
+      // selectedDay가 선택된 경우
+      if (selectedDay && selectedHours.length == 0) {
+        const searchTime = selectedDay.value;
+        if (lectureTime.includes(searchTime)) {
+          shouldDisplay = true;
+        }
       }
-    });
-  }
 
-  // 필터링된 강의 목록 표시
-  displaySubjectList(filteredSubjects);
+      // selectedHours가 선택된 경우
+      if (selectedHours.length > 0 && !selectedDay) {
+        for (let j = 0; j < selectedHours.length; j++) {
+          const searchTime = selectedHours[j];
+          const regex = new RegExp(`\\b${searchTime}\\b`); // 정확한 일치 검사(ex. searchTime이 5 일때 15 출력 방지)
+          if (lectureTime.match(regex)) {
+            shouldDisplay = true;
+            break;
+          }
+        }
+      }
+      
+
+      if (selectedDay && selectedHours.length > 0) {
+        shouldDisplay = true; // 기본값으로 true 설정
+        for (let j = 0; j < selectedHours.length; j++) {
+          const searchTime = selectedDay.value + selectedHours[j];
+          if (!lectureTime.includes(searchTime)) {
+            shouldDisplay = false; // 하나라도 포함되지 않으면 false 설정하고 종료
+            break;
+          }
+        }
+      }
+      if (shouldDisplay) {
+        row.style.display = ''; // 보여줌
+      } else {
+        row.style.display = 'none'; // 숨김
+      }
+    }
+  } else {
+    // 선택된 요일과 교시가 없을 때 전체 강의 보여주기
+    for (let i = 1; i < table.rows.length; i++) {
+      const row = table.rows[i];
+      row.style.display = ''; // 보여줌
+    }
+  }
 }
