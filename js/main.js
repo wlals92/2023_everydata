@@ -7,18 +7,9 @@ let semester = today.getMonth() < 6 ? 1 : 2;
 let message = year + '년 ' + semester + '학기 시간표';
 document.getElementById('p-semester_date').innerHTML = message;
 
-//임의 DB
-const tempSubjects = [
-  { id: 1, name: '프로그래밍언어론', professor: '홍길동', category: '전공필수', time: '금4, 금5, 목5', room: '030-0304' },
-  { id: 2, name: '소프트웨어설계PBL', professor: '홍길동', category: '전공필수', time: '목1, 목2, 목3', room: '030-0304' },
-  { id: 3, name: '데이터베이스데이터베이스데이터베이스', professor: '홍길동', category: '전공필수', time: '금3, 월1, 월2', room: '030-0304' },
-  { id: 4, name: '데이터과학', professor: '홍길동', category: '전공필수', time: '금1, 금2', room: '030-0304' },
-  { id: 5, name: '컴퓨터네트워크', professor: '홍길동', category: '전공필수', time: '수3, 수4, 수5, 수6', room: '030-0304' }
-];
-
 //사용자 프로필--------------------------------------------------------------
 $.ajax({
-  url: "/user",
+  url: "../php/getProfile.php",
   type: "GET",
   dataType: "json",
   success: function(data) {
@@ -45,26 +36,48 @@ $.ajax({
   }
 });
 
+let tempSubjects = [];
+
+
 //강의목록 팝업창 : 메인 '+' 버튼 onclick ------------------------------------
 const openSubjectList = () => {
-  const url = 'sample.html';
-  // const url = 'searchTimeTable.html';
+  // const url = 'sample.html';
+  const url = 'searchTimeTable.html';
   window.open(url, 'subject-list-popup', 'width=1200,height=800');
 };
 
+// 시간표 정보를 서버에서 가져오기
+const getTimetableFromServer = async () => {
+  try {
+    const response = await fetch('../php/getTimetable.php');
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      console.error('시간표를 가져오는 중에 오류가 발생했습니다.', response.status);
+      return [];
+    }
+  } catch (error) {
+    console.error('시간표를 가져오는 중에 오류가 발생했습니다.', error);
+    return [];
+  }
+};
 
 
 // 시간표 업데이트 함수-------------------------------------------------------
-const updateTimetable = (subjects) => {
-  // 시간표 초기화
-  initializeTimetable();
-
-  // 강의를 시간표에 추가
-  subjects.forEach((subject) => {
-    addSubjectToTimetable(subject);
-  });
+const updateTimetable = async () => {
+  try {
+    tempSubjects = []; // tempSubjects 초기화
+    const subjectsFromServer = await getTimetableFromServer();
+    tempSubjects.push(...subjectsFromServer);
+    initializeTimetable();
+    subjectsFromServer.forEach((subject) => {
+      addSubjectToTimetable(subject);
+    });
+  } catch (error) {
+    console.error('시간표 업데이트 중에 오류가 발생했습니다.', error);
+  }
 };
-
 
 const MAX_TIMETABLE_HOURS =  9; // 최대 시간표 교시 수
 
@@ -121,7 +134,7 @@ const initializeTimetable = () => {
 // 토요일 강의 여부 확인 (시간표 열 확장용)-----------------------------------------
 const hasSaturdaySubject = (subjects) => {
   for (const subject of subjects) {
-    const dayTimePairs = subject.time.split(", ");
+    const dayTimePairs = subject.lecture_time.split(",");
     for (const pair of dayTimePairs) {
       const [day, _] = pair.split(/([^\uAC00-\uD7A3]+)/);
       if (day === '토') {
@@ -139,7 +152,7 @@ const findMaxSubjectHour = (subjects) => {
   let maxSubjectHour = 0;
   
   for (const subject of subjects) {
-    const dayTimePairs = subject.time.split(", ");
+    const dayTimePairs = subject.lecture_time.split(",");
     for (const pair of dayTimePairs) {
       const [_, time] = pair.split(/([^\uAC00-\uD7A3]+)/);
       const numericTime = Number(time);
@@ -155,7 +168,7 @@ const findMaxSubjectHour = (subjects) => {
 const addSubjectToTimetable = (subject) => {
 
   const timetable = document.getElementById("main-timetable");
-  const dayTimePairs = subject.time.split(", ");
+  const dayTimePairs = subject.lecture_time.split(",");
   let mergedRows = 1; // 통합된 행 수
   let mergedRowStart = null; // 통합된 행 시작 인덱스
   const days = ["월", "화", "수", "목", "금", "토"];
@@ -197,10 +210,10 @@ const addSubjectToTimetable = (subject) => {
 
     const div = document.createElement("div");
     div.innerHTML = `
-      <div style="font-weight: bold; font-size: 15px; " class="subject_info">${subject.name}</div>
+      <div style="font-weight: bold; font-size: 15px; " class="subject_info">${subject.subject_name}</div>
       <div class="subject_info">${subject.professor}</div>
-      <div class="subject_info">${subject.room}</div>
-      <button class="delete-button" onclick="removeSubjectFromTimetable()">삭제</button>
+      <div class="subject_info">${subject.lecture_room}</div>
+      <button class="delete-button" onclick="removeSubject(${subject.subjects_now_id})">삭제</button>
     `;
 
   
@@ -228,7 +241,7 @@ const addSubjectToTimetable = (subject) => {
     cell.appendChild(div);
     cell.classList.add("added");
 
-    const colorIndex = subject.id - 1
+    const colorIndex = subject['subjects_now_id'] - 1
     const color = colorArray[colorIndex % colorArray.length];
     cell.style.backgroundColor = color;
 
@@ -239,22 +252,13 @@ const addSubjectToTimetable = (subject) => {
 updateTimetable(tempSubjects);
 
 //강의 삭제------------------------------------------------------------------
-const removeSubjectFromTimetable = (subject) => {
-  const dayTimePairs = subject.time.split(", ");
-  for (const pair of dayTimePairs) {
-    const [day, time] = pair.split(/([^\uAC00-\uD7A3]+)/);
-    const cell = document.querySelector(`#main-timetable td[data-day="${day}"][data-time="${time}"]`);
-    const div = cell.querySelector(`div[data-subject="${subject.name}"]`);
-    if (div) {
-      cell.removeChild(div);
-    }
-  }
+const removeSubject = (subjects_now_id) => {
 
   // 서버 강의 삭제 요청
   $.ajax({
-    url: '/api/remove-subject',
+    url: '../php/removeSubject.php',
     method: 'POST',
-    data: { subjectId: subject.id },
+    data: { subjectId: subjects_now_id },
     success: function (response) {
       // 서버 응답 처리
       console.log('강의 삭제 요청이 성공적으로 처리되었습니다.');
@@ -264,7 +268,6 @@ const removeSubjectFromTimetable = (subject) => {
       console.error('강의 삭제 요청이 실패하였습니다.', error);
     }
   });
-
   updateTimetable(tempSubjects);
 };
 
@@ -279,4 +282,4 @@ setInterval(function() {
     // 상태 변경 감지 후 값 초기화
     localStorage.setItem('subjectAdded', 'false');
   }
-}, 1000); // 1초마다 확인
+}, 1000);

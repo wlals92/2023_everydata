@@ -1,20 +1,26 @@
 <?php
+// 이지민 작성 : 로그인
 require_once("dbConfig.php"); 
-$_POST = JSON_DECODE(file_get_contents("php://input"), true);
+
 
 $id = $_POST["id"];
 $password= $_POST["password"];
 
-$sql = "SELECT name FROM user WHERE id = '$id' and password='$password'"; 
+$sql = "SELECT * FROM user WHERE user_id ='$id' and user_pw ='$password'"; 
 $res = $db->query($sql); 
 $row = $res->fetch_array(MYSQLI_ASSOC);
-if ($row==!NULL) {
+
+if ($row !== null) {
     session_start();
     $_SESSION['name']=$row['name'];
-    header('Location: /html/mypage.html');
-    $_SESSION['id'] = $id;
-    echo true;
+    $_SESSION['id']=$id;
+    $_SESSION['curriculum_year']=$row['curriculum_year'];
+    $_SESSION['major']=$row['major'];
+    $_SESSION['double_major']=$row['double_major'];
+    $_SESSION['minor']=$row['minor'];
+    echo json_encode(true);
 } else {            
-    echo false;   
+    echo json_encode(false);   
 }
 mysqli_close($db);
+?>

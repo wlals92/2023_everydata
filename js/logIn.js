@@ -2,7 +2,7 @@
 
 //입력이 비어있는지 확인
 const checkField = (fieldId, checkText) => {
-    const fieldValue = $(`${fieldId}`).val();
+    const fieldValue = $(`#${fieldId}`).val();
     if (fieldValue === '') {
         alert(checkText)
         return true;
@@ -42,15 +42,15 @@ $('#login-form').submit(function(event) {
         //서버로 아이디, 비밀번호 전송
         $.ajax({
             type:'POST',
-            url:'/login',
+            url:'../php/logIn.php',
             data:{
                 id:id,
                 password:password
             },
             success: function(response) {
-                if (response.success){
+                if (response === true){
                     alert('로그인에 성공하였습니다.');
-                    window.location.href='/main';
+                    window.location.href='../html/main.html';
                 }
                 else {
                     alert('아이디 또는 비밀번호가 잘못되었습니다.');

@@ -216,20 +216,55 @@ const validateForm = () => {
     return true;
 };
 
-const form = document.querySelector('form');
-
-form.addEventListener("submit", function(event) {
-    event.preventDefault(); //폼 제출 이벤트 취소
+const form = document.querySelector('#signup-form');
+form.addEventListener("submit", async function(event) {
+    event.preventDefault(); // 폼 제출 이벤트 취소
 
     const isValid = validateForm();
 
-    //유효성 검사 결과에 따라 form submit
-    if (isValid) {
-        console.log("제출 완료");
-        form.submit();
-    }
-    else {
-        alert("입력한 내용을 다시 확인해주세요.");
-        return false;
+    try {
+        if (isValid) {
+            const formData = new FormData(form); // 폼 데이터 가져오기
+
+            // 아이디 중복 확인
+            const response = await fetch("../php/checkID.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: new URLSearchParams(formData)
+            });
+            console.log(response);
+
+            if (response.ok) {
+                const data = await response.json();
+                if (data.duplicate === false) {
+                    // 중복이 아닌 경우
+                    // 회원 가입 폼 데이터 전송
+                    const signUpResponse = await fetch("../php/signUp.php", {
+                        method: "POST",
+                        body: formData
+                    });
+
+                    if (signUpResponse.ok) {
+                        const signUpData = await signUpResponse.text();
+                        console.log(signUpData); // 서버에서 반환한 데이터 출력
+                        window.location.href = '../index.html'; // 페이지 이동
+                    } else {
+                        console.error("Sign up request failed.");
+                    }
+                } else {
+                    // 중복인 경우
+                    alert("이미 해당 아이디가 존재합니다.");
+                }
+            } else {
+                console.error("Check ID request failed.");
+            }
+        } else {
+            alert("입력한 내용을 다시 확인해주세요.");
+            return false;
+        }
+    } catch (error) {
+        console.log(error);
     }
 });

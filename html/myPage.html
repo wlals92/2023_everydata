@@ -38,9 +38,8 @@
                     </li>
                 </ul>
                 <div id="nav-logo">
-                    <img id="nav-logo_img" src="../img/logo-green.png" alt="메인로고" height="30">
                     <a href="main.html">
-                        <span>EVERY</span><span class="nav-logo_data">DATA</span>
+                        <img id="nav-logo_img" src="../img/logo-text-green.png" alt="메인로고" height="30">
                     </a>
                 </div>
                 <button id="nav-logout_button" type="button" onclick="logout()">로그아웃</button>
@@ -55,39 +54,39 @@
                             <div id="profile-img_box">
                                 <img id="profile-img" src="../img/profile-gnu.png">
                             </div>
-                            <div id="profile-name">이지민</div>
+                            <div id="profile-name"></div>
                             <a href="./updateUser.html">회원정보 수정</a>
                         </div>
                         <table class="main-profile">
                             <tr>
                                 <th><div>학과</div></th>
-                                <td>컴퓨터과학과</td>
+                                <td id="profile-major"></td>
                                 <th><div>상태</div></th>
-                                <td>학부생/재학</td>
+                                <td id="profile-status"></td>
                             </tr>
                             <tr>
                                 <th><div>학번</div></th>
-                                <td>2023000000</td>
+                                <td id="profile-student_id"></td>
                                 <th><div>학년</div></th>
-                                <td>3</td>
+                                <td id="profile-grade"></td>
                             </tr>
                         </table>
                         <table class="main-profile">
                             <tr>
                                 <th><div>이수학점</div></th>
-                                <td><span>76</span><span>/</span><span>130</span></td>
+                                <td><span id="profile-user_credit"></span><span>/</span><span id="profile-total_credit"></span></td>
                                 <th><div>교과적용</div></th>
-                                <td>2023</td>
+                                <td id="profile-curriculum_year"></td>
                             </tr>
                         </table>
                         <div class="main-profile" id="main-profile_department">
                             <span>
                                 <div>부전공</div>
-                                <span>-</span>
+                                <span id="profile-minor"></span>
                             </span>
                             <span>
                                 <div>복수전공</div>
-                                <span>-</span>
+                                <span id="profile-double_major"></span>
                             </span>
                         </div>
                     </div>
@@ -110,7 +109,7 @@
                             <tr>
                                 <th style="width: 150px;"><div>이수학기</div></th>
                                 <th style="width: 175px;"><div>이수구분</div></th>
-                                <th><div>과목명</div></th>
+                                <th><div>교과목명</div></th>
                                 <th style="width: 110px;"><div>학점</div></th>
                                 <th style="width: 110px;"><div>성적</div></th>
                             </tr>

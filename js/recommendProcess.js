@@ -1,3 +1,4 @@
+// 남서린 작성
 // 제출 버튼 요소 가져오기
 const submitBtn = document.getElementById("input-recommend_submit");
 
@@ -8,33 +9,43 @@ submitBtn.addEventListener("click", function(event) {
   // 선택한 값들 가져오기
   const selectedDay = document.querySelector("input[name='day']:checked").value; // 1번 문항(공강 요일) 값 가져오기
   const fillCredit = document.getElementById("div-fill_credit").value; // 2번 문항(희망 학점) 가져오기
-  const selectedAreas = Array.from(document.querySelectorAll("input[type='checkbox']:checked")).map(input => input.name); // 3번 문항(교양 영역) 가져오기
-  
+  const selectedAreas = Array.from(document.querySelectorAll("input[type='checkbox']:checked")).map(input => input.value); // 3번 문항(교양 영역) 가져오기
+
   // 값들을 객체로 만들기
   const data = {
     day: selectedDay, // 공강 요일 값
     credit: fillCredit, // 학점 값
     areas: selectedAreas // 선택한 영역 값들의 배열
   };
-  
-  // 값들을 JSON 형태로 변환(JSON은 웹에서 데이터를 전송할 때 사용)
-  const jsonData = JSON.stringify(data);
-  
-  // JS 파일 내에서 Python 파일 호출(임시 파일이라서 나중에 수정 필요@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@)
-  const pythonFile = "../python/skatjfls_recommend.py"; // Python 파일 경로
 
-  // Python 파일 호출 코드(AJAX(서버와 웹이 비동기식으로 데이터 교환) 사용)
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", pythonFile, true); // POST 요청 설정
-  xhr.setRequestHeader("Content-Type", "application/json"); // 요청 헤더 설정
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-      console.log(xhr.responseText); // Python 파일에서 반환된 응답 출력
-    }
-  };
-  xhr.send(jsonData); // JSON 데이터를 요청으로 보냄
+  fetch("../php/recommendSubjects.php", {
+    method: 'POST',
+    body: JSON.stringify(data)
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+    })
+    .catch(error => {
+      console.error(error); // 오류 메시지 출력
+    });
 
 });
+
+  // // JS 파일 내에서 Python 파일 호출(임시 파일이라서 나중에 수정 필요@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@)
+  // const pythonFile = "../python/skatjfls_recommend.py"; // Python 파일 경로
+
+  // // Python 파일 호출 코드(AJAX(서버와 웹이 비동기식으로 데이터 교환) 사용)
+  // const xhr = new XMLHttpRequest();
+  // xhr.open("POST", pythonFile, true); // POST 요청 설정
+  // xhr.setRequestHeader("Content-Type", "application/json"); // 요청 헤더 설정
+  // xhr.onreadystatechange = function () {
+  //   if (xhr.readyState === 4 && xhr.status === 200) {
+  //     console.log(xhr.responseText); // Python 파일에서 반환된 응답 출력
+  //   }
+  // };
+  // xhr.send(jsonData); // JSON 데이터를 요청으로 보냄
+
 //@@@@@@@@@@@@@@@@@@@에러 발생. 근데 js내의 문제가 아니라 서버 보안때문에 발생하는거라 가상환경 만들어서 실행하면 실행 된다고 하는데 일단 해봐야해요@@@@@@@@@@@@@@@@@
 
 const fillCreditInput = document.getElementById("div-fill_credit");
@@ -89,3 +100,43 @@ document.getElementById('input-recommend_submit').onclick = function() {
 };
 
 
+// 여기서부터 이지민 작성 ----------------------------------------------------------------------------
+// 모두 선택 함수
+function toggleCheckboxes(className) {
+  if (className) {
+    // 영역별 모두 선택
+    let selectAllCheckbox = document.getElementById("selectAll" + className);
+    let checkboxes = document.querySelectorAll('input[type="checkbox"][name="' + className + '"]');
+
+    for (let i = 0; i < checkboxes.length; i++) {
+      checkboxes[i].checked = selectAllCheckbox.checked;
+    }
+  } else {
+    // 전체 모두 선택
+    let selectAllCheckbox = document.getElementById("selectAll");
+    let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+    for (let i = 0; i < checkboxes.length; i++) {
+      let checkbox = checkboxes[i];
+      if (checkbox.name === 'balanceClass' || checkbox.name === 'RootClass' || checkbox.name === 'CoreClass') {
+        checkbox.checked = selectAllCheckbox.checked;
+      }
+    }
+  }
+}
+
+// 이름 받아옴 : 000님을 위한 강의 추천 표시용
+fetch('../php/getSession.php')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('서버 요청이 실패하였습니다.');
+    }
+    return response.json();
+  })
+  .then(data => {
+    const user_name = document.getElementById('user_name');
+    user_name.innerHTML = data.name;
+  })
+  .catch(error => {
+    console.error('서버 요청이 실패하였습니다.', error);
+  });

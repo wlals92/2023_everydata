@@ -1,12 +1,5 @@
 // 개설 교양 목록 가져오기-------------------------------------------------
-const tempSubjects = [
-  {id: 1, name: "프로그래밍언어론", professor:"홍길동", category: "전공필수", subject_code: "1", time:"월1, 월2, 수3", room: "030-0304"},
-  {id: 2, name: "소프트웨어설계PBL", professor:"홍길동", category: "전공필수", subject_code:"2", time:"월2, 월3", room: "030-0304"},
-  {id: 3, name: "데이터베이스", professor:"홍길동", category: "전공필수", subject_code: "3", time:"금1, 금2", room: "030-0304"},
-  {id: 4, name: "데이터과학", professor:"홍길동", category: "전공필수", subject_code: "4", time:"월11, 월12", room: "030-0304"},
-  {id: 5, name: "컴퓨터네트워크", professor:"홍길동", category: "전공필수", subject_code: "5", time:"화6, 화7, 수3", room: "030-0304"},
-  {id: 6, name: "환경과오염", professor: "김둘선", category: "균형교양(통합교양) 5영역(과학과 기술)", subject_code: "6", time: "월4, 토5", room: "024-0135"}
-];
+const tempSubjects = [];
 // 현재 날짜 기반으로 년도와 학기 출력 : 남서린 작성
 let today = new Date();
 let year = today.getFullYear();
@@ -20,76 +13,317 @@ const categorySelect = document.getElementById("table-ge_category");
 
 
 // 강의 목록을 표시하는 함수
-function displaySubjectList(subjects) {
-  // 기존 테이블 내용 삭제
-  while (table.firstChild) {
-    table.firstChild.remove();
+async function displaySubjectList(subjectsList) {
+  // // 기존 테이블 내용 삭제
+  // while (table.firstChild) {
+  //   table.firstChild.remove();
+  // }
+
+  try {
+    const response = await fetch('../php/getSubjectsList.php', {
+      method: 'GET'
+    });
+    const data = await response.json();
+    subjectsList.push(...data);
+
+    subjectsList.forEach(subject => {
+      const tr = document.createElement("tr");
+      const formattedLectureTime = formatLectureTime(subject.lecture_time);
+      tr.innerHTML = `
+        <td>${subject.subject_name}</td>
+        <td>${subject.professor}</td>
+        <td>${subject.category}${subject.ge_category ? `<br>(${subject.ge_category})` : ''}</td>
+        <td>${subject.subject_code}</td>
+        <td>${formattedLectureTime}</td>
+        <td>${subject.lecture_room}</td>
+        <td><button type="button" onclick="addSubjectFromList(${subject['1st_subjects_id']})">시간표에 추가</button></td>
+        <td style="display: none;">${subject.lecture_time}</td>
+      `;
+      table.appendChild(tr);
+    });
+  } catch (error) {
+    console.error('데이터를 가져오는 도중 오류가 발생했습니다.', error);
   }
-
-  // 헤더 생성
-  const thRow = document.createElement("tr");
-  thRow.innerHTML = `
-    <th><div>과목명</div></th>
-    <th><div>교수명</div></th>
-    <th><div>분류</div></th>
-    <th><div>과목 코드</div></th>
-    <th><div>시간</div></th>
-    <th><div>강의실</div></th>
-    <th><div>추가</div></th>
-  `;
-  table.appendChild(thRow);
-
-  subjects.forEach(subject => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${subject.name}</td>
-      <td>${subject.professor}</td>
-      <td style="width: 120px;">${subject.category}</td>
-      <td>${subject.subject_code}</td>
-      <td>${subject.time}</td>
-      <td>${subject.room}</td>
-      <td><button type="button" onclick="addSubjectFromList(${subject.id})">시간표에 추가</button></td>
-    `;
-    table.appendChild(tr);
-  });
 }
 
 // 초기 페이지 로드 시 전체 강의 목록 표시
-displaySubjectList(tempSubjects);
+async function initializePage() {
+  try {
+    await displaySubjectList(tempSubjects);
+  } catch (error) {
+    console.error('강의 목록 표시 중 오류가 발생했습니다.', error);
+  }
+}
+
+initializePage();
+
+// // 요일과 교시에 따라 필터링된 강의 목록을 표시하는 함수
+// function filterSubjectList() {
+//   // 선택된 요일과 교시를 가져옴
+//   const selectedDays = Array.from(document.querySelectorAll('.table-select_day:checked')).map(day => day.value);
+//   const selectedHours = Array.from(document.querySelectorAll('.table-select_hour:checked')).map(hour => hour.value);
+
+//   // 필터링된 강의 목록을 담을 배열
+//   let filteredSubjects = [];
+
+//   // 선택된 요일과 교시가 없는 경우, 전체 강의 목록을 표시
+//   if (selectedDays.length === 0 && selectedHours.length === 0) {
+//     filteredSubjects = tempSubjects;
+//   } else {
+//     // 강의 목록을 순회하면서 필터링
+//     tempSubjects.forEach(subject => {
+//       // 강의 시간 정보를 가져옴
+//       const subjectTimes = subject.time.split(', ');
+
+//       // 선택된 요일과 교시를 합쳐서 '월3'과 같은 형식의 문자열을 만듦
+//       const selectedTime = selectedDays.map(day => selectedHours.map(hour => day + hour)).flat();
+
+//       // 선택된 시간과 강의의 시간을 비교하여 필터링
+//       const hasMatchingTime = selectedTime.some(time => subjectTimes.includes(time));
+
+//       if (hasMatchingTime) {
+//         filteredSubjects.push(subject);
+//       }
+//     });
+//   }
+
+//   // 필터링된 강의 목록 표시
+//   displaySubjectList(filteredSubjects);
+// }
 
 
-// 요일과 교시에 따라 필터링된 강의 목록을 표시하는 함수
-function filterSubjectList() {
-  // 선택된 요일과 교시를 가져옴
-  const selectedDays = Array.from(document.querySelectorAll('.table-select_day:checked')).map(day => day.value);
-  const selectedHours = Array.from(document.querySelectorAll('.table-select_hour:checked')).map(hour => hour.value);
+// 이지민 작성 ---------------------------------------------------------------------------
+// 시간 형식 변환 : ex. 화2, 화3, 수1, 수2 -> 화2, 3, 수1, 2
+function formatLectureTime(lectureTime) {
+  const times = lectureTime.split(','); // 시간을 쉼표로 분할하여 배열로 변환
+  const formattedTimes = [];
 
-  // 필터링된 강의 목록을 담을 배열
-  let filteredSubjects = [];
+  for (let i = 0; i < times.length; i++) {
+    const time = times[i].trim(); // 각 시간 문자열 앞뒤의 공백 제거
 
-  // 선택된 요일과 교시가 없는 경우, 전체 강의 목록을 표시
-  if (selectedDays.length === 0 && selectedHours.length === 0) {
-    filteredSubjects = tempSubjects;
-  } else {
-    // 강의 목록을 순회하면서 필터링
-    tempSubjects.forEach(subject => {
-      // 강의 시간 정보를 가져옴
-      const subjectTimes = subject.time.split(', ');
-
-      // 선택된 요일과 교시를 합쳐서 '월3'과 같은 형식의 문자열을 만듦
-      const selectedTime = selectedDays.map(day => selectedHours.map(hour => day + hour)).flat();
-
-      // 선택된 시간과 강의의 시간을 비교하여 필터링
-      const hasMatchingTime = selectedTime.some(time => subjectTimes.includes(time));
-
-      if (hasMatchingTime) {
-        filteredSubjects.push(subject);
-      }
-    });
+    if (i > 0 && time.startsWith(times[i - 1].charAt(0))) {
+      // 이전 시간과 같은 요일인 경우
+      const prevTime = formattedTimes.pop(); // 이전 요일 + 시간
+      const currentTime = time.substring(1); //현재 시간
+      formattedTimes.push(prevTime + ', ' + currentTime); // 이전 요일과 현재 시간을 합쳐서 배열에 추가
+    } else {
+      formattedTimes.push(time); // 이전 시간과 요일이 다른 경우 그대로 배열에 추가
+    }
   }
 
-  // 필터링된 강의 목록 표시
-  displaySubjectList(filteredSubjects);
+  return formattedTimes.join(', '); // 변경된 시간들을 다시 쉼표로 연결하여 반환
+}
+
+// 서버에 강의 추가 요청 전송
+const addSubjectToServer = (subject) => {
+  // AJAX 요청
+  $.ajax({
+    url: '../php/addSubject.php',
+    type: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify(subject),
+    success: function (response) {
+      console.log('강의 추가 요청이 성공적으로 전송되었습니다.');
+
+      localStorage.setItem('subjectAdded', 'true');
+    },
+    error: function (xhr, status, error) {
+      console.error('강의 추가 요청이 실패하였습니다.');
+    }
+  });
+};
+
+// 서버에서 현재 강의 목록 가져오기
+const getTimetableFromServer = async () => {
+  try {
+    const subjects = await $.ajax({
+      url: '../php/getTimetable.php',
+      type: 'GET'
+    });
+    return subjects;
+  } catch (error) {
+    console.error('강의 목록을 가져오는 도중 오류가 발생하였습니다.', error);
+    return [];
+  }
+};
+
+// 이미 추가된 강의인지 확인하는 함수
+const isAlreadyAdded = async (subject) => {
+  const subjects = await getTimetableFromServer();
+  const alreadyAdded = subjects.find((addedSubject) => addedSubject['subject_code'] == subject['subject_code']);
+  return alreadyAdded !== undefined;
+};
+
+// 해당 시간에 강의가 이미 있는지 확인하는 함수
+const isTimeConflict = async (day, time) => {
+  const subjects = await getTimetableFromServer();
+  const lectureTimes = subjects.map(subject => subject.lecture_time);
+  for (let i = 0; i < lectureTimes.length; i++) {
+    const lectureTime = lectureTimes[i];
+    if (lectureTime.includes(day + time)) {
+      return true; // 시간 충돌
+    }
+  }
+  return false; // 시간 겹치는 강의 없음
+};
+
+
+// 강의목록에서 강의 추가
+const addSubjectFromList = async (subjectId) => {
+  const subject = tempSubjects.find((subject) => subject['1st_subjects_id'] == subjectId);
+  if (subject) {
+    const dayTimePairs = subject.lecture_time.split(", ");
+
+    for (const dayTimePair of dayTimePairs) {
+      const [day, time] = dayTimePair.split(/([^\uAC00-\uD7A3]+)/);
+
+      const isAdded = await isAlreadyAdded(subject);
+      if (isAdded) {
+        alert('이미 추가된 강의입니다.');
+      } else {
+        const isConflict = await isTimeConflict(day, time);
+        if (isConflict) {
+          alert('해당 시간에 이미 다른 강의가 있습니다.');
+        } else {
+          addSubjectToServer(subject);
+        }
+      }
+    }
+  } else {
+    console.log('해당 강의를 찾을 수 없습니다.');
+  }
+};
+
+
+// 강의 검색------------------------------------------------------------------------
+const searchInput = document.getElementById('form-search_text');
+const searchButton = document.getElementById('form-search_button');
+
+searchButton.addEventListener('click', function(event) {
+  event.preventDefault();
+});
+
+// 검색어 입력
+searchInput.addEventListener('input', function() {
+  showFilteredLectures();
+});
+
+const searchSelect = document.getElementById('form-search_select');
+searchSelect.addEventListener('change', handleSearchSelect);
+
+// 검색 종류 드롭다운
+function handleSearchSelect(){
+  const selectedValue = searchSelect.value;
+  if (selectedValue === 'lectureName'){
+    searchInput.placeholder = '강의명 검색';
+  }else{
+    searchInput.placeholder = '이수구분 검색';
+  }
 }
 
 
+// 카테고리별 강의목록 필터링----------------------------------------------------
+// 요일 체크박스 변경 시
+const dayCheckboxes = document.querySelectorAll('.table-select_day');
+const hourCheckboxes = document.querySelectorAll('.table-select_hour');
+dayCheckboxes.forEach(checkbox => {
+  checkbox.addEventListener('change', function () {
+    // 모든 체크박스 해제
+    if (this.checked) {
+      dayCheckboxes.forEach(cb => {
+        if (cb !== this) {
+          cb.checked = false;
+        }
+      });
+    } else {
+      this.checked = false;
+    }
+    showFilteredLectures()
+  });
+});
+
+hourCheckboxes.forEach(checkbox => {
+  checkbox.addEventListener('change', function () {
+    showFilteredLectures()
+  });
+});
+
+// 필터링된 강의 목록을 보여주는 함수
+function showFilteredLectures() {
+  const searchValue = searchInput.value;
+  const selectedDay = document.querySelector('input[name="table-select_day"]:checked');
+  const selectedHours = Array.from(document.querySelectorAll('input[name="table-select_time"]:checked')).map(checkbox => checkbox.value);
+  const selectedValue = searchSelect.value;
+
+  let cellNumber = 0;
+  if (selectedValue === 'lectureName'){
+    cellNumber = 0;
+  }else{
+    cellNumber = 2;
+  }
+  if (selectedDay || selectedHours.length > 0) {
+    for (let i = 1; i < table.rows.length; i++) {
+      const row = table.rows[i];
+      const lectureTime = row.cells[7].textContent;
+      const lectureCell = row.cells[cellNumber].textContent;
+      let shouldDisplay = false;
+
+      // selectedDay가 선택된 경우
+      if (selectedDay && selectedHours.length == 0) {
+        const searchTime = selectedDay.value;
+        if (lectureTime.includes(searchTime)) {
+          shouldDisplay = true;
+        }
+      }
+
+      // selectedHours가 선택된 경우
+      if (selectedHours.length > 0 && !selectedDay) {
+        shouldDisplay = true; // 기본값으로 true 설정
+        for (let j = 0; j < selectedHours.length; j++) {
+          const searchTime = selectedHours[j];
+          const regex = new RegExp(`\\b${searchTime}\\b`); // 정확한 일치 검사(ex. searchTime이 5 일때 15 출력 방지)
+          if (!lectureTime.match(regex)) {
+            shouldDisplay = false;
+            break;
+          }
+        }
+      }
+      
+      // selectedDay, selectedHours 둘다 선택된 경우
+      if (selectedDay && selectedHours.length > 0) {
+        shouldDisplay = true; // 기본값으로 true 설정
+        for (let j = 0; j < selectedHours.length; j++) {
+          const searchTime = selectedDay.value + selectedHours[j];
+          if (!lectureTime.includes(searchTime)) {
+            shouldDisplay = false; // 하나라도 포함되지 않으면 false 설정하고 종료
+            break;
+          }
+        }
+      }
+      if (shouldDisplay) {
+        row.style.display = ''; // 보여줌
+        // 검색어가 있을 경우
+        if (searchValue!=''){
+          if (!lectureCell.includes(searchValue)) {
+            row.style.display = 'none'; // 숨김
+          }
+        }
+      } else {
+        row.style.display = 'none'; // 숨김
+      }
+    }
+  } else {
+    // 선택된 요일과 교시가 없을 때 전체 강의 보여주기
+    for (let i = 1; i < table.rows.length; i++) {
+      const row = table.rows[i];
+      const lectureCell = row.cells[cellNumber].textContent;
+      row.style.display = ''; // 보여줌
+      // 검색어가 있을 경우
+      if (searchValue!=''){
+        if (!lectureCell.includes(searchValue)) {
+          row.style.display = 'none'; // 숨김
+        }
+      }
+    }
+  }
+}

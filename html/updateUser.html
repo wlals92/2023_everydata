@@ -19,24 +19,24 @@
             <div>*은 필수항목입니다.</div>
             <form method="post" id="update-form" action="/submit" enctype="multipart/form-data">
                 <div><span>*</span>아이디</div>
-                <input type="text" id="id" placeholder="아이디 입력(6~20자)" maxlength="20" disabled readonly>
+                <input type="text" name="id" id="id" placeholder="아이디 입력(6~20자)" maxlength="20" disabled readonly>
                 <span class="input-check" id="id-checktext"></span>
                 <div><span>*</span>비밀번호</div>
-                <input type="password" id="password" onchange="password_inputcheck()" placeholder="비밀번호 입력(8~20자)" maxlength="20">
+                <input type="password" name="password" id="password" onchange="password_inputcheck()" placeholder="비밀번호 입력(8~20자)" maxlength="20">
                 <span class="input-check" id="password-checktext"></span>
                 <div><span>*</span>비밀번호 확인</div>
                 <input type="password" id="repassword" onchange="repassword_inputcheck()" placeholder="비밀번호 재입력" maxlength="20">
                 <span class="input-check" id="repassword-checktext"></span>
                 <div><span>*</span>이름</div>
-                <input type="text" id="name" onchange="name_inputcheck()" placeholder="이름">
+                <input type="text" name="name" id="name" onchange="name_inputcheck()" placeholder="이름">
                 <span class="input-check" id="name-checktext"></span>
                 <div><span>*</span>학번</div>
-                <input type="text" id="academic_number" onchange="academic_number_inputcheck()" placeholder="학번">
-                <span class="input-check" id="academic_number-checktext"></span>
+                <input type="text" name="student_id" id="student_id" onchange="student_id_inputcheck()" placeholder="학번">
+                <span class="input-check" id="student_id-checktext"></span>
                 <div id="update-threebox">
                     <div>
                         <div><span>*</span>상태</div>
-                        <select id="academic_status" onblur="select_inputcheck('academic_status', 'academic_status-checktext')">
+                        <select name="academic_status" id="academic_status" onblur="select_inputcheck('academic_status', 'academic_status-checktext')">
                             <option selected disabled>선택</option>
                             <option value="재학">재학</option>
                             <option value="휴학">휴학</option>
@@ -45,7 +45,7 @@
                     </div>
                     <div>
                         <div><span>*</span>교과적용년도</div>
-                        <select id="curriculum_year" onblur="select_inputcheck('curriculum_year', 'curriculum_year-checktext')">
+                        <select name="curriculum_year" id="curriculum_year" onblur="select_inputcheck('curriculum_year', 'curriculum_year-checktext')">
                             <option selected disabled>선택</option>
                             <option value="2023">2023</option>
                             <option value="2022">2022</option>
@@ -61,7 +61,7 @@
                     </div>
                     <div>
                         <div><span>*</span>학년</div>
-                        <select id="grade" onblur="select_inputcheck('grade', 'grade-checktext')">
+                        <select name="grade" id="grade" onblur="select_inputcheck('grade', 'grade-checktext')">
                             <option selected disabled>선택</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -72,7 +72,7 @@
                     </div>
                 </div>
                 <div><span>*</span>학과</div>
-                <select id="major" onblur="select_inputcheck('major', 'major-checktext')">
+                <select name="major" id="major" onblur="select_inputcheck('major', 'major-checktext')">
                     <option selected disabled>선택</option>
                     <option value="생명과학부">생명과학부</option>
                     <option value="물리학과">물리학과</option>
@@ -86,7 +86,7 @@
                 </select>
                 <span class="input-check" id="major-checktext"></span>
                 <div>복수전공</div>
-                <select id="double_major">
+                <select name="double_major" id="double_major">
                     <option value="null">선택안함</option>
                     <option value="생명과학부">생명과학부</option>
                     <option value="물리학과">물리학과</option>
@@ -99,7 +99,7 @@
                     <option value="컴퓨터과학과">컴퓨터과학과</option>
                 </select>
                 <div>부전공</div>
-                <select id="minor">
+                <select name="minor" id="minor">
                     <option value="null">선택안함</option>
                     <option value="생명과학부">생명과학부</option>
                     <option value="물리학과">물리학과</option>
@@ -113,7 +113,7 @@
                 </select>
                 <div>이수내역확인표 PDF</div>
                 <p id="filebox">
-                    <input type="file" id="file" onblur="file_inputcheck()">
+                    <input type="file" name="file" id="file" onblur="file_inputcheck()">
                     <label for="file">업로드</label>
                 </p>
                 <span id="file-checktext">1-1 신입생의 경우 이수내역확인표는 추가하지 않아도 됩니다.</span>
