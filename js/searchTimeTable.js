@@ -204,24 +204,9 @@ searchButton.addEventListener('click', function(event) {
 });
 
 // 검색어 입력
-searchInput.addEventListener('input', performSearch);
-
-// 검색 함수
-function performSearch() {
-  const searchValue = searchInput.value;
-
-  // 검색어와 일치하는 행을 보여주거나 숨김
-  for (let i = 1; i < table.rows.length; i++) {
-    const row = table.rows[i];
-    const lectureName = row.cells[0].textContent;
-
-    if (lectureName.includes(searchValue)) {
-      row.style.display = ''; // 보여줌
-    } else {
-      row.style.display = 'none'; // 숨김
-    }
-  }
-}
+searchInput.addEventListener('input', function() {
+  showFilteredLectures();
+});
 
 // 카테고리별 강의목록 필터링----------------------------------------------------
 // 요일 체크박스 변경 시
@@ -251,6 +236,7 @@ hourCheckboxes.forEach(checkbox => {
 
 // 필터링된 강의 목록을 보여주는 함수
 function showFilteredLectures() {
+  const searchValue = searchInput.value;
   const selectedDay = document.querySelector('input[name="table-select_day"]:checked');
   const selectedHours = Array.from(document.querySelectorAll('input[name="table-select_time"]:checked')).map(checkbox => checkbox.value);
 
@@ -258,6 +244,7 @@ function showFilteredLectures() {
     for (let i = 1; i < table.rows.length; i++) {
       const row = table.rows[i];
       const lectureTime = row.cells[7].textContent;
+      const lectureName = row.cells[0].textContent;
       let shouldDisplay = false;
 
       // selectedDay가 선택된 경우
@@ -270,11 +257,12 @@ function showFilteredLectures() {
 
       // selectedHours가 선택된 경우
       if (selectedHours.length > 0 && !selectedDay) {
+        shouldDisplay = true; // 기본값으로 true 설정
         for (let j = 0; j < selectedHours.length; j++) {
           const searchTime = selectedHours[j];
           const regex = new RegExp(`\\b${searchTime}\\b`); // 정확한 일치 검사(ex. searchTime이 5 일때 15 출력 방지)
-          if (lectureTime.match(regex)) {
-            shouldDisplay = true;
+          if (!lectureTime.match(regex)) {
+            shouldDisplay = false;
             break;
           }
         }
@@ -293,6 +281,11 @@ function showFilteredLectures() {
       }
       if (shouldDisplay) {
         row.style.display = ''; // 보여줌
+        if (searchValue!=''){
+          if (!lectureName.includes(searchValue)) {
+            row.style.display = 'none'; // 숨김
+          }
+        }
       } else {
         row.style.display = 'none'; // 숨김
       }
@@ -301,7 +294,13 @@ function showFilteredLectures() {
     // 선택된 요일과 교시가 없을 때 전체 강의 보여주기
     for (let i = 1; i < table.rows.length; i++) {
       const row = table.rows[i];
+      const lectureName = row.cells[0].textContent;
       row.style.display = ''; // 보여줌
+      if (searchValue!=''){
+        if (!lectureName.includes(searchValue)) {
+          row.style.display = 'none'; // 숨김
+        }
+      }
     }
   }
 }
