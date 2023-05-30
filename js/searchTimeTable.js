@@ -57,7 +57,7 @@ async function initializePage() {
 
 initializePage();
 
-// // 요일과 교시에 따라 필터링된 강의 목록을 표시하는 함수
+// // 요일과 교시에 따라 필터링된 강의 목록을 표시하는 함수!
 // function filterSubjectList() {
 //   // 선택된 요일과 교시를 가져옴
 //   const selectedDays = Array.from(document.querySelectorAll('.table-select_day:checked')).map(day => day.value);
