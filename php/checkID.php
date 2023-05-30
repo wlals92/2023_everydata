@@ -1,5 +1,5 @@
 <?php
-// 이지민 작성 : 아이디 중복 여부 확인하는 파일
+// 이지민 작성
 require_once("dbConfig.php");
 
 $id = isset($_POST["id"]) ? $_POST["id"] : null;

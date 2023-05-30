@@ -100,7 +100,7 @@ strong{
 }
 /* 검색창 전체 div */
 #section-search_box{
-    width: 50%;
+    width: 55%;
     height: auto;
     margin: 10px auto;
     display: block;
@@ -111,9 +111,18 @@ strong{
     width: 100%;
     text-align: center;
 }
+/* 검색창 강의명/이수구분 드롭다운 */
+#form-search_select{
+    height: auto;
+    border: 1px solid #62D3DA;
+    font-size: 14px;
+    border-radius: 10px;
+    padding: 8px;
+    margin-right: 7px;
+}
 /* 검색창 텍스트 입력하는 부분 */
 #form-search_text{
-    width: 80%;
+    width: 60%;
     height: auto;
     font-size: 15px;
     background-color: #FFFFFF;
@@ -131,7 +140,6 @@ strong{
     background-color: white;
     border: none;
     padding: 8px;
-    vertical-align: middle;
 }
 .fa-magnifying-glass{
     color: #62D3DA;
@@ -197,7 +205,7 @@ strong{
 /* 강의 검색 결과 div */
 #section-class_list{
     width: 95%;
-    height: 735px;
+    height: 700px;
     background-color: #FFFFFF;
     margin: 10px auto;
     overflow: auto;
@@ -223,7 +231,7 @@ strong{
 
 #div-class_list_table th, #div-class_list_table td{
     border-bottom: 1px solid #d0d0d0;
-    padding: 8px;
+    padding: 10px;
 }
 /* 시간표에 추가 버튼 */
 #div-class_list_table button{
@@ -232,9 +240,4 @@ strong{
     color: white;
     border: none;
     padding: 7px;
-}
-
-/* 아이디 저장 */
-input[type="checkbox"] {
-    accent-color: #62D3DA;
 }

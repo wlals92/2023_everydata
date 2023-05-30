@@ -76,22 +76,22 @@ const name_inputcheck = () => {
 };
   
 //학번 유효성 검사
-const student_id_inputcheck = () => {
+const academic_number_inputcheck = () => {
     //숫자로 된 문자열
-    const student_idReg = /^[0-9]+$/;
-    const student_id = document.getElementById("student_id").value;
+    const academic_numberReg = /^[0-9]+$/;
+    const academic_number = document.getElementById("academic_number").value;
     
-    if (student_idReg.test(student_id)) {
+    if (academic_numberReg.test(academic_number)) {
         //유효한 학번 형식
-        showMessage('student_id', '', false);
+        showMessage('academic_number', '', false);
         return true;
-    } else if (student_id === "") {
+    } else if (academic_number === "") {
         //비어있을 경우
-        showMessage('student_id', '학번을 입력해주세요.', true);
+        showMessage('academic_number', '학번을 입력해주세요.', true);
         return false;
     } else {
         //유효하지 않은 학번 형식
-        showMessage('student_id', '숫자로 입력해주세요.', true);
+        showMessage('academic_number', '숫자로 입력해주세요.', true);
         return false;
     }
 };
@@ -100,7 +100,7 @@ const student_id_inputcheck = () => {
 const select_inputcheck = (inputId, checktextId) => {
     const select = document.getElementById(inputId);
     const checktext = document.getElementById(checktextId);
-
+  
     if (select.value === "선택") {
         //선택하지 않은 경우
         select.style.borderColor = "red";
@@ -160,23 +160,11 @@ const validateForm = () => {
         //이름 유효성 검사 실패
         return false;
     }
-    if (!student_id_inputcheck()){
+    if (!academic_number_inputcheck()){
         //학번 유효성 검사 실패
         return false;
     }
-    if (!select_inputcheck('academic_status', 'academic_status-checktext')){
-        //선택 항목 미입력
-        return false;
-    }
-    if (!select_inputcheck('curriculum_year', 'curriculum_year-checktext')){
-        //선택 항목 미입력
-        return false;
-    }
-    if (!select_inputcheck('grade', 'grade-checktext')){
-        //선택 항목 미입력
-        return false;
-    }
-    if (!select_inputcheck('major', 'major-checktext')){
+    if (!select_inputcheck()){
         //선택 항목 미입력
         return false;
     }
@@ -191,80 +179,65 @@ const validateForm = () => {
 
 document.addEventListener('DOMContentLoaded', function() {
     // 사용자 정보를 가져와서 폼에 설정하는 함수
-    async function setUserInfo() {
-        try {
-            // 사용자 정보 가져오기 AJAX 요청
-            const response = await fetch('../php/getUserInfo.php', {
-                method: 'GET'
-            });
-
-            if (response.ok) {
-                const userInfo = await response.json();
-
-                // 폼 요소 가져오기
-                const idInput = document.getElementById('id');
-                const passwordInput = document.getElementById('password');
-                const nameInput = document.getElementById('name');
-                const student_idInput = document.getElementById('student_id');
-                const academic_statusInput = document.getElementById('academic_status');
-                const curriculum_yearInput = document.getElementById('curriculum_year');
-                const gradeInput = document.getElementById('grade');
-                const majorInput = document.getElementById('major');
-                const double_majorInput = document.getElementById('double_major');
-                const minorInput = document.getElementById('minor');
-
-                // 사용자 정보를 폼에 설정
-                idInput.value = userInfo[0].user_id;
-                passwordInput.value = userInfo[0].user_pw;
-                nameInput.value = userInfo[0].name;
-                student_idInput.value = userInfo[0].academic_number;
-                academic_statusInput.value = userInfo[0].status;
-                curriculum_yearInput.value = userInfo[0].curriculum_year;
-                gradeInput.value = userInfo[0].grade;
-                majorInput.value = userInfo[0].major;
-                double_majorInput.value = userInfo[0].double_major;
-                minorInput.value = userInfo[0].minor;
-            } else {
-                console.error('사용자 정보를 가져오는 도중 오류가 발생했습니다.');
-            }
-        } catch (error) {
-            console.log(error);
-            console.error('사용자 정보를 가져오는 도중 오류가 발생했습니다.');
-        }
+    function setUserInfo() {
+      // 사용자 정보 AJAX 요청 (임의 DB) 파일은 백이랑 연동 후 설정 가능
+      const userInfo = {
+        id: 'jimin1234',
+        password: 'jimin1234!',
+        name: '이지민',
+        academic_number: '2023000000',
+        academic_status: '재학',
+        curriculum_year: 2023,
+        grade: 3,
+        major: '컴퓨터과학과',
+        double_major: '화학과',
+        minor: null,
+      };
+  
+      // 폼 요소 가져오기
+      const idInput = document.getElementById('id');
+      const passwordInput = document.getElementById('password');
+      const nameInput = document.getElementById('name');
+      const academic_numberInput = document.getElementById('academic_number');
+      const academic_statusInput = document.getElementById('academic_status');
+      const curriculum_yearInput = document.getElementById('curriculum_year');
+      const gradeInput = document.getElementById('grade');
+      const majorInput = document.getElementById('major');
+      const double_majorInput = document.getElementById('double_major');
+      const minorInput = document.getElementById('minor');
+  
+      // 사용자 정보를 폼에 설정
+      idInput.value = userInfo.id;
+      passwordInput.value = userInfo.password;
+      nameInput.value = userInfo.name;
+      academic_numberInput.value = userInfo.academic_number;
+      academic_statusInput.value = userInfo.academic_status;
+      curriculum_yearInput.value = userInfo.curriculum_year;
+      gradeInput.value = userInfo.grade;
+      majorInput.value = userInfo.major;
+      double_majorInput.value = userInfo.double_major;
+      minorInput.value = userInfo.minor;
     }
-
+  
     // 페이지 로드 시 사용자 정보 설정
     setUserInfo();
-});
+  
+    // 폼 제출 이벤트 핸들러
+    document.getElementById('update-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      // 폼 데이터 처리 등의 로직 추가
 
-// 폼 제출 이벤트 핸들러
-const form = document.querySelector('#update-form');
-form.addEventListener("submit", async function(event) {
-    event.preventDefault(); // 폼 제출 이벤트 취소
+      const isValid = validateForm();
 
-    const isValid = validateForm();
-
-    try {
+        //유효성 검사 결과에 따라 form submit
         if (isValid) {
-            const formData = new FormData(form); // 폼 데이터 가져오기
-
-            const updateResponse = await fetch("../php/updateUser.php", {
-                method: "POST",
-                body: formData
-            });
-            if (updateResponse.ok) {
-                const updateData = await updateResponse.text();
-                console.log(updateData); // 서버에서 반환한 데이터 출력
-                alert("회원정보 수정이 완료되었습니다.");
-                window.location.href = '../html/myPage.html'; // 페이지 이동
-            } else {
-                console.error("회원정보 수정 요청이 실패하였습니다.");
-            }
-        } else {
+            console.log("제출 완료");
+            form.submit();
+        }
+        else {
             alert("입력한 내용을 다시 확인해주세요.");
             return false;
         }
-    } catch (error) {
-        console.log(error);
-    }
+    });
 });
+

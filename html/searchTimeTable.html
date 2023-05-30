@@ -46,6 +46,10 @@
             </div>
             <div id="section-search_box">
                 <form id="div-search_time_table">
+                    <select id="form-search_select">
+                        <option value="lectureName">강의명</option>
+                        <option value="lectureCategory">이수구분</option>
+                    </select>
                     <input type="text" id="form-search_text" placeholder="강의명 검색">
                     <button id="form-search_button"><i class="fa-solid fa-magnifying-glass"></i></button>
                 </form>
@@ -90,7 +94,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <!-- 요일은 하나만! -->
+                        <!-- 요일은 하나만!!! -->
                         <th>요일</th>
                         <td><label><input type="checkbox" class="table-select_day" name="table-select_day" value="월">월&nbsp;</label></td>
                         <td><label><input type="checkbox" class="table-select_day" name="table-select_day" value="화">화&nbsp;</label></td>
@@ -110,7 +114,8 @@
                         <td><label><input type="checkbox" class="table-select_hour" name="table-select_time" value="7">7&nbsp;</label></td>
                         <td><label><input type="checkbox" class="table-select_hour" name="table-select_time" value="8">8&nbsp;</label></td>
                         <td><label><input type="checkbox" class="table-select_hour" name="table-select_time" value="9">9&nbsp;</label></td>
-                      </tr>                     
+                      </tr>
+                                                            
                       
                 </table>
             </div>
@@ -124,7 +129,6 @@
                         <th style="width: 90px;"><div>시간</div></th>
                         <th style="width: 90px;"><div>강의실</div></th>
                         <th style="width: 110px;"><div>시간표 추가</div></th>
-                        <th style="width: 110px; display: none;"><div>시간</div></th>
                     </tr>
                 </table>
             </div>
