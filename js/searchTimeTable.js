@@ -57,72 +57,72 @@ async function initializePage() {
   }
 }
 
-// 카테고리 선택 이벤트 처리
-categorySelect.addEventListener("change", function() {
-  // 과목 목록을 업데이트합니다.
-  updateSubjectList();
-});
+// // 카테고리 선택 이벤트 처리
+// categorySelect.addEventListener("change", function() {
+//   // 과목 목록을 업데이트합니다.
+//   updateSubjectList();
+// });
 
-// 과목 목록을 업데이트하는 함수
-function updateSubjectList() {
-  // 기존 테이블 내용 삭제
-  while (table.firstChild) {
-    table.firstChild.remove();
-  }
+// // 과목 목록을 업데이트하는 함수
+// function updateSubjectList() {
+//   // 기존 테이블 내용 삭제
+//   while (table.firstChild) {
+//     table.firstChild.remove();
+//   }
 
-  // 과목 목록을 가져와서 선택된 카테고리와 일치하는 과목만 표시합니다.
-  displaySubjectList(tempSubjects);
-}
+//   // 과목 목록을 가져와서 선택된 카테고리와 일치하는 과목만 표시합니다.
+//   displaySubjectList(tempSubjects);
+// }
 
-// 체크된 요일의 value 값을 저장할 변수
-var selectedDay = null;
+// // 체크된 요일의 value 값을 저장할 변수
+// var selectedDay = null;
 
-// 체크된 교시의 value 값을 저장할 변수
-var selectedHour = null;
+// // 체크된 교시의 value 값을 저장할 변수
+// var selectedHour = null;
 
-// 체크박스 요소들을 선택합니다
-var dayCheckboxes = document.getElementsByClassName("table-select_day");
-var hourCheckboxes = document.getElementsByClassName("table-select_hour");
-console.log(dayCheckboxes); // 확인용 로그
-console.log(hourCheckboxes); // 확인용 로그
+// // 체크박스 요소들을 선택합니다
+// var dayCheckboxes = document.getElementsByClassName("table-select_day");
+// var hourCheckboxes = document.getElementsByClassName("table-select_hour");
+// console.log(dayCheckboxes); // 확인용 로그
+// console.log(hourCheckboxes); // 확인용 로그
 
-// 요일 체크박스 이벤트 처리
-for (var i = 0; i < dayCheckboxes.length; i++) {
-  dayCheckboxes[i].addEventListener("change", function() {
-    // 다른 요일 체크박스를 해제합니다
-    for (var j = 0; j < dayCheckboxes.length; j++) {
-      if (dayCheckboxes[j] !== this) {
-        dayCheckboxes[j].checked = false;
-      }
-    }
+// // 요일 체크박스 이벤트 처리
+// for (var i = 0; i < dayCheckboxes.length; i++) {
+//   dayCheckboxes[i].addEventListener("change", function() {
+//     // 다른 요일 체크박스를 해제합니다
+//     for (var j = 0; j < dayCheckboxes.length; j++) {
+//       if (dayCheckboxes[j] !== this) {
+//         dayCheckboxes[j].checked = false;
+//       }
+//     }
 
-    // 선택된 요일 값을 변수에 저장합니다
-    if (this.checked) {
-      selectedDay = this.value;
-    } else {
-      selectedDay = null;
-    }
-  });
-}
+//     // 선택된 요일 값을 변수에 저장합니다
+//     if (this.checked) {
+//       selectedDay = this.value;
+//     } else {
+//       selectedDay = null;
+//     }
+//   });
+// }
 
-// 교시 체크박스 이벤트 처리
-for (var k = 0; k < hourCheckboxes.length; k++) {
-  hourCheckboxes[k].addEventListener("change", function() {
-    // 다른 교시 체크박스를 해제합니다
-    for (var l = 0; l < hourCheckboxes.length; l++) {
-      if (hourCheckboxes[l] !== this) {
-        hourCheckboxes[l].checked = false;
-      }
-    }
+// // 교시 체크박스 이벤트 처리
+// for (var k = 0; k < hourCheckboxes.length; k++) {
+//   hourCheckboxes[k].addEventListener("change", function() {
+//     // 다른 교시 체크박스를 해제합니다
+//     for (var l = 0; l < hourCheckboxes.length; l++) {
+//       if (hourCheckboxes[l] !== this) {
+//         hourCheckboxes[l].checked = false;
+//       }
+//     }
 
-    // 선택된 교시 값을 변수에 저장합니다
-    if (this.checked) {
-      selectedHour = this.value;
-    } else {
-      selectedHour = null;
-    }
-  });
-}
+//     // 선택된 교시 값을 변수에 저장합니다
+//     if (this.checked) {
+//       selectedHour = this.value;
+//     } else {
+//       selectedHour = null;
+//     }
+//   });
+// }
 
 // 서버에 강의 추가 요청 전송
 const addSubjectToServer = (subject) => {
@@ -203,4 +203,138 @@ const addSubjectFromList = async (subjectId) => {
   }
 };
 
-initializePage();
+
+
+// 강의 검색------------------------------------------------------------------------
+const searchInput = document.getElementById('form-search_text');
+const searchButton = document.getElementById('form-search_button');
+
+searchButton.addEventListener('click', function(event) {
+  event.preventDefault();
+});
+
+// 검색어 입력
+searchInput.addEventListener('input', function() {
+  showFilteredLectures();
+});
+
+const searchSelect = document.getElementById('form-search_select');
+searchSelect.addEventListener('change', handleSearchSelect);
+
+// 검색 종류 드롭다운
+function handleSearchSelect(){
+  const selectedValue = searchSelect.value;
+  if (selectedValue === 'lectureName'){
+    searchInput.placeholder = '강의명 검색';
+  }else{
+    searchInput.placeholder = '이수구분 검색';
+  }
+}
+
+
+// 카테고리별 강의목록 필터링----------------------------------------------------
+// 요일 체크박스 변경 시
+const dayCheckboxes = document.querySelectorAll('.table-select_day');
+const hourCheckboxes = document.querySelectorAll('.table-select_hour');
+dayCheckboxes.forEach(checkbox => {
+  checkbox.addEventListener('change', function () {
+    // 모든 체크박스 해제
+    if (this.checked) {
+      dayCheckboxes.forEach(cb => {
+        if (cb !== this) {
+          cb.checked = false;
+        }
+      });
+    } else {
+      this.checked = false;
+    }
+    showFilteredLectures()
+  });
+});
+
+hourCheckboxes.forEach(checkbox => {
+  checkbox.addEventListener('change', function () {
+    showFilteredLectures()
+  });
+});
+
+// 필터링된 강의 목록을 보여주는 함수
+function showFilteredLectures() {
+  const searchValue = searchInput.value;
+  const selectedDay = document.querySelector('input[name="table-select_day"]:checked');
+  const selectedHours = Array.from(document.querySelectorAll('input[name="table-select_time"]:checked')).map(checkbox => checkbox.value);
+  const selectedValue = searchSelect.value;
+
+  let cellNumber = 0;
+  if (selectedValue === 'lectureName'){
+    cellNumber = 0;
+  }else{
+    cellNumber = 2;
+  }
+  if (selectedDay || selectedHours.length > 0) {
+    for (let i = 1; i < table.rows.length; i++) {
+      const row = table.rows[i];
+      const lectureTime = row.cells[7].textContent;
+      const lectureCell = row.cells[cellNumber].textContent;
+      let shouldDisplay = false;
+
+      // selectedDay가 선택된 경우
+      if (selectedDay && selectedHours.length == 0) {
+        const searchTime = selectedDay.value;
+        if (lectureTime.includes(searchTime)) {
+          shouldDisplay = true;
+        }
+      }
+
+      // selectedHours가 선택된 경우
+      if (selectedHours.length > 0 && !selectedDay) {
+        shouldDisplay = true; // 기본값으로 true 설정
+        for (let j = 0; j < selectedHours.length; j++) {
+          const searchTime = selectedHours[j];
+          const regex = new RegExp(`\\b${searchTime}\\b`); // 정확한 일치 검사(ex. searchTime이 5 일때 15 출력 방지)
+          if (!lectureTime.match(regex)) {
+            shouldDisplay = false;
+            break;
+          }
+        }
+      }
+      
+      // selectedDay, selectedHours 둘다 선택된 경우
+      if (selectedDay && selectedHours.length > 0) {
+        shouldDisplay = true; // 기본값으로 true 설정
+        for (let j = 0; j < selectedHours.length; j++) {
+          const searchTime = selectedDay.value + selectedHours[j];
+          if (!lectureTime.includes(searchTime)) {
+            shouldDisplay = false; // 하나라도 포함되지 않으면 false 설정하고 종료
+            break;
+          }
+        }
+      }
+      if (shouldDisplay) {
+        row.style.display = ''; // 보여줌
+        // 검색어가 있을 경우
+        if (searchValue!=''){
+          if (!lectureCell.includes(searchValue)) {
+            row.style.display = 'none'; // 숨김
+          }
+        }
+      } else {
+        row.style.display = 'none'; // 숨김
+      }
+    }
+  } else {
+    // 선택된 요일과 교시가 없을 때 전체 강의 보여주기
+    for (let i = 1; i < table.rows.length; i++) {
+      const row = table.rows[i];
+      const lectureCell = row.cells[cellNumber].textContent;
+      row.style.display = ''; // 보여줌
+      // 검색어가 있을 경우
+      if (searchValue!=''){
+        if (!lectureCell.includes(searchValue)) {
+          row.style.display = 'none'; // 숨김
+        }
+      }
+    }
+  }
+}
+

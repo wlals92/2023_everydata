@@ -160,14 +160,14 @@ main{
     width: 96%;
     height: 360px;
     margin: auto;
-    overflow: auto;
+    overflow-x: auto;
 }
 #subjects-completed {
     width: 100%;
     border-collapse: collapse;
 }
 #subjects-completed th {
-    /* position: sticky; */
+    position: sticky;
     top: 0px;
     padding: 2px;
     background-color: #ffffff;
