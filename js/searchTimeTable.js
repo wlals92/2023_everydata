@@ -10,14 +10,12 @@ document.getElementById('p-semester_date').innerHTML = message;
 const table = document.getElementById("div-class_list_table");
 const categorySelect = document.getElementById("table-ge_category");
 
-
-
 // 강의 목록을 표시하는 함수
 async function displaySubjectList(subjectsList) {
-  // // 기존 테이블 내용 삭제
-  // while (table.firstChild) {
-  //   table.firstChild.remove();
-  // }
+  // 기존 테이블 내용 삭제
+  while (table.firstChild) {
+    table.firstChild.remove();
+  }
 
   try {
     const response = await fetch('../php/getSubjectsList.php', {
@@ -26,20 +24,24 @@ async function displaySubjectList(subjectsList) {
     const data = await response.json();
     subjectsList.push(...data);
 
+    // 선택된 카테고리
+    const selectedCategory = categorySelect.value;
+
     subjectsList.forEach(subject => {
-      const tr = document.createElement("tr");
-      const formattedLectureTime = formatLectureTime(subject.lecture_time);
-      tr.innerHTML = `
-        <td>${subject.subject_name}</td>
-        <td>${subject.professor}</td>
-        <td>${subject.category}${subject.ge_category ? `<br>(${subject.ge_category})` : ''}</td>
-        <td>${subject.subject_code}</td>
-        <td>${formattedLectureTime}</td>
-        <td>${subject.lecture_room}</td>
-        <td><button type="button" onclick="addSubjectFromList(${subject['1st_subjects_id']})">시간표에 추가</button></td>
-        <td style="display: none;">${subject.lecture_time}</td>
-      `;
-      table.appendChild(tr);
+      // 과목의 카테고리와 선택된 카테고리를 비교하여 일치하는 경우에만 출력
+      if (subject.category === selectedCategory) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${subject.subject_name}</td>
+          <td>${subject.professor}</td>
+          <td>${subject.category}${subject.ge_category ? `<br>(${subject.ge_category})` : ''}</td>
+          <td>${subject.subject_code}</td>
+          <td>${subject.lecture_time}</td>
+          <td>${subject.lecture_room}</td>
+          <td><button type="button" onclick="addSubjectFromList(${subject['1st_subjects_id']})">시간표에 추가</button></td>
+        `;
+        table.appendChild(tr);
+      }
     });
   } catch (error) {
     console.error('데이터를 가져오는 도중 오류가 발생했습니다.', error);
@@ -55,64 +57,72 @@ async function initializePage() {
   }
 }
 
-initializePage();
+// // 카테고리 선택 이벤트 처리
+// categorySelect.addEventListener("change", function() {
+//   // 과목 목록을 업데이트합니다.
+//   updateSubjectList();
+// });
 
-// // 요일과 교시에 따라 필터링된 강의 목록을 표시하는 함수
-// function filterSubjectList() {
-//   // 선택된 요일과 교시를 가져옴
-//   const selectedDays = Array.from(document.querySelectorAll('.table-select_day:checked')).map(day => day.value);
-//   const selectedHours = Array.from(document.querySelectorAll('.table-select_hour:checked')).map(hour => hour.value);
-
-//   // 필터링된 강의 목록을 담을 배열
-//   let filteredSubjects = [];
-
-//   // 선택된 요일과 교시가 없는 경우, 전체 강의 목록을 표시
-//   if (selectedDays.length === 0 && selectedHours.length === 0) {
-//     filteredSubjects = tempSubjects;
-//   } else {
-//     // 강의 목록을 순회하면서 필터링
-//     tempSubjects.forEach(subject => {
-//       // 강의 시간 정보를 가져옴
-//       const subjectTimes = subject.time.split(', ');
-
-//       // 선택된 요일과 교시를 합쳐서 '월3'과 같은 형식의 문자열을 만듦
-//       const selectedTime = selectedDays.map(day => selectedHours.map(hour => day + hour)).flat();
-
-//       // 선택된 시간과 강의의 시간을 비교하여 필터링
-//       const hasMatchingTime = selectedTime.some(time => subjectTimes.includes(time));
-
-//       if (hasMatchingTime) {
-//         filteredSubjects.push(subject);
-//       }
-//     });
+// // 과목 목록을 업데이트하는 함수
+// function updateSubjectList() {
+//   // 기존 테이블 내용 삭제
+//   while (table.firstChild) {
+//     table.firstChild.remove();
 //   }
 
-//   // 필터링된 강의 목록 표시
-//   displaySubjectList(filteredSubjects);
+//   // 과목 목록을 가져와서 선택된 카테고리와 일치하는 과목만 표시합니다.
+//   displaySubjectList(tempSubjects);
 // }
 
+// // 체크된 요일의 value 값을 저장할 변수
+// var selectedDay = null;
 
-// 여기서부터 이지민 작성 ---------------------------------------------------------------------------
-// 시간 형식 변환 : ex. 화2, 화3, 수1, 수2 -> 화2, 3, 수1, 2
-function formatLectureTime(lectureTime) {
-  const times = lectureTime.split(','); // 시간을 쉼표로 분할하여 배열로 변환
-  const formattedTimes = [];
+// // 체크된 교시의 value 값을 저장할 변수
+// var selectedHour = null;
 
-  for (let i = 0; i < times.length; i++) {
-    const time = times[i].trim(); // 각 시간 문자열 앞뒤의 공백 제거
+// // 체크박스 요소들을 선택합니다
+// var dayCheckboxes = document.getElementsByClassName("table-select_day");
+// var hourCheckboxes = document.getElementsByClassName("table-select_hour");
+// console.log(dayCheckboxes); // 확인용 로그
+// console.log(hourCheckboxes); // 확인용 로그
 
-    if (i > 0 && time.startsWith(times[i - 1].charAt(0))) {
-      // 이전 시간과 같은 요일인 경우
-      const prevTime = formattedTimes.pop(); // 이전 요일 + 시간
-      const currentTime = time.substring(1); //현재 시간
-      formattedTimes.push(prevTime + ', ' + currentTime); // 이전 요일과 현재 시간을 합쳐서 배열에 추가
-    } else {
-      formattedTimes.push(time); // 이전 시간과 요일이 다른 경우 그대로 배열에 추가
-    }
-  }
+// // 요일 체크박스 이벤트 처리
+// for (var i = 0; i < dayCheckboxes.length; i++) {
+//   dayCheckboxes[i].addEventListener("change", function() {
+//     // 다른 요일 체크박스를 해제합니다
+//     for (var j = 0; j < dayCheckboxes.length; j++) {
+//       if (dayCheckboxes[j] !== this) {
+//         dayCheckboxes[j].checked = false;
+//       }
+//     }
 
-  return formattedTimes.join(', '); // 변경된 시간들을 다시 쉼표로 연결하여 반환
-}
+//     // 선택된 요일 값을 변수에 저장합니다
+//     if (this.checked) {
+//       selectedDay = this.value;
+//     } else {
+//       selectedDay = null;
+//     }
+//   });
+// }
+
+// // 교시 체크박스 이벤트 처리
+// for (var k = 0; k < hourCheckboxes.length; k++) {
+//   hourCheckboxes[k].addEventListener("change", function() {
+//     // 다른 교시 체크박스를 해제합니다
+//     for (var l = 0; l < hourCheckboxes.length; l++) {
+//       if (hourCheckboxes[l] !== this) {
+//         hourCheckboxes[l].checked = false;
+//       }
+//     }
+
+//     // 선택된 교시 값을 변수에 저장합니다
+//     if (this.checked) {
+//       selectedHour = this.value;
+//     } else {
+//       selectedHour = null;
+//     }
+//   });
+// }
 
 // 서버에 강의 추가 요청 전송
 const addSubjectToServer = (subject) => {
@@ -167,7 +177,6 @@ const isTimeConflict = async (day, time) => {
   return false; // 시간 겹치는 강의 없음
 };
 
-
 // 강의목록에서 강의 추가
 const addSubjectFromList = async (subjectId) => {
   const subject = tempSubjects.find((subject) => subject['1st_subjects_id'] == subjectId);
@@ -193,6 +202,7 @@ const addSubjectFromList = async (subjectId) => {
     console.log('해당 강의를 찾을 수 없습니다.');
   }
 };
+
 
 
 // 강의 검색------------------------------------------------------------------------
@@ -327,3 +337,4 @@ function showFilteredLectures() {
     }
   }
 }
+
