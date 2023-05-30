@@ -1,5 +1,5 @@
 <?php
-// 이지민 작성
+// 이지민 작성 : 회원정보 수정
 require_once("dbConfig.php"); 
 session_start();
 // 세션이 있는지 확인

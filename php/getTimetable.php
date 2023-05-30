@@ -1,5 +1,5 @@
 <?php
-// 이지민 작성
+// 이지민 작성 : 사용자 현재 시간표 가져오는 파일
 require_once("dbConfig.php");
 session_start();
 

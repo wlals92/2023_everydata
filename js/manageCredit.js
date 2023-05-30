@@ -11,26 +11,6 @@ const data = [
   { area: 8, credit: 1, completed: false }
 ];
 
-//개설전공 DB
-const major_data=[
-  { grade: 1, category: "전필", credit: 1, subject_name: "C프로그래밍", major:"컴퓨터과학과", professor: "홍길동"},
-  { grade: 1, category: "전필", credit: 3, subject_name: "식품자원경제학개론", major: "식품자원경제학과", professor: "홍길동"},
-  { grade: 1, category: "전필", credit: 1, subject_name: "C프로그래밍", major:"컴퓨터과학과", professor: "홍길동"},
-  { grade: 1, category: "전필", credit: 3, subject_name: "식품자원경제학개론", major: "식품자원경제학과", professor: "홍길동"},
-  { grade: 1, category: "전필", credit: 1, subject_name: "C프로그래밍", major:"컴퓨터과학과", professor: "홍길동"},
-  { grade: 1, category: "전필", credit: 3, subject_name: "식품자원경제학개론", major: "식품자원경제학과", professor: "홍길동"},
-  { grade: 1, category: "전필", credit: 1, subject_name: "C프로그래밍", major:"컴퓨터과학과", professor: "홍길동"},
-  { grade: 1, category: "전필", credit: 3, subject_name: "식품자원경제학개론", major: "식품자원경제학과", professor: "홍길동"},
-  { grade: 1, category: "전필", credit: 1, subject_name: "C프로그래밍", major:"컴퓨터과학과", professor: "홍길동"},
-  { grade: 1, category: "전필", credit: 3, subject_name: "식품자원경제학개론", major: "식품자원경제학과", professor: "홍길동"},
-  { grade: 1, category: "전필", credit: 1, subject_name: "C프로그래밍", major:"컴퓨터과학과", professor: "홍길동"},
-  { grade: 1, category: "전필", credit: 3, subject_name: "식품자원경제학개론", major: "식품자원경제학과", professor: "홍길동"},
-  { grade: 1, category: "전필", credit: 1, subject_name: "C프로그래밍", major:"컴퓨터과학과", professor: "홍길동"},
-  { grade: 1, category: "전필", credit: 3, subject_name: "식품자원경제학개론", major: "식품자원경제학과", professor: "홍길동"},
-  { grade: 1, category: "전필", credit: 1, subject_name: "C프로그래밍", major:"컴퓨터과학과", professor: "홍길동"},
-  { grade: 1, category: "전필", credit: 3, subject_name: "식품자원경제학개론", major: "식품자원경제학과", professor: "홍길동"}
-];
-
 // 졸업요건 충족했는지 여부를 판단하는 함수
 function calculateCompletedCreditsByArea() {
   const completedCredits = Array(8).fill(0);
@@ -262,39 +242,33 @@ var message = year + '년 ' + semester + '학기에 개설된 전공';
 
 document.getElementById('p-semester_date').innerHTML = message;
 
-// 학기별 개설 전공을 데이터베이스(mysql에서 가져오기)------------------------------------------------------
-const user_major = "식품자원경제학과"; // 사용자의 전공
 
-// 테이블 헤더 추가
-// const headerRow = table.insertRow();
-// const header1 = headerRow.insertCell(0);
-// const header2 = headerRow.insertCell(1);
-// const header3 = headerRow.insertCell(2);
-// const header4 = headerRow.insertCell(3);
-// header1.innerHTML = '학년';
-// header2.innerHTML = '이수구분';
-// header3.innerHTML = '학점';
-// header4.innerHTML = '교과목명';
-
-
-document.getElementById("section-origin_table").addEventListener("click", function() {
-  // AJAX 요청을 통해 이수내역확인표를 받아오는 코드
-  $.ajax({
-    url: '/api/subjects-completed-pdf',
-    method: 'GET',
-    success: function(response) {
-      // 새 창을 열어 이수내역확인표를 표시
-      var newWindow = window.open();
-      newWindow.document.write(response);
-    },
-    error: function(xhr, status, error) {
-      // 서버 요청이 실패한 경우 에러 처리
-      console.error('이수내역확인표 요청 실패.', error);
+// 여기서부터 이지민 작성 ------------------------------------------------------------------------------
+// 이수내역확인표 원본 보기 버튼 클릭시 원본 새창으로 뜨는 기능
+document.getElementById('section-origin_table').addEventListener('click', async function() {
+  try {
+    const response = await fetch('../php/getSession.php', {
+      method: 'GET'
+    });
+    if (response.ok) {
+      const data = await response.json();
+      const userID = data.id;
+      if (userID) {
+        const fileExtension = 'pdf';
+        const url = '../pdf/' + userID + '.' + fileExtension;
+        window.open(url);
+      } else {
+        console.log('유저 아이디를 가져올 수 없습니다.');
+      }
+    } else {
+      throw new Error('서버 요청 실패');
     }
-  });
+  } catch (error) {
+    console.log('서버 요청 실패: ' + error.message);
+  }
 });
 
-// 이지민 작성 : 개설전공 목록 및 시간표에 추가--------------------------------------------------------
+// tempSubjects 생성 후 강의 목록 넣기
 const tempSubjects = [];
 (async () => {
   try {
@@ -308,6 +282,7 @@ const tempSubjects = [];
   }
 })();
 
+// 전공 커리큘럼 및 개설된 전공 불러오기
 (async () => {
   try {
     const response = await fetch('../php/getMajor.php');
@@ -328,6 +303,7 @@ const tempSubjects = [];
       const cell7 = newRow.insertCell(6);
       const cell8 = newRow.insertCell(7);
       const formattedLectureTime = formatLectureTime(row.lecture_time);
+      // 개설 강의는 시간표에 추가 버튼이 기능하고, 미개설된 강의는 기능하지 않음
       const button = row.professor === '미개설' ?
         "<button type='button' id='unopened'>시간표에 추가</button>" :
         `<button type='button' onclick='addSubjectFromList(${row['1st_subjects_id']})'>시간표에 추가</button>`;
@@ -348,6 +324,7 @@ const tempSubjects = [];
   }
 })();
 
+// 학과 드롭다운 : 전공 커리큘럼을 학과별로 볼 수 있음(본전공, 부전공, 복수전공만 표시)
 async function populateDepartmentDropdown() {
   const dropdown = document.getElementById('departmentDropdown');
   
@@ -362,6 +339,7 @@ async function populateDepartmentDropdown() {
     dropdown.innerHTML = '';
 
     // 옵션 추가
+    // 전공이 두개 이상일 때만 전체 옵션
     if (departments.double_major !== 'none' || departments.minor !== 'none') {
       const option = document.createElement('option');
       option.value = '전체';
@@ -393,10 +371,12 @@ async function populateDepartmentDropdown() {
 // 페이지 로드 시 학과 드롭다운 메뉴 초기화
 window.onload = populateDepartmentDropdown;
 
+// 학과 드롭다운 값에 따라 필터링
 function filterSubjects() {
   const dropdown = document.getElementById('departmentDropdown');
   const selectedDepartment = dropdown.value;
   let selectedComputer = '';
+  // 컴퓨터과학과는 통합 전후 이름이 바뀌어 따로 표시
   if (selectedDepartment == '컴퓨터과학과'){
     selectedComputer = '컴퓨터과학부';
   }
@@ -415,6 +395,8 @@ function filterSubjects() {
   }
 }
 
+// 시간표에 추가------------------------------------------------------------------------------
+// 서버에 강의 추가 요청
 const addSubjectToServer = (subject) => {
   // AJAX 요청
   $.ajax({
@@ -493,6 +475,7 @@ const addSubjectFromList = async (subjectId) => {
   }
 };
 
+// 시간 형식 변환 (월6, 월7, 수3 -> 월6, 7, 수3)
 function formatLectureTime(lectureTime) {
   const times = lectureTime.split(','); // 시간을 쉼표로 분할하여 배열로 변환
   const formattedTimes = [];
@@ -513,6 +496,7 @@ function formatLectureTime(lectureTime) {
   return formattedTimes.join(', '); // 변경된 시간들을 다시 쉼표로 연결하여 반환
 }
 
+// 유저 이름 받아오기 : 000님의 이수내역 표시용
 fetch('../php/getSession.php')
   .then(response => {
     if (!response.ok) {

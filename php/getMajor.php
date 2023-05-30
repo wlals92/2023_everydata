@@ -1,5 +1,5 @@
 <?php
-//이지민 작성
+//이지민 작성 : 전공 커리큘럼 가져오는 파일
 require_once('dbConfig.php');
 session_start();
 

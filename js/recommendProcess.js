@@ -100,9 +100,11 @@ document.getElementById('input-recommend_submit').onclick = function() {
 };
 
 
-// 이지민 작성 : 모두 선택, 이름 받아오기 ----------------------------------------------------------------
+// 여기서부터 이지민 작성 ----------------------------------------------------------------------------
+// 모두 선택 함수
 function toggleCheckboxes(className) {
   if (className) {
+    // 영역별 모두 선택
     let selectAllCheckbox = document.getElementById("selectAll" + className);
     let checkboxes = document.querySelectorAll('input[type="checkbox"][name="' + className + '"]');
 
@@ -110,6 +112,7 @@ function toggleCheckboxes(className) {
       checkboxes[i].checked = selectAllCheckbox.checked;
     }
   } else {
+    // 전체 모두 선택
     let selectAllCheckbox = document.getElementById("selectAll");
     let checkboxes = document.querySelectorAll('input[type="checkbox"]');
 
@@ -122,6 +125,7 @@ function toggleCheckboxes(className) {
   }
 }
 
+// 이름 받아옴 : 000님을 위한 강의 추천 표시용
 fetch('../php/getSession.php')
   .then(response => {
     if (!response.ok) {

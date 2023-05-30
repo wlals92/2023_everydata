@@ -1,5 +1,5 @@
 <?php
-// 이지민 작성
+// 이지민 작성 : 회원가입
 require_once("dbConfig.php"); 
 // $_POST = JSON_DECODE(file_get_contents("php://input"), true);
 
