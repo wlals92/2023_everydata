@@ -1,5 +1,4 @@
 <?php
-// 이지민 작성 : 강의를 시간표에 추가하는 파일(강의 여러개 추가)
 require_once("dbConfig.php");
 session_start();
 

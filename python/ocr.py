@@ -1,16 +1,15 @@
 from tika import parser
 import mysql.connector
 import os
-import subprocess
 
 
 # DB 연결
 try:
     db = mysql.connector.connect(
         host="localhost",
-        # port=3307,
+        port=3307,
         user="root",
-        password="123456",
+        password="0000",
         database="everydata"
     )
     print("Connected to the database")
@@ -53,8 +52,6 @@ try:
     # 텍스트 파일 출력 폴더 생성
     output_folder = 'txt'
     os.makedirs(output_folder, exist_ok=True)
-    
-    php_file = 'c:/Bitnami/wampstack-8.0.3-2/apache2/htdocs/php/ocr.php'
 
     # 미완료된 ID에 대해 처리 수행
     for file_id in missing_ids:
@@ -62,7 +59,7 @@ try:
         pdf_path_query = "SELECT subjects_completed_pdf FROM user WHERE user_id = %s"
         cursor.execute(pdf_path_query, (file_id,))
         result = cursor.fetchone()
-        pdf_path = result[0].decode() if result else None
+        pdf_path = result[0] if result else None
 
         if pdf_path:
             print("Processing file ID:", file_id)
@@ -95,8 +92,6 @@ try:
         try:
             os.replace(original_path, new_path)
             print("File renamed:", original_filename, "->", new_filename)
-            # subprocess.run(['php', php_file, str(file_id)])
-            
         except Exception as e:
             print("Error occurred while renaming the file:", e)
 

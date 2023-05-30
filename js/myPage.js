@@ -207,10 +207,8 @@ $.ajax({
       document.getElementById("profile-total_credit").innerHTML = total_credit;
       document.getElementById("profile-curriculum_year").innerHTML = curriculum_year;
       document.getElementById("profile-major").innerHTML = major;
-      const minorElement = document.getElementById("profile-minor");
-      minorElement.innerHTML = minor !== 'null' ? minor : '-';
-      const doubleMajorElement = document.getElementById("profile-double_major");
-      doubleMajorElement.innerHTML = double_major !== 'null' ? double_major : '-';
+      document.getElementById("profile-minor").innerHTML = minor;
+      document.getElementById("profile-double_major").innerHTML = double_major;
     },
     error: function(xhr, status, error){
       console.log(xhr);

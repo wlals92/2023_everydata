@@ -131,7 +131,6 @@ strong{
     background-color: white;
     border: none;
     padding: 8px;
-    vertical-align: middle;
 }
 .fa-magnifying-glass{
     color: #62D3DA;
@@ -197,7 +196,7 @@ strong{
 /* 강의 검색 결과 div */
 #section-class_list{
     width: 95%;
-    height: 735px;
+    height: 700px;
     background-color: #FFFFFF;
     margin: 10px auto;
     overflow: auto;
@@ -223,7 +222,7 @@ strong{
 
 #div-class_list_table th, #div-class_list_table td{
     border-bottom: 1px solid #d0d0d0;
-    padding: 8px;
+    padding: 10px;
 }
 /* 시간표에 추가 버튼 */
 #div-class_list_table button{
@@ -232,9 +231,4 @@ strong{
     color: white;
     border: none;
     padding: 7px;
-}
-
-/* 아이디 저장 */
-input[type="checkbox"] {
-    accent-color: #62D3DA;
 }
