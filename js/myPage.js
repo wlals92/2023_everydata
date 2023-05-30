@@ -47,7 +47,6 @@ $.ajax({
     }
 
     const data = await response.json();
-    console.log(data);
     const semesterSelect = document.getElementById("semester-select");
 
     data.forEach((row) => {
@@ -76,7 +75,7 @@ const rows = [];
     console.log(data);
     data.forEach((row) => {
       const tr = document.createElement("tr");
-      const selectOptions = ["선택", "A+", "A0", "B+", "B0", "C+", "C0", "D+", "D0", "F", "P", "NP"]; // 수정 가능한 성적 옵션
+      const selectOptions = ["선택", "A+", "A0", "B+", "B0", "C+", "C0", "D+", "D0", "F", "P", "U"]; // 수정 가능한 성적 옵션
 
       tr.innerHTML = `
         <td>${row.semester_completed}</td>
