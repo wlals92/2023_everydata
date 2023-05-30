@@ -14,7 +14,7 @@ require_once("dbConfig.php");
 //     exit;
 // }
 
-$user_id = 'dlwlals1234';
+$user_id = $_SERVER['argv'][1];
 // OCR.py에서 생성된 txt 파일 경로
 $txtFilePath = 'C:/Bitnami/wampstack-8.0.3-2/apache2/htdocs/txt/output_' . $user_id . '.txt';
 
