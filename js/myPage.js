@@ -108,40 +108,6 @@ const rows = [];
   }
 })();
 
-// const completed_table = document.getElementById("subjects-completed");
-// const rows = []; // 각 항목의 tr 요소를 저장할 배열
-
-// 초기화: 모든 항목을 테이블에 추가하고 rows 배열에 저장
-// tempCompleted.forEach(subject => {
-//   const tr = document.createElement("tr");
-//   const selectOptions = ["선택", "A+", "A", "B+", "B", "C+", "C", "D+", "D", "F", "P", "NP"]; // 수정 가능한 성적 옵션
-
-//   tr.innerHTML = `
-//     <td>${subject.semester_completed}</td>
-//     <td>${subject.category}</td>
-//     <td>${subject.name}</td>
-//     <td>${subject.credit}</td>
-//     <td class="score-select-td">
-//       <select class="score-select">
-//         ${selectOptions.map(option => `<option value="${option}" ${subject.score === option ? "selected" : ""}>${option}</option>`).join("")}
-//       </select>
-//     </td>
-//   `;
-
-//   const select = tr.querySelector(".score-select");
-//   select.addEventListener("change", function() {
-//     const selectedScore = this.value; // 선택된 성적 값 가져오기
-//     // 수정된 성적을 서버로 보내는 로직 추가?
-//     const subjectId = subject.id; // 해당 과목의 고유 식별자 (임의 DB에서는 id로 가정)
-//     sendScoreUpdateToServer(subjectId, selectedScore);
-//     //백에서 temp 불러오는 함수 호출 추가
-//     updateChart();
-//   });
-
-//   completed_table.appendChild(tr);
-//   rows.push(tr);
-// });
-
 // 선택한 학기 과목만 보이게 하기
 document.getElementById("semester-select").addEventListener("change", function() {
   const selectedSemester = this.value; // 선택된 학기 값 가져오기
