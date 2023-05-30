@@ -1,11 +1,9 @@
 //이지민 작성
 
-//로그인 상태일 때만 접근 가능
 $.ajax({
     type: 'GET',
     url: '../php/getSession.php',
     success: function(response) {
-      // 세션이 있는 경우 로그인한 사용자의 정보가 반환됨
       // 세션이 없는 경우 로그인 페이지로 이동
       if (!response) {
         alert("로그인을 해주세요.");

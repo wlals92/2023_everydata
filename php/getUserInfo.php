@@ -1,5 +1,5 @@
 <?php
-//이지민 작성
+//이지민 작성 : 유저 정보 가져오는 파일
 require_once('dbConfig.php');
 session_start();
 

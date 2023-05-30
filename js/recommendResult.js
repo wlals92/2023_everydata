@@ -1,41 +1,4 @@
 // 남서린 작성
-// const results = [
-//   {
-//     title: "환경과 오염",
-//     professor: "김둘선",
-//     category: "균형교양(통합교양) - 5영역(과학과 기술)",
-//     time: "월 1,2",
-//     classroom: "024-0260"
-//   },
-//   {
-//     title: "사회학개론",
-//     professor: "이네모",
-//     category: "핵심교양(역량교양) - 사회과학",
-//     time: "화 3,4",
-//     classroom: "013-0203"
-//   },
-//   {
-//     title: "글쓰기의 기초",
-//     professor: "박글",
-//     category: "기초교양",
-//     time: "수 2,3",
-//     classroom: "025-0312"
-//   },
-//   {
-//     title: "문화와 예술",
-//     professor: "김예술",
-//     category: "균형교양(통합교양) - 1영역(문학과 문화)",
-//     time: "목 4,5",
-//     classroom: "032-0410"
-//   },
-//   {
-//     title: "디지털 리터러시",
-//     professor: "정디지",
-//     category: "핵심교양(역량교양) - 정보문화",
-//     time: "금 1,2",
-//     classroom: "009-0156"
-//   }
-// ];
 
 // 강의추천 돌린거 가져오기-------------
 $.ajax({
@@ -128,8 +91,9 @@ reRecommendBtn.addEventListener("click", function(event) {
 });
 
 
-// @@@@@얘도 마찬가지로 오류 발생하는데 보안 이슈라 가상환경 구축이 완료되어야할 것 같아요@@@@@@@@@@@@@@@@@@@@@@@@
 
+// 이지민 작성 ---------------------------------------------------------------------------
+// 강의 시간표에 추가
 const timetableButton = document.getElementById("section-add_in_time_table");
 timetableButton.addEventListener("click", function() {
   const checkboxes = document.getElementsByName("recommendedClassName");

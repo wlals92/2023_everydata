@@ -1,5 +1,5 @@
 <?php
-// 이지민 작성
+// 이지민 작성 : 로그인
 require_once("dbConfig.php"); 
 
 

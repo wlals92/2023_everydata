@@ -1,4 +1,5 @@
 <?php
+// 이지민 작성 : 강의 삭제
 require_once("dbConfig.php");
 
 $subjectId = $_POST['subjectId'];

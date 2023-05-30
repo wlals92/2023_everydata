@@ -1,9 +1,9 @@
 <?php
-// 이지민 작성
+// 이지민 작성 : 전체 강의목록 가져오는 파일
 require_once("dbConfig.php");
 
 //강의목록 조회
-$query = "SELECT * FROM 1st_subjects";
+$query = "SELECT * FROM 1st_subjects"; //(1학기 기준)
 $result = $db->query($query);
 
 if ($result) {
