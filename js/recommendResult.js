@@ -33,9 +33,24 @@ $.ajax({
 // 강의 추천 결과를 화면에 표시하는 함수
 function displayResults(results) {
   const resultContainer = document.getElementById("section-recommend_list");
+  const selectContainer = document.getElementById("select-all-recommend");
+
+  selectContainer.innerHTML = "";
+  const checkElement = document.createElement("div");
+  const labelElement = document.createElement("label");
+  const inputElement = document.createElement("input");
+
+  inputElement.type = "checkbox";
+  inputElement.id = "selectAll";
+  inputElement.onchange = toggleCheckboxes;
+  labelElement.appendChild(inputElement);
+  labelElement.appendChild(document.createTextNode("모두 선택"));
+  checkElement.appendChild(labelElement);
+  selectContainer.appendChild(checkElement);
 
   // 결과 컨테이너를 비웁니다.
   resultContainer.innerHTML = "";
+
 
   // 추천 결과에 따라 각각의 요소를 생성해서 컨테이너에 추가합니다.
   results.forEach(function(result) {
@@ -93,6 +108,17 @@ reRecommendBtn.addEventListener("click", function(event) {
 
 
 // 이지민 작성 ---------------------------------------------------------------------------
+// 모두 선택 함수
+function toggleCheckboxes() {
+  // 전체 모두 선택
+  let selectAllCheckbox = document.getElementById("selectAll");
+  let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+  for (let i = 0; i < checkboxes.length; i++) {
+    let checkbox = checkboxes[i];
+    checkbox.checked = selectAllCheckbox.checked;
+  }
+}
 // 강의 시간표에 추가
 const timetableButton = document.getElementById("section-add_in_time_table");
 timetableButton.addEventListener("click", function() {

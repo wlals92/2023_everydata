@@ -117,22 +117,23 @@ const select_inputcheck = (inputId, checktextId) => {
 
 //파일 입력 체크
 const file_inputcheck = () => {
-    const grade = document.getElementById("grade").value;
+    // const grade = document.getElementById("grade").value;
     const fileInput = document.getElementById('file');
     const fileName = fileInput.value.trim();
     //pdf 형식 제한
     const fileEx = /(\.pdf)$/i;
 
     if (fileName === ''){
-        //1학년일 경우 입력하지 않아도 됨
-        if (grade === '1') {
-            showMessage('file', '1-1 신입생의 경우 이수내역확인표는 추가하지 않아도 됩니다.', false);
-            return true;
-        }
-        else {
-            showMessage('file', '2, 3, 4학년은 이수내역확인표를 추가해주세요.', true);
-            return false;
-        }
+        showMessage('file', '이수내역확인표를 추가해주세요.', true);
+        // //1학년일 경우 입력하지 않아도 됨
+        // if (grade === '1') {
+        //     showMessage('file', '1-1 신입생의 경우 이수내역확인표는 추가하지 않아도 됩니다.', false);
+        //     return true;
+        // }
+        // else {
+        //     showMessage('file', '2, 3, 4학년은 이수내역확인표를 추가해주세요.', true);
+        //     return false;
+        // }
     }
     //pdf 형식으로만 입력 가능
     else if (!fileEx.exec(fileName)) {

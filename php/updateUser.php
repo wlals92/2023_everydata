@@ -38,4 +38,7 @@ $_SESSION['curriculum_year']=$curriculum_year;
 $_SESSION['major']=$major;
 $_SESSION['double_major']=$double_major;
 $_SESSION['minor']=$minor;
+
+exec("python ocr.py ".$id);
+
 mysqli_close($db);

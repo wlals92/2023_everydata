@@ -14,11 +14,6 @@ db = mysql.connector.connect(
 
 
 file_id = sys.argv[1]
-py_result = {
-    'status': 'success',
-    'message': '아이디를 받았습니다.',
-    'userId': file_id
-}
 
 # SQL 쿼리
 user_query = "SELECT user_id, subjects_completed_pdf FROM user"
@@ -35,6 +30,7 @@ try:
     
     php_file = 'c:/Bitnami/wampstack-8.0.3-2/apache2/htdocs/php/ocr.php'
     php_file_c = 'c:/Bitnami/wampstack-8.0.3-2/apache2/htdocs/php/ocrCredit.php'
+    
     pdf_path_query = "SELECT subjects_completed_pdf FROM user WHERE user_id = %s"
     cursor.execute(pdf_path_query, (file_id,))
     result = cursor.fetchone()
@@ -74,22 +70,21 @@ try:
         result_c = subprocess.run(['php', php_file_c, str(file_id)], capture_output=True, text=True)
         
         if result.returncode == 0:
-            py_result['ocr'] = result.stdout
-            py_result['credit'] = result_c.stdout
+            output = result.stdout
+            output_c = result_c.stdout
+            print("실행 결과:", output)
+            print("실행 결과:", output_c)
+            print("PHP 파일이 정상적으로 실행되었습니다.")
         else:
             print("PHP 파일 실행 중 오류가 발생하였습니다. 반환 코드:", result.returncode)
-            py_result['status'] = 'error'
-            py_result['message'] = 'PHP 파일 실행 중 오류가 발생하였습니다.'
     
     except Exception as e:
         print("Error occurred while renaming the file:", e)
-        py_result['status'] = 'error'
-        py_result['message'] = '파일 이름 변경 중 오류가 발생하였습니다.'
+        
 except mysql.connector.Error as error:
     print("Error occurred while executing the SQL query: ", error)
 
 
-print(py_result)
 
 # DB 연결 종료
 if db.is_connected():
