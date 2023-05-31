@@ -95,7 +95,13 @@ try:
         try:
             os.replace(original_path, new_path)
             print("File renamed:", original_filename, "->", new_filename)
-            # subprocess.run(['php', php_file, str(file_id)])
+            result = subprocess.run(['php', php_file, str(file_id)])
+            # print("실행 결과:", result.stdout.decode())
+            
+            if result.returncode == 0:
+                print("PHP 파일이 정상적으로 실행되었습니다.")
+            else:
+                print("PHP 파일 실행 중 오류가 발생하였습니다. 반환 코드:", result.returncode)
             
         except Exception as e:
             print("Error occurred while renaming the file:", e)

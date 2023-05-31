@@ -14,9 +14,9 @@ require_once("dbConfig.php");
 //     exit;
 // }
 
-// $user_id = $_SERVER['argv'][1]; 
+$user_id = $_SERVER['argv'][1];
 
-$user_id = "dlwlals1234";
+
 // OCR.py에서 생성된 txt 파일 경로
 $txtFilePath = 'C:/Bitnami/wampstack-8.0.3-2/apache2/htdocs/txt/output_' . $user_id . '.txt';
 
@@ -49,7 +49,6 @@ foreach ($lines as $line) {
 
 // 추출된 문장 출력
 foreach ($extractedSentences as $sentence) {
-    echo $sentence . "\n";
 
     $items = explode(" ", $sentence);
 
@@ -103,18 +102,11 @@ foreach ($extractedSentences as $sentence) {
             $nd_subjects_id = 'NULL';  // 2학기 과목 ID를 NULL로 설정
         }
 
-
-        echo "user_id: " . $user_id . "\n";
-        echo "st_subjects_id: " . $st_subjects_id . "\n";
-        echo "nd_subjects_id: " . $nd_subjects_id . "\n";
-        echo "semester_completed: " . $items[0] . "\n";
-        echo "score: " . $score . "\n";
     
         
         $query = "INSERT INTO `subjects_completed` (`user_id`, `1st_subjects_id`, `2nd_subjects_id`, `semester_completed`, `score`)
           VALUES ('$user_id', $st_subjects_id, $nd_subjects_id, '$items[0]', '$score')";
 
-        echo $query;
         
         if ($db->query($query) === true) {
             echo "Data inserted successfully.";
