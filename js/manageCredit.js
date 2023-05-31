@@ -49,11 +49,11 @@ const foundationNeed = 9;
 const generalNeed = 6;
 const majorEssentialNeed = 18;
 const majorElectiveNeed = 21;
-const minorEssentialNeed = 21;
-const minorElectiveNeed = 15;
-const teachingNeed = 0;
-const remaining1Need = 0;
-const remaining2Need = 0;
+const doubleMajorEssentialNeed = 21;
+const doubleMajorElectiveNeed = 15;
+const minorNeed = 1;
+const teachingNeed = 2;
+
 
 // 취득
 const coreCapacityAcquire = 10;
@@ -62,11 +62,10 @@ const foundationAcquire = 12;
 const generalAcquire = 9;
 const majorEssentialAcquire = 12;
 const majorElectiveAcquire = 15;
-const minorEssentialAcquire = 6;
-const minorElectiveAcquire = 3;
+const doubleMajorEssentialAcquire = 6;
+const doubleMajorElectiveAcquire = 3;
+const minorAcquire = 0;
 const teachingAcquire = 0;
-const remaining1Acquire = 0;
-const remaining2Acquire = 0;
 
 // 잔여
 // 취득학점이 소요학점 이상일 경우 0(단순히 빼기하면 취득이 소요보다 클때 마이너스 값이 나옴)
@@ -113,40 +112,36 @@ if (majorElectiveAcquire>=majorElectiveNeed){
   majorElectiveRemaining=majorElectiveNeed-majorElectiveAcquire;
 }
 
-let minorEssentialRemaining = minorEssentialNeed - minorEssentialAcquire;
-if (minorEssentialAcquire>=minorEssentialNeed){
-  minorElectiveRemaining = 0;
+let doubleMajorEssentialRemaining = doubleMajorEssentialNeed - doubleMajorEssentialAcquire;
+if (doubleMajorEssentialAcquire>=doubleMajorEssentialNeed){
+  doubleMajorElectiveRemaining = 0;
 } else {
-  minorEssentialRemaining = minorEssentialNeed - minorEssentialAcquire;
+  doubleMajorEssentialRemaining = doubleMajorEssentialNeed - doubleMajorEssentialAcquire;
 }
 
-let minorElectiveRemaining = minorElectiveNeed - minorElectiveAcquire;
-if (minorElectiveAcquire>=minorElectiveNeed){
-  minorElectiveRemaining = 0;
+let doubleMajorElectiveRemaining = doubleMajorElectiveNeed - doubleMajorElectiveAcquire;
+if (doubleMajorElectiveAcquire>=doubleMajorElectiveNeed){
+  doubleMajorElectiveRemaining = 0;
 } else {
-  minorElectiveRemaining = minorElectiveNeed- minorElectiveAcquire;
+  doubleMajorElectiveRemaining = doubleMajorElectiveNeed- doubleMajorElectiveAcquire;
+}
+
+let minorRemaining = minorNeed - minorAcquire;
+if (minorAcquire>=minorNeed){
+  minorRemaining=0;
+} else{
+  minorRemaining=minorNeed-minorAcquire;
 }
 
 let teachingRemaining = teachingNeed - teachingAcquire;
-if (teachingAcquire<=teachingNeed){
+if (teachingAcquire>=teachingNeed){
   teachingRemaining = 0;
 } else{
   teachingRemaining = teachingNeed-teachingAcquire;
 }
 
-let remaining1Remaining = remaining1Need - remaining1Acquire;
-if (remaining1Acquire>=remaining1Need){
-  remaining1Remaining=0;
-} else{
-  remaining1Remaining=remaining1Need-remaining1Acquire;
-}
 
-let remaining2Remaining = remaining2Need - remaining2Acquire;
-if (remaining2Acquire>=remaining2Need){
-  remaining2Remaining=0;
-} else{
-  remaining2Remaining=remaining2Need-remaining2Acquire;
-}
+
 
 // // 서버 이수내역확인표 정보 요청------------------
 
@@ -161,34 +156,33 @@ if (remaining2Acquire>=remaining2Need){
 //     document.getElementById("general-need").innerHTML = response.generalNeed;
 //     document.getElementById("major-essential-need").innerHTML = response.majorEssentialNeed;
 //     document.getElementById("major-elective-need").innerHTML = response.majorElectiveNeed;
-//     document.getElementById("minor-essential-need").innerHTML = response.minorEssentialNeed;
-//     document.getElementById("minor-elective-need").innerHTML = response.minorElectiveNeed;
+//     document.getElementById("double-major-essential-need").innerHTML = response.doubleMajorEssentialNeed;
+//     document.getElementById("double-major-elective-need").innerHTML = response.doubleMajorElectiveNeed;
+//     document.getElementById("minor-need").innerHTML = response.minorNeed
 //     document.getElementById("teaching-need").innerHTML = response.teachingNeed;
-//     document.getElementById("remaining1-need").innerHTML = response.remaining1Need;
-//     document.getElementById("remaining2-need").innerHTML = response.remaining2Need;
-
+    
 //     document.getElementById("core-capacity-acquire").innerHTML = response.coreCapacityAcquire;
 //     document.getElementById("balance-integration-acquire").innerHTML = response.balanceIntegrationAcquire;
 //     document.getElementById("foundation-acquire").innerHTML = response.foundationAcquire;
 //     document.getElementById("general-acquire").innerHTML = response.generalAcquire;
 //     document.getElementById("major-essential-acquire").innerHTML = response.majorEssentialAcquire;
 //     document.getElementById("major-elective-acquire").innerHTML = response.majorElectiveAcquire;
-//     document.getElementById("minor-essential-acquire").innerHTML = response.minorEssentialAcquire;
-//     document.getElementById("minor-elective-acquire").innerHTML = response.minorElectiveAcquire;
+//     document.getElementById("double-major-essential-acquire").innerHTML = response.doubleMajorEssentialAcquire;
+//     document.getElementById("double-major-elective-acquire").innerHTML = response.doubleMajorElectiveAcquire;
+//     document.getElementById("minor-acquire").innerHTML = response.minorAcquire
 //     document.getElementById("teaching-acquire").innerHTML = response.teachingAcquire;
-//     document.getElementById("remaining1-acquire").innerHTML = response.remaining1Acquire;
-//     document.getElementById("remaining2-acquire").innerHTML = response.remaining2Acquire;
-
+    
 //     document.getElementById("core-capacity-remaining").innerHTML = response.coreCapacityRemaining;
 //     document.getElementById("balance-integration-remaining").innerHTML = response.balanceIntegrationRemaining;
 //     document.getElementById("foundation-remaining").innerHTML = response.foundationRemaining;
 //     document.getElementById("general-remaining").innerHTML = response.generalRemaining;
 //     document.getElementById("major-essential-remaining").innerHTML = response.majorEssentialRemaining;
 //     document.getElementById("major-elective-remaining").innerHTML = response.majorElectiveRemaining;
-//     document.getElementById("minor-essential-remaining").innerHTML = response.minorEssentialRemaining;
-//     document.getElementById("minor-elective-remaining").innerHTML = response.minorElectiveRemaining;
+//     document.getElementById("double-major-essential-remaining").innerHTML = response.doubleMajorEssentialRemaining;
+//     document.getElementById("double-major-elective-remaining").innerHTML = response.doubleMajorElectiveRemaining;
+//     document.getElementById("minor-remaining").innerHTML = response.minorRemaining
 //     document.getElementById("teaching-remaining").innerHTML = response.teachingRemaining;
-//     document.getElementById("remaining1-remaining").innerHTML = response.remaining1Remaining;
+    
 //   },
 //   error: function(xhr, status, error) {
 //     // 서버 요청이 실패한 경우 에러 처리
@@ -203,11 +197,10 @@ document.getElementById("foundation-need").innerHTML = foundationNeed;
 document.getElementById("general-need").innerHTML = generalNeed;
 document.getElementById("major-essential-need").innerHTML = majorEssentialNeed;
 document.getElementById("major-elective-need").innerHTML = majorElectiveNeed;
-document.getElementById("minor-essential-need").innerHTML = minorEssentialNeed;
-document.getElementById("minor-elective-need").innerHTML = minorElectiveNeed;
+document.getElementById("double-major-essential-need").innerHTML = doubleMajorEssentialNeed;
+document.getElementById("double-major-elective-need").innerHTML = doubleMajorElectiveNeed;
+document.getElementById("minor-need").innerHTML = minorNeed
 document.getElementById("teaching-need").innerHTML = teachingNeed;
-document.getElementById("remaining1-need").innerHTML = remaining1Need;
-document.getElementById("remaining2-need").innerHTML = remaining2Need;
 
 document.getElementById("core-capacity-acquire").innerHTML = coreCapacityAcquire;
 document.getElementById("balance-integration-acquire").innerHTML = balanceIntegrationAcquire;
@@ -215,11 +208,10 @@ document.getElementById("foundation-acquire").innerHTML = foundationAcquire;
 document.getElementById("general-acquire").innerHTML = generalAcquire;
 document.getElementById("major-essential-acquire").innerHTML = majorEssentialAcquire;
 document.getElementById("major-elective-acquire").innerHTML = majorElectiveAcquire;
-document.getElementById("minor-essential-acquire").innerHTML = minorEssentialAcquire;
-document.getElementById("minor-elective-acquire").innerHTML = minorElectiveAcquire;
+document.getElementById("double-major-essential-acquire").innerHTML = doubleMajorEssentialAcquire;
+document.getElementById("double-major-elective-acquire").innerHTML = doubleMajorElectiveAcquire;
+document.getElementById("minor-acquire").innerHTML = minorAcquire
 document.getElementById("teaching-acquire").innerHTML = teachingAcquire;
-document.getElementById("remaining1-acquire").innerHTML = remaining1Acquire;
-document.getElementById("remaining2-acquire").innerHTML = remaining2Acquire;
 
 document.getElementById("core-capacity-remaining").innerHTML = coreCapacityRemaining;
 document.getElementById("balance-integration-remaining").innerHTML = balanceIntegrationRemaining;
@@ -227,10 +219,10 @@ document.getElementById("foundation-remaining").innerHTML = foundationRemaining;
 document.getElementById("general-remaining").innerHTML = generalRemaining;
 document.getElementById("major-essential-remaining").innerHTML = majorEssentialRemaining;
 document.getElementById("major-elective-remaining").innerHTML = majorElectiveRemaining;
-document.getElementById("minor-essential-remaining").innerHTML = minorEssentialRemaining;
-document.getElementById("minor-elective-remaining").innerHTML = minorElectiveRemaining;
+document.getElementById("double-major-essential-remaining").innerHTML = doubleMajorEssentialRemaining;
+document.getElementById("double-major-elective-remaining").innerHTML = doubleMajorElectiveRemaining;
+document.getElementById("minor-remaining").innerHTML = minorRemaining
 document.getElementById("teaching-remaining").innerHTML = teachingRemaining;
-document.getElementById("remaining1-remaining").innerHTML = remaining1Remaining;
 
 
 
