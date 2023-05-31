@@ -6,14 +6,14 @@ if (!isset($_SERVER['argv'][1])) {
     exit;
 }
 $user_id = $_SERVER['argv'][1];
-
+echo $user_id;
 
 // OCR.py에서 생성된 txt 파일 경로
 $txtFilePath = 'C:/Bitnami/wampstack-8.0.3-2/apache2/htdocs/txt/output_' . $user_id . '.txt';
 
 // 파일 존재 여부 확인
 if (!file_exists($txtFilePath)) {
-    echo "File not found.";
+    // echo "File not found.";
     exit;
 }
 
