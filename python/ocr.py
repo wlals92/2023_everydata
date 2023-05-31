@@ -8,9 +8,9 @@ import subprocess
 try:
     db = mysql.connector.connect(
         host="localhost",
-        # port=3307,
+        port=3307,
         user="root",
-        password="123456",
+        password="0000",
         database="everydata"
     )
     print("Connected to the database")
@@ -86,6 +86,7 @@ try:
 
     # 파일명 변경 및 txt 폴더로 이동
     for file_id in missing_ids:
+        
         original_filename = f'output_{file_id}.txt'
         user_id_str = str(file_id)
         new_filename = f'output_{user_id_str}.txt'
@@ -93,8 +94,10 @@ try:
         original_path = os.path.join(output_folder, original_filename)
         new_path = os.path.join(output_folder, new_filename)
         try:
-            os.replace(original_path, new_path)
+            # os.replace(original_path, new_path)
             print("File renamed:", original_filename, "->", new_filename)
+            if 'bytearray' in user_id_str:
+                file_id = user_id_str.replace("bytearray(b'", "").replace("')", "")
             result = subprocess.run(['php', php_file, str(file_id)], capture_output=True, text=True)
             
             if result.returncode == 0:

@@ -26,6 +26,10 @@ if ($file !== null) {
     VALUES ('$id','$password','$name','$student_id','$academic_status', '$curriculum_year', '$grade', '$major', '$double_major', '$minor', null);";
 }
 $db->query($sql);
+$pythonScript = "C:/Bitnami/wampstack-8.0.3-2/apache2/htdocs/python/ocr.py";
+$command = "python " . $pythonScript;
+
+shell_exec($command);
 
 mysqli_close($db);
 ?>
