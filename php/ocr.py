@@ -66,8 +66,8 @@ try:
         print("File renamed:", original_filename, "->", new_filename)
         if 'bytearray' in user_id_str:
             file_id = user_id_str.replace("bytearray(b'", "").replace("')", "")
-        result = subprocess.run(['php', php_file, str(file_id)], capture_output=True, text=True)
-        result_c = subprocess.run(['php', php_file_c, str(file_id)], capture_output=True, text=True)
+        result = subprocess.run(['php', 'ocr.php', str(file_id)], capture_output=True, text=True)
+        result_c = subprocess.run(['php', 'ocrCredit.php', str(file_id)], capture_output=True, text=True)
         
         if result.returncode == 0:
             output = result.stdout
