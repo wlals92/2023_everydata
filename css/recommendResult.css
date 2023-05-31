@@ -96,33 +96,11 @@ p>strong{
     padding: 10px;
     margin: 0 auto;
 }
-/* 시간표 들어있는 div */
-/* #section-time_table{
-    display: block;
-    float: left;
-    width: 400px;
-    height: 500px;
-    background-color: #f5f5f5;
-    margin-left: 50px;
+/* 모두선택 div */
+#select-all-recommend {
+    text-align: right;
+    margin: 17px 50px;
 }
-강의추천결과 시간표
-#div-recommend_time_table, th, td{
-    border: 1px solid #D9D9D9;
-    border-collapse: collapse;
-}
-#div-recommend_time_table th{
-    font-family: Montserrat;
-    font-weight: lighter;
-    font-size: 14px;
-    vertical-align: top;
-}
-#div-recommend_time_table td{
-    width: 100px;
-    height: 50px;
-}
-#div-recommend_time_table{
-    margin: auto;
-} */
 /* 강의추천결과 리스트(여러개 들어있는 div) */
 #section-recommend_list {
     width: 90%;

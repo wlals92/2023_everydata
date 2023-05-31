@@ -227,7 +227,6 @@ form.addEventListener("submit", async function(event) {
     try {
         if (isValid) {
             const formData = new FormData(form); // 폼 데이터 가져오기
-            const userId = formData.get('id');
 
             // 아이디 중복 확인
             const response = await fetch("../php/checkID.php", {
@@ -247,10 +246,7 @@ form.addEventListener("submit", async function(event) {
                         method: "POST",
                         body: formData
                     });
-
                     if (signUpResponse.ok) {
-                        const signUpData = await signUpResponse.json();
-                        console.log(signUpData); // 서버에서 반환한 데이터 출력
                         window.location.href = '../index.html'; // 페이지 이동
                     } else {
                         console.error("Sign up request failed.");
