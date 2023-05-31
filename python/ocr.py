@@ -51,7 +51,7 @@ try:
     print("Missing IDs:", missing_ids)
 
     # 텍스트 파일 출력 폴더 생성
-    output_folder = 'txt'
+    output_folder = 'c:/Bitnami/wampstack-8.0.3-2/apache2/htdocs/txt'
     os.makedirs(output_folder, exist_ok=True)
     
     php_file = 'c:/Bitnami/wampstack-8.0.3-2/apache2/htdocs/php/ocr.php'
@@ -95,10 +95,11 @@ try:
         try:
             os.replace(original_path, new_path)
             print("File renamed:", original_filename, "->", new_filename)
-            result = subprocess.run(['php', php_file, str(file_id)])
-            # print("실행 결과:", result.stdout.decode())
+            result = subprocess.run(['php', php_file, str(file_id)], capture_output=True, text=True)
             
             if result.returncode == 0:
+                output = result.stdout
+                print("실행 결과:", output)
                 print("PHP 파일이 정상적으로 실행되었습니다.")
             else:
                 print("PHP 파일 실행 중 오류가 발생하였습니다. 반환 코드:", result.returncode)
