@@ -35,6 +35,9 @@ while ($row = $result->fetch_assoc()) {
 // 공강 요일로 선택한 요일의 강의는 제외
 $query = "SELECT * FROM 1st_subjects WHERE lecture_time NOT LIKE '%$day%'";
 
+//꿈미래 제외
+$query .= "AND subject_code NOT LIKE '%11023216%'";
+
 // subjects_now, subjects_completed에 없는 강의 가져오기
 if ($existingSubjects !== null && !in_array(null, $existingSubjects, true)) {
     $query .= " AND 1st_subjects_id NOT IN ('" . implode("', '", $existingSubjects) . "')";
