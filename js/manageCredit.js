@@ -1,24 +1,11 @@
-// 임의의 데이터베이스
-//남은 학점 DB
-const data = [
-  { area: 1, credit: 2, completed: true },
-  { area: 2, credit: 3, completed: true },
-  { area: 3, credit: 2, completed: true },
-  { area: 4, credit: 1, completed: true },
-  { area: 5, credit: 1, completed: true },
-  { area: 6, credit: 2, completed: false },
-  { area: 7, credit: 2, completed: false },
-  { area: 8, credit: 1, completed: false }
-];
+// 남서린 작성
 
 // 졸업요건 충족했는지 여부를 판단하는 함수
-function calculateCompletedCreditsByArea() {
+function calculateCompletedCreditsByArea(data) {
   const completedCredits = Array(8).fill(0);
 
   data.forEach(item => {
-    if (item.completed) {
-      completedCredits[item.area - 1] += item.credit;
-    }
+    completedCredits[item.area - 1] += item.credit;
   });
 
   const completedAreas = [];
@@ -39,191 +26,74 @@ function calculateCompletedCreditsByArea() {
   return completedCredits;
 }
 
-calculateCompletedCreditsByArea();
 
-// 임의의 데이터베이스(남서린 이수내역확인표)
-// 소요
-const coreCapacityNeed = 10;
-const balanceIntegrationNeed = 10;
-const foundationNeed = 9;
-const generalNeed = 6;
-const majorEssentialNeed = 18;
-const majorElectiveNeed = 21;
-const doubleMajorEssentialNeed = 21;
-const doubleMajorElectiveNeed = 15;
-const minorNeed = 1;
-const teachingNeed = 2;
+// // 서버 이수내역확인표 정보 요청------------------
+fetch('../php/getCredit.php')
+  .then(response => response.json())
+  .then(data => {
+    // 서버 응답 처리
+    updateElementValue("core-capacity-need", data[0].coreCapacityNeed);
+    updateElementValue("balance-integration-need", data[0].balanceIntegrationNeed);
+    updateElementValue("foundation-need", data[0].foundationNeed);
+    updateElementValue("general-need", data[0].generalNeed);
+    updateElementValue("major-essential-need", data[0].majorEssentialNeed);
+    updateElementValue("major-elective-need", data[0].majorElectiveNeed);
+    updateElementValue("double-major-essential-need", data[0].doubleMajorEssentialNeed);
+    updateElementValue("double-major-elective-need", data[0].doubleMajorElectiveNeed);
+    updateElementValue("minor-need", data[0].minorNeed);
+    updateElementValue("teaching-need", data[0].teachingNeed);
+
+    updateElementValue("core-capacity-acquire", data[0].coreCapacityAcquire);
+    updateElementValue("balance-integration-acquire", data[0].balanceIntegrationAcquire);
+    updateElementValue("foundation-acquire", data[0].foundationAcquire);
+    updateElementValue("general-acquire", data[0].generalAcquire);
+    updateElementValue("major-essential-acquire", data[0].majorEssentialAcquire);
+    updateElementValue("major-elective-acquire", data[0].majorElectiveAcquire);
+    updateElementValue("double-major-essential-acquire", data[0].doubleMajorEssentialAcquire);
+    updateElementValue("double-major-elective-acquire", data[0].doubleMajorElectiveAcquire);
+    updateElementValue("minor-acquire", data[0].minorAcquire);
+    updateElementValue("teaching-acquire", data[0].teachingAcquire);
+
+    updateRemainingValue("core-capacity", data[0].coreCapacityNeed, data[0].coreCapacityAcquire);
+    updateRemainingValue("balance-integration", data[0].balanceIntegrationNeed, data[0].balanceIntegrationAcquire);
+    updateRemainingValue("foundation", data[0].foundationNeed, data[0].foundationAcquire);
+    updateRemainingValue("general", data[0].generalNeed, data[0].generalAcquire);
+    updateRemainingValue("major-essential", data[0].majorEssentialNeed, data[0].majorEssentialAcquire);
+    updateRemainingValue("major-elective", data[0].majorElectiveNeed, data[0].majorElectiveAcquire);
+    updateRemainingValue("double-major-essential", data[0].doubleMajorEssentialNeed, data[0].doubleMajorEssentialAcquire);
+    updateRemainingValue("double-major-elective", data[0].doubleMajorElectiveNeed, data[0].doubleMajorElectiveAcquire);
+    updateRemainingValue("minor", data[0].minorNeed, data[0].minorAcquire);
+    updateRemainingValue("teaching", data[0].teachingNeed, data[0].teachingAcquire);
+
+    const areas = [
+      { area: 1, credit: data[0].area1},
+      { area: 2, credit: data[0].area2},
+      { area: 3, credit: data[0].area3},
+      { area: 4, credit: data[0].area4},
+      { area: 5, credit: data[0].area5},
+      { area: 6, credit: data[0].area6},
+      { area: 7, credit: data[0].area7}
+    ];
+    calculateCompletedCreditsByArea(areas);
+  })
+  .catch(error => {
+    // 서버 요청이 실패한 경우 에러 처리
+    console.error('데이터 요청 실패함.', error);
+  });
 
 
-// 취득
-const coreCapacityAcquire = 10;
-const balanceIntegrationAcquire = 16;
-const foundationAcquire = 12;
-const generalAcquire = 9;
-const majorEssentialAcquire = 12;
-const majorElectiveAcquire = 15;
-const doubleMajorEssentialAcquire = 6;
-const doubleMajorElectiveAcquire = 3;
-const minorAcquire = 0;
-const teachingAcquire = 0;
+function updateElementValue(elementId, value) {
+  document.getElementById(elementId).innerHTML = value;
+}
+
 
 // 잔여
 // 취득학점이 소요학점 이상일 경우 0(단순히 빼기하면 취득이 소요보다 클때 마이너스 값이 나옴)
 // 취득학점이 소요학점 미만일 경우 소요학점-취득학점 출력
-let coreCapacityRemaining = coreCapacityNeed - coreCapacityAcquire;
-if (coreCapacityAcquire >= coreCapacityNeed) {
-  coreCapacityRemaining = 0;
-} else {
-  coreCapacityRemaining = coreCapacityNeed - coreCapacityAcquire;
+function updateRemainingValue(elementId, need, acquire) {
+  let remaining = Math.max(need - acquire, 0);
+  document.getElementById(elementId + "-remaining").innerHTML = remaining;
 }
-
-let balanceIntegrationRemaining = balanceIntegrationNeed - balanceIntegrationAcquire;
-if (balanceIntegrationAcquire >= balanceIntegrationNeed){
-  balanceIntegrationRemaining = 0;
-} else {
-  balanceIntegrationRemaining = balanceIntegrationNeed - balanceIntegrationAcquire;
-}
-
-let foundationRemaining = foundationNeed - foundationAcquire;
-if (foundationAcquire >= foundationNeed){
-  foundationRemaining = 0;
-} else {
-  foundationRemaining = foundationNeed - foundationAcquire;
-}
-
-let generalRemaining = generalNeed - generalAcquire;
-if (generalAcquire>=generalNeed){
-  generalRemaining=0;
-} else {
-  generalRemaining=generalNeed-generalAcquire;
-}
-
-let majorEssentialRemaining = majorEssentialNeed - majorEssentialAcquire;
-if(majorEssentialAcquire>=majorEssentialNeed){
-  majorEssentialRemaining=0;
-} else {
-  majorEssentialRemaining = majorEssentialNeed-majorEssentialAcquire;
-}
-
-let majorElectiveRemaining = majorElectiveNeed - majorElectiveAcquire;
-if (majorElectiveAcquire>=majorElectiveNeed){
-  majorElectiveRemaining=0;
-} else{
-  majorElectiveRemaining=majorElectiveNeed-majorElectiveAcquire;
-}
-
-let doubleMajorEssentialRemaining = doubleMajorEssentialNeed - doubleMajorEssentialAcquire;
-if (doubleMajorEssentialAcquire>=doubleMajorEssentialNeed){
-  doubleMajorElectiveRemaining = 0;
-} else {
-  doubleMajorEssentialRemaining = doubleMajorEssentialNeed - doubleMajorEssentialAcquire;
-}
-
-let doubleMajorElectiveRemaining = doubleMajorElectiveNeed - doubleMajorElectiveAcquire;
-if (doubleMajorElectiveAcquire>=doubleMajorElectiveNeed){
-  doubleMajorElectiveRemaining = 0;
-} else {
-  doubleMajorElectiveRemaining = doubleMajorElectiveNeed- doubleMajorElectiveAcquire;
-}
-
-let minorRemaining = minorNeed - minorAcquire;
-if (minorAcquire>=minorNeed){
-  minorRemaining=0;
-} else{
-  minorRemaining=minorNeed-minorAcquire;
-}
-
-let teachingRemaining = teachingNeed - teachingAcquire;
-if (teachingAcquire>=teachingNeed){
-  teachingRemaining = 0;
-} else{
-  teachingRemaining = teachingNeed-teachingAcquire;
-}
-
-
-
-
-// // 서버 이수내역확인표 정보 요청------------------
-
-// $.ajax({
-//   url: '/api/subjects-completed-pdf',  // 데이터를 받아올 API 엔드포인트의 URL을 설정.
-//   method: 'GET',  // GET 메서드를 사용하여 데이터를 요청.
-//   success: function(response) {
-//     // 서버 응답 처리
-//     document.getElementById("core-capacity-need").innerHTML = response.coreCapacityNeed;
-//     document.getElementById("balance-integration-need").innerHTML = response.balanceIntegrationNeed;
-//     document.getElementById("foundation-need").innerHTML = response.foundationNeed;
-//     document.getElementById("general-need").innerHTML = response.generalNeed;
-//     document.getElementById("major-essential-need").innerHTML = response.majorEssentialNeed;
-//     document.getElementById("major-elective-need").innerHTML = response.majorElectiveNeed;
-//     document.getElementById("double-major-essential-need").innerHTML = response.doubleMajorEssentialNeed;
-//     document.getElementById("double-major-elective-need").innerHTML = response.doubleMajorElectiveNeed;
-//     document.getElementById("minor-need").innerHTML = response.minorNeed
-//     document.getElementById("teaching-need").innerHTML = response.teachingNeed;
-    
-//     document.getElementById("core-capacity-acquire").innerHTML = response.coreCapacityAcquire;
-//     document.getElementById("balance-integration-acquire").innerHTML = response.balanceIntegrationAcquire;
-//     document.getElementById("foundation-acquire").innerHTML = response.foundationAcquire;
-//     document.getElementById("general-acquire").innerHTML = response.generalAcquire;
-//     document.getElementById("major-essential-acquire").innerHTML = response.majorEssentialAcquire;
-//     document.getElementById("major-elective-acquire").innerHTML = response.majorElectiveAcquire;
-//     document.getElementById("double-major-essential-acquire").innerHTML = response.doubleMajorEssentialAcquire;
-//     document.getElementById("double-major-elective-acquire").innerHTML = response.doubleMajorElectiveAcquire;
-//     document.getElementById("minor-acquire").innerHTML = response.minorAcquire
-//     document.getElementById("teaching-acquire").innerHTML = response.teachingAcquire;
-    
-//     document.getElementById("core-capacity-remaining").innerHTML = response.coreCapacityRemaining;
-//     document.getElementById("balance-integration-remaining").innerHTML = response.balanceIntegrationRemaining;
-//     document.getElementById("foundation-remaining").innerHTML = response.foundationRemaining;
-//     document.getElementById("general-remaining").innerHTML = response.generalRemaining;
-//     document.getElementById("major-essential-remaining").innerHTML = response.majorEssentialRemaining;
-//     document.getElementById("major-elective-remaining").innerHTML = response.majorElectiveRemaining;
-//     document.getElementById("double-major-essential-remaining").innerHTML = response.doubleMajorEssentialRemaining;
-//     document.getElementById("double-major-elective-remaining").innerHTML = response.doubleMajorElectiveRemaining;
-//     document.getElementById("minor-remaining").innerHTML = response.minorRemaining
-//     document.getElementById("teaching-remaining").innerHTML = response.teachingRemaining;
-    
-//   },
-//   error: function(xhr, status, error) {
-//     // 서버 요청이 실패한 경우 에러 처리
-//     console.error('데이터 요청 실패함.', error);
-//   }
-// });
-
-// 각 td 엘리먼트에 값 넣기----------------------
-document.getElementById("core-capacity-need").innerHTML = coreCapacityNeed;
-document.getElementById("balance-integration-need").innerHTML = balanceIntegrationNeed;
-document.getElementById("foundation-need").innerHTML = foundationNeed;
-document.getElementById("general-need").innerHTML = generalNeed;
-document.getElementById("major-essential-need").innerHTML = majorEssentialNeed;
-document.getElementById("major-elective-need").innerHTML = majorElectiveNeed;
-document.getElementById("double-major-essential-need").innerHTML = doubleMajorEssentialNeed;
-document.getElementById("double-major-elective-need").innerHTML = doubleMajorElectiveNeed;
-document.getElementById("minor-need").innerHTML = minorNeed
-document.getElementById("teaching-need").innerHTML = teachingNeed;
-
-document.getElementById("core-capacity-acquire").innerHTML = coreCapacityAcquire;
-document.getElementById("balance-integration-acquire").innerHTML = balanceIntegrationAcquire;
-document.getElementById("foundation-acquire").innerHTML = foundationAcquire;
-document.getElementById("general-acquire").innerHTML = generalAcquire;
-document.getElementById("major-essential-acquire").innerHTML = majorEssentialAcquire;
-document.getElementById("major-elective-acquire").innerHTML = majorElectiveAcquire;
-document.getElementById("double-major-essential-acquire").innerHTML = doubleMajorEssentialAcquire;
-document.getElementById("double-major-elective-acquire").innerHTML = doubleMajorElectiveAcquire;
-document.getElementById("minor-acquire").innerHTML = minorAcquire
-document.getElementById("teaching-acquire").innerHTML = teachingAcquire;
-
-document.getElementById("core-capacity-remaining").innerHTML = coreCapacityRemaining;
-document.getElementById("balance-integration-remaining").innerHTML = balanceIntegrationRemaining;
-document.getElementById("foundation-remaining").innerHTML = foundationRemaining;
-document.getElementById("general-remaining").innerHTML = generalRemaining;
-document.getElementById("major-essential-remaining").innerHTML = majorEssentialRemaining;
-document.getElementById("major-elective-remaining").innerHTML = majorElectiveRemaining;
-document.getElementById("double-major-essential-remaining").innerHTML = doubleMajorEssentialRemaining;
-document.getElementById("double-major-elective-remaining").innerHTML = doubleMajorElectiveRemaining;
-document.getElementById("minor-remaining").innerHTML = minorRemaining
-document.getElementById("teaching-remaining").innerHTML = teachingRemaining;
-
 
 
 // 현재 날짜 기반으로 년도와 학기 출력-------------------------
@@ -343,13 +213,13 @@ async function populateDepartmentDropdown() {
     majorOption.textContent = departments.major;
     dropdown.appendChild(majorOption);
 
-    if (departments.double_major !== 'none') {
+    if (departments.double_major !== 'none' && departments.double_major !== null) {
       const doubleMajorOption = document.createElement('option');
       doubleMajorOption.value = departments.double_major;
       doubleMajorOption.textContent = departments.double_major;
       dropdown.appendChild(doubleMajorOption);
     }
-    if (departments.minor !== 'none') {
+    if (departments.minor !== 'none' && departments.minor !== null) {
       const minorOption = document.createElement('option');
       minorOption.value = departments.minor;
       minorOption.textContent = departments.minor;

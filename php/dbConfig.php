@@ -7,9 +7,9 @@ ini_set("display_errors", 1);
 //json 통신
 header("Content-Type:application/json");
 
-$host = 'localhost:3307';
+$host = 'localhost';
 $user = 'root';
-$pw = '0000';
+$pw = '123456';
 $dbName = 'everydata';
 
 $db = new mysqli($host, $user, $pw, $dbName);
