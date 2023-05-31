@@ -111,9 +111,9 @@ foreach ($extractedSentences as $sentence) {
 }
 
 if ($result_completed) {
-    echo "Data inserted successfully.";
+    echo "Completed : Data inserted successfully.";
 } else {
-    echo "Error inserting data.";
+    echo "Completed : Error inserting data.";
 }
 // 성적이 없는 경우(점검 과목 일부)에는 null을 삽입하도록 수정
 // 현재 개설과목에 없는 경우에는 안됨. 과목명이 바뀐 경우를 추가(대학영어1, 대학영어2)

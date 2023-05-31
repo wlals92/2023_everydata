@@ -84,7 +84,7 @@ const MAX_TIMETABLE_HOURS =  9; // 최대 시간표 교시 수
 // 시간표 초기화 및 기본 행 생성----------------------------------------------
 const initializeTimetable = () => {
   const timetable = document.getElementById("main-timetable");
-
+  timetable.classList.remove("has-saturday");
   // 기존 행 삭제
   while (timetable.firstChild) {
     timetable.firstChild.remove();

@@ -17,14 +17,18 @@ $id = $_SESSION['id'];
 $sql = "SELECT name, major, status, academic_number, grade, curriculum_year, double_major, minor  FROM user WHERE user_id = '$id'";
 $result = mysqli_query($db, $sql);
 
-if ($result) {
+$sql = "SELECT cumulative, total FROM credits WHERE user_id = '$id'";
+$result_credit = mysqli_query($db, $sql);
+
+if ($result && $result_credit) {
     $row = mysqli_fetch_assoc($result);
+    $row_credit = mysqli_fetch_assoc($result_credit);
 
     // 사용자 프로필 정보를 연관 배열로 생성
     $profile = array(
         'name' => $row['name'],
-        'user_credit' => 77,
-        'total_credit' => 130,
+        'user_credit' => $row_credit['cumulative'],
+        'total_credit' => $row_credit['total'],
         'major' => $row['major'],
         'status' => $row['status'],
         'academic_number' => $row['academic_number'],

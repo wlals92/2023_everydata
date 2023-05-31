@@ -1,6 +1,6 @@
 <?php
 // 이지민 작성 : 회원가입
-require_once("dbConfig.php"); 
+require_once("dbConfig.php");
 // $_POST = JSON_DECODE(file_get_contents("php://input"), true);
 
 $id = isset($_POST["id"]) ? $_POST["id"] : null;
@@ -26,10 +26,8 @@ if ($file !== null) {
     VALUES ('$id','$password','$name','$student_id','$academic_status', '$curriculum_year', '$grade', '$major', '$double_major', '$minor', null);";
 }
 $db->query($sql);
-$pythonScript = "C:/Bitnami/wampstack-8.0.3-2/apache2/htdocs/python/ocr.py";
-$command = "python " . $pythonScript;
 
-shell_exec($command);
+exec("python ocr.py ".$id);
 
 mysqli_close($db);
 ?>
