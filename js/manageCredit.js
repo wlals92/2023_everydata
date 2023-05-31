@@ -453,8 +453,9 @@ const isTimeConflict = async (day, time) => {
 const addSubjectFromList = async (subjectId) => {
   const subject = tempSubjects.find((subject) => subject['1st_subjects_id'] == subjectId);
   if (subject) {
-    const dayTimePairs = subject.lecture_time.split(", ");
-
+    const dayTimePairs = subject.lecture_time.split(",");
+    let hasConflict = false;
+    
     for (const dayTimePair of dayTimePairs) {
       const [day, time] = dayTimePair.split(/([^\uAC00-\uD7A3]+)/);
 
@@ -464,11 +465,14 @@ const addSubjectFromList = async (subjectId) => {
       } else {
         const isConflict = await isTimeConflict(day, time);
         if (isConflict) {
+          hasConflict = true;
           alert('해당 시간에 이미 다른 강의가 있습니다.');
-        } else {
-          addSubjectToServer(subject);
+          break;
         }
       }
+    }
+    if (!hasConflict) {
+      addSubjectToServer(subject);
     }
   } else {
     console.log('해당 강의를 찾을 수 없습니다.');

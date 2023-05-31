@@ -36,7 +36,7 @@ $.ajax({
     console.log(error);
   }
 });
-
+const semesters  = [];
 //이수내역--------------------------------------------
 // 서버에서 받아온 학기 정보
 (async () => {
@@ -47,10 +47,15 @@ $.ajax({
     }
 
     const data = await response.json();
-    console.log(data);
     const semesterSelect = document.getElementById("semester-select");
-
     data.forEach((row) => {
+      const semesterObj = {
+        semester: row,
+        scores: []
+      };
+      if (row.endsWith('1') || row.endsWith('2')) {
+        semesters.push(semesterObj);
+      }
       const option = document.createElement("option");
       option.value = row;
       option.textContent = row;
@@ -73,10 +78,10 @@ const rows = [];
       throw new Error('서버 요청 실패');
     }
     const data = await response.json();
-    console.log(data);
+
     data.forEach((row) => {
       const tr = document.createElement("tr");
-      const selectOptions = ["선택", "A+", "A0", "B+", "B0", "C+", "C0", "D+", "D0", "F", "P", "NP"]; // 수정 가능한 성적 옵션
+      const selectOptions = ["선택", "A+", "A0", "B+", "B0", "C+", "C0", "D+", "D0", "F", "P", "U"]; // 수정 가능한 성적 옵션
 
       tr.innerHTML = `
         <td>${row.semester_completed}</td>
@@ -91,12 +96,14 @@ const rows = [];
       `;
       const select = tr.querySelector(".score-select");
       select.addEventListener("change", function() {
-        const selectedScore = this.value; // 선택된 성적 값 가져오기
-        // 수정된 성적을 서버로 보내는 로직 추가?
-        const subjectId = row.subjects_completed_id; // 해당 과목의 고유 식별자 (임의 DB에서는 id로 가정)
+        let selectedScore = this.value; // 선택된 성적 값 가져오기
+        if (selectedScore == '선택'){
+          selectedScore = null;
+        }
+        const subjectId = row.subjects_completed_id;
         sendScoreUpdateToServer(subjectId, selectedScore);
-        //백에서 temp 불러오는 함수 호출 추가
-        updateChart();
+        tempScore = [...initialTempScore];
+        fetchCompletedScores();
       });
 
       table.appendChild(tr);
@@ -140,38 +147,144 @@ rows.forEach(row => {
 
 
 // 서버로 수정된 성적 정보 전송
-// function sendScoreUpdateToServer(subjectId, selectedScore) {
-//   // 서버 URL
-//   const url = `/api/updateScore/${subjectId}`;
-
-//   // AJAX 요청
-//   $.ajax({
-//     url: url,
-//     type: 'PUT',
-//     contentType: 'application/json',
-//     data: JSON.stringify({ score: selectedScore }),
-//     success: function (response) {
-//       console.log('성적 수정 요청이 성공적으로 전송되었습니다.');
-//     },
-//     error: function (xhr, status, error) {
-//       console.error('성적 수정 요청이 실패하였습니다.');
-//     }
-//   });
-// }
+function sendScoreUpdateToServer(subjectId, selectedScore) {
+  // AJAX 요청
+  $.ajax({
+    url: '../php/updateScore.php',
+    type: 'PUT',
+    contentType: 'application/json',
+    data: JSON.stringify({ score: selectedScore, subjects_completed_id: subjectId }),
+    success: function (response) {
+      console.log('성적 수정 요청이 성공적으로 전송되었습니다.');
+    },
+    error: function (xhr, status, error) {
+      console.error('성적 수정 요청이 실패하였습니다.');
+    }
+  });
+}
+let initialTempScore = [
+  {id: 1, semester: "1-1"},
+  {id: 2, semester: "1-2"},
+  {id: 3, semester: "2-1"},
+  {id: 4, semester: "2-2"},
+  {id: 5, semester: "3-1"},
+  {id: 6, semester: "3-2"},
+  {id: 7, semester: "4-1"},
+  {id: 8, semester: "4-2"}
+];
 
 
 // 성적 그래프-------------------------------------------
-const tempScore = [
-    {id: 1, semester: "1-1", total_score: 4.5, major_score: 4.5},
-    {id: 2, semester: "1-2", total_score: 4.2, major_score: 4.0},
-    {id: 3, semester: "2-1", total_score: 4.0, major_score: 4.3},
-    {id: 4, semester: "2-2", total_score: 3.5, major_score: 3.85},
+let tempScore = [
+    {id: 1, semester: "1-1"},
+    {id: 2, semester: "1-2"},
+    {id: 3, semester: "2-1"},
+    {id: 4, semester: "2-2"},
     {id: 5, semester: "3-1"},
     {id: 6, semester: "3-2"},
     {id: 7, semester: "4-1"},
     {id: 8, semester: "4-2"}
-]
+];
 
+// 성적 받아오기
+async function fetchCompletedScores() {
+  try {
+    const response = await fetch('../php/getCompleted.php');
+    if (!response.ok) {
+      throw new Error('서버 요청 실패');
+    }
+
+    const data = await response.json();
+
+    data.forEach((row) => {
+      for (let i = 0; i < semesters.length; i++) {
+        if (semesters[i].semester === row.semester_completed && row.score !== '' && row.score !== 'P' && row.score !== 'U') {
+          const isMajorCategory = row.category.includes('전공');
+          semesters[i].scores.push({
+            score: row.score,
+            credit: row.credit,
+            isMajor: isMajorCategory
+          });
+          break;
+        }
+      }
+    });
+
+
+    addScoresToTempScore();
+    updateChart();
+
+  } catch (error) {
+    console.error('서버 요청 실패.', error);
+  }
+}
+
+
+fetchCompletedScores();
+
+
+// 성적 변환
+function convertGradeToScore(grade) {
+  switch (grade) {
+    case 'A+':
+      return 4.5;
+    case 'A0':
+      return 4.0;
+    case 'B+':
+      return 3.5;
+    case 'B0':
+      return 3.0;
+    case 'C+':
+      return 2.5;
+    case 'C0':
+      return 2.0;
+    case 'D+':
+      return 1.5;
+    case 'D0':
+      return 1.0;
+    case 'F':
+      return 0.0;
+    default:
+      return 0.0;
+  }
+}
+
+// 성적 평균 계산 후 TempScore에 추가
+function addScoresToTempScore() {
+  semesters.forEach((semester, index) => {
+    const targetSemester = tempScore[index];
+
+    if (targetSemester && semester.scores.length > 0) {
+      let totalPoints = 0;
+      let majorPoints = 0;
+      let totalCredits = 0;
+      let majorCredits = 0;
+
+      semester.scores.forEach((subject) => {
+        const grade = convertGradeToScore(subject.score);
+        const credit = parseInt(subject.credit);
+        totalCredits += credit;
+
+        if (subject.isMajor) {
+          majorCredits += credit;
+          majorPoints += grade * credit;
+        }
+
+        totalPoints += grade * credit;
+      });
+
+      targetSemester.total_score = totalPoints / totalCredits;
+      if (majorCredits > 0){
+        targetSemester.major_score = majorPoints / majorCredits;
+      }
+
+
+
+    }
+  });
+}
+
+// 그래프--------------------------
 let labels = [];
 let totals = [];
 let majors = [];
@@ -221,12 +334,10 @@ const myChart = new Chart(ctx, {
     },
     options: {
         maintainAspectRatio :false,
-        // legend: {
-        //     position: 'bottom'
-        // },
         scales: {
             y: {
                 beginAtZero: true,
+                max: 4.5
             }
         }
     }

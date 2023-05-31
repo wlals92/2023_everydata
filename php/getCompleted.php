@@ -27,13 +27,27 @@ $sql = "SELECT subjects_completed.subjects_completed_id, 2nd_subjects.*, subject
         ORDER BY semester_completed";
 $result_2nd = $db->query($sql);
 
-if ($result_1st && $result_2nd) {
+$sql = "SELECT subjects_completed.subjects_completed_id, pre_subjects.*, subjects_completed.score, subjects_completed.semester_completed
+        FROM subjects_completed
+        INNER JOIN pre_subjects ON subjects_completed.pre_subjects_id = pre_subjects.pre_subjects_id
+        WHERE subjects_completed.user_id = '$id'
+        ORDER BY semester_completed";
+$result_pre = $db->query($sql);
+
+if ($result_1st) {
     $subjects = array();
     while ($row = $result_1st->fetch_assoc()) {
         $subjects[] = $row;
     }
-    while ($row = $result_2nd->fetch_assoc()) {
-        $subjects[] = $row;
+    if ($result_2nd){
+        while ($row = $result_2nd->fetch_assoc()) {
+            $subjects[] = $row;
+        }
+    }
+    if ($result_pre){
+        while ($row = $result_pre->fetch_assoc()) {
+            $subjects[] = $row;
+        }
     }
     usort($subjects, function($a, $b) {
         return strcmp($a['semester_completed'], $b['semester_completed']);

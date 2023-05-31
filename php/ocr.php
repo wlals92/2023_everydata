@@ -1,22 +1,13 @@
 <?php
 require_once("dbConfig.php");
 
-// user 테이블에서 user_id 가져올 때 어떤 유저걸 가져올건지만 잘 생각해서 하면 될 것 같아요!
-// user 테이블에서 user_id 가져오기
-// $query = "SELECT user_id FROM user";
-// $result = $db->query($query);
+// ocr.py에서 넘겨준 user_id
+if (!isset($_SERVER['argv'][1])) {
+    exit;
+}
+$user_id = $_SERVER['argv'][1];
 
-// if ($result->num_rows > 0) {
-//     $row = $result->fetch_assoc();
-//     $user_id = $row["user_id"];
-// } else {
-//     echo "No records found.";
-//     exit;
-// }
 
-// $user_id = $_SERVER['argv'][1]; 
-
-$user_id = "dlwlals1234";
 // OCR.py에서 생성된 txt 파일 경로
 $txtFilePath = 'C:/Bitnami/wampstack-8.0.3-2/apache2/htdocs/txt/output_' . $user_id . '.txt';
 
@@ -49,7 +40,6 @@ foreach ($lines as $line) {
 
 // 추출된 문장 출력
 foreach ($extractedSentences as $sentence) {
-    echo $sentence . "\n";
 
     $items = explode(" ", $sentence);
 
@@ -78,14 +68,7 @@ foreach ($extractedSentences as $sentence) {
     }
     $semester_completed = $lastChar; // semester_completed는 학기를 구분하는 변수 (1 혹은 2의 값을 가짐)
 
-    // 우선 불러올 sql문을 적어주고 적은 후에 db에서 찾아줌
-    if ($subject_code == "11021121"){
-        $subject_code = "11021430";
-    } elseif($subject_code == "11021123"){
-        $subject_code = "11021398";
-    } elseif($subject_code == "11021122"){
-        $subject_code = "11021431";
-    }
+
     $subjects_completed_id_sql = "SELECT `$semester_id` FROM `$semester_table` WHERE `subject_code` = '$subject_code'"; // 학기별 테이블의 학수번호가 11021126이면 그 과목의 id 가져오기
     $result = $db->query($subjects_completed_id_sql);  // 실제 db에서 id 가져오기
     
@@ -103,27 +86,34 @@ foreach ($extractedSentences as $sentence) {
             $nd_subjects_id = 'NULL';  // 2학기 과목 ID를 NULL로 설정
         }
 
-
-        echo "user_id: " . $user_id . "\n";
-        echo "st_subjects_id: " . $st_subjects_id . "\n";
-        echo "nd_subjects_id: " . $nd_subjects_id . "\n";
-        echo "semester_completed: " . $items[0] . "\n";
-        echo "score: " . $score . "\n";
     
         
         $query = "INSERT INTO `subjects_completed` (`user_id`, `1st_subjects_id`, `2nd_subjects_id`, `semester_completed`, `score`)
-          VALUES ('$user_id', $st_subjects_id, $nd_subjects_id, '$items[0]', '$score')";
+            VALUES ('$user_id', $st_subjects_id, $nd_subjects_id, '$items[0]', '$score')";
 
-        echo $query;
-        
-        if ($db->query($query) === true) {
-            echo "Data inserted successfully.";
-        } else {
-            echo "Error inserting data: " . $db->error ."\n";
-        }
+        $result_completed = $db->query($query);
     } else {
-        echo "No matching records found.";
+        // 1학기, 2학기 개설 강의 테이블에서 학수번호를 찾을 수 없는 경우 : 통합 이전 변경 전 학수번호 과목, 현재 자연대 이외 타전공 과목도 이 테이블에 있음.
+        $subjects_completed_id_sql = "SELECT `pre_subjects_id` FROM `pre_subjects` WHERE `subject_code` = '$subject_code'"; // 학기별 테이블의 학수번호가 11021126이면 그 과목의 id 가져오기
+        $result_pre = $db->query($subjects_completed_id_sql);  // 실제 db에서 id 가져오기
+
+        if ($result_pre && $result_pre->num_rows > 0) {
+            $row = $result_pre->fetch_assoc();
+            $pre_subjects_id = intval($row['pre_subjects_id']);
+
+            $query = "INSERT INTO `subjects_completed` (`user_id`, `pre_subjects_id`, `semester_completed`, `score`)
+                VALUES ('$user_id', $pre_subjects_id, '$items[0]', '$score')";
+
+            $result_completed = $db->query($query);
+
+        }
     }
+}
+
+if ($result_completed) {
+    echo "Data inserted successfully.";
+} else {
+    echo "Error inserting data.";
 }
 // 성적이 없는 경우(점검 과목 일부)에는 null을 삽입하도록 수정
 // 현재 개설과목에 없는 경우에는 안됨. 과목명이 바뀐 경우를 추가(대학영어1, 대학영어2)
