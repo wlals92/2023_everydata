@@ -202,7 +202,7 @@ async function populateDepartmentDropdown() {
 
     // 옵션 추가
     // 전공이 두개 이상일 때만 전체 옵션
-    if (departments.double_major !== 'none' || departments.minor !== 'none') {
+    if ((departments.double_major !== 'none' && departments.double_major !== 'null'  && departments.double_major !== null ) || (departments.minor !== 'none' && departments.minor !== 'null' && departments.minor !== null)) {
       const option = document.createElement('option');
       option.value = '전체';
       option.textContent = '전체'
@@ -213,13 +213,13 @@ async function populateDepartmentDropdown() {
     majorOption.textContent = departments.major;
     dropdown.appendChild(majorOption);
 
-    if (departments.double_major !== 'none' && departments.double_major !== null) {
+    if (departments.double_major !== 'none' && departments.double_major !== 'null' && departments.double_major !== null) {
       const doubleMajorOption = document.createElement('option');
       doubleMajorOption.value = departments.double_major;
       doubleMajorOption.textContent = departments.double_major;
       dropdown.appendChild(doubleMajorOption);
     }
-    if (departments.minor !== 'none' && departments.minor !== null) {
+    if (departments.minor !== 'none' && departments.minor !== 'null' && departments.minor !== null) {
       const minorOption = document.createElement('option');
       minorOption.value = departments.minor;
       minorOption.textContent = departments.minor;
