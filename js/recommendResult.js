@@ -153,3 +153,19 @@ timetableButton.addEventListener("click", function() {
     }
   });
 });
+
+// 이름 받아옴 : 000님을 위한 강의 추천 표시용
+fetch('../php/getSession.php')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('서버 요청이 실패하였습니다.');
+    }
+    return response.json();
+  })
+  .then(data => {
+    const user_name = document.getElementById('user_name');
+    user_name.innerHTML = data.name;
+  })
+  .catch(error => {
+    console.error('서버 요청이 실패하였습니다.', error);
+  });
