@@ -8,6 +8,7 @@ if (!isset($_SERVER['argv'][1])) {
 }
 $user_id = $_SERVER['argv'][1];
 
+
 // OCR.py에서 생성된 txt 파일 경로
 $txtFilePath = 'C:/Bitnami/wampstack-8.0.3-2/apache2/htdocs/txt/output_' . $user_id . '.txt';
 
@@ -40,6 +41,22 @@ foreach ($lines as $line) {
         $extractedText = substr($line, $start);
 
         $completedCredits = explode(' ', $extractedText);
+        foreach ($completedCredits as &$credit) {
+            if (strpos($credit, '(') !== false) {
+                $pattern = "/(\d+)\s*\((\d+)\)/";
+                if (preg_match($pattern, $credit, $matches)) {
+                    // 괄호 '(' 이전의 숫자와 괄호 안의 숫자를 추출합니다.
+                    $beforeParentheses = intval($matches[1]);
+                    $insideParentheses = intval($matches[2]);
+        
+                    // 두 숫자를 더하여 값을 업데이트합니다.
+                    $newCredit = $beforeParentheses + $insideParentheses;
+        
+                    // 업데이트된 값을 해당 요소에 할당합니다.
+                    $credit = str_replace($matches[0], $newCredit, $credit);
+                }
+            }
+        }
     }
     if (strpos($line, '졸업소요학점') !== false) {
         $start = strpos($line, '졸업소요학점 ') + strlen('졸업소요학점 ');  // 시작 위치 계산
@@ -86,6 +103,8 @@ if($completedCredits){
     $credits[] = $completedCredits[8];
     // $credits[] = $completedCredits[16];
 }
+
+print_r($credits);
 if(count($credits) >= 20){
     $query = "INSERT INTO `credits` (`user_id`, `cumulative`,
                 `coreCapacityAcquire`, `balanceIntegrationAcquire`, `foundationAcquire`, `generalAcquire`,
