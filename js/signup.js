@@ -247,6 +247,7 @@ form.addEventListener("submit", async function(event) {
                         body: formData
                     });
                     if (signUpResponse.ok) {
+                        console.log(signUpResponse);
                         window.location.href = '../index.html'; // 페이지 이동
                     } else {
                         console.error("Sign up request failed.");

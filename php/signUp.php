@@ -27,7 +27,9 @@ if ($file !== null) {
 }
 $db->query($sql);
 
-exec("python ocr.py ".$id);
+$command = "python ocr.py ".$id." 2>&1";
+shell_exec($command);
+
 
 mysqli_close($db);
 ?>

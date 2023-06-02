@@ -1,4 +1,4 @@
 <?php
-$id = "dlwlals1234";
+$id = "skatjfls1011";
 exec("python ocr.py ".$id);
 ?>
