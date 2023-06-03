@@ -32,21 +32,6 @@ submitBtn.addEventListener("click", function(event) {
 
 });
 
-  // // JS 파일 내에서 Python 파일 호출(임시 파일이라서 나중에 수정 필요@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@)
-  // const pythonFile = "../python/skatjfls_recommend.py"; // Python 파일 경로
-
-  // // Python 파일 호출 코드(AJAX(서버와 웹이 비동기식으로 데이터 교환) 사용)
-  // const xhr = new XMLHttpRequest();
-  // xhr.open("POST", pythonFile, true); // POST 요청 설정
-  // xhr.setRequestHeader("Content-Type", "application/json"); // 요청 헤더 설정
-  // xhr.onreadystatechange = function () {
-  //   if (xhr.readyState === 4 && xhr.status === 200) {
-  //     console.log(xhr.responseText); // Python 파일에서 반환된 응답 출력
-  //   }
-  // };
-  // xhr.send(jsonData); // JSON 데이터를 요청으로 보냄
-
-//@@@@@@@@@@@@@@@@@@@에러 발생. 근데 js내의 문제가 아니라 서버 보안때문에 발생하는거라 가상환경 만들어서 실행하면 실행 된다고 하는데 일단 해봐야해요@@@@@@@@@@@@@@@@@
 
 const fillCreditInput = document.getElementById("div-fill_credit");
 

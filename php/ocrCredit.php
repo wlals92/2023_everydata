@@ -104,7 +104,6 @@ if($completedCredits){
     // $credits[] = $completedCredits[16];
 }
 
-print_r($credits);
 if(count($credits) >= 20){
     $query = "INSERT INTO `credits` (`user_id`, `cumulative`,
                 `coreCapacityAcquire`, `balanceIntegrationAcquire`, `foundationAcquire`, `generalAcquire`,

@@ -32,7 +32,7 @@ foreach ($lines as $line) {
         $foundTarget = true;
     }
     
-    if ($foundTarget && strpos($line, '20') === 0) {
+    if ($foundTarget && (strpos($line, '20') === 0 || strpos($line, '0000/') === 0)) {
         $extractedSentences[] = $line;
     }
 }
@@ -105,6 +105,82 @@ foreach ($extractedSentences as $sentence) {
 
             $result_completed = $db->query($query);
 
+        }
+        else {
+            if ($items[3] == '전필'){
+                $category = '전공필수';
+            }
+            elseif ($items[3] == '전선'){
+                $category = '전공선택';
+            }
+            elseif ($items[3] == '개교'){
+                $category = '개척교양';
+            }
+            elseif ($items[3] == '일선'){
+                $category = '일반선택';
+            }
+            elseif ($items[3] == '기초'){
+                $category = '기초교양';
+            }
+            elseif ($items[3] == '역교'){
+                $category = '역량교양';
+            }
+            elseif ($items[3] == '통합'){
+                $category = '통합교양';
+            }
+            elseif ($items[3] == '균교'){
+                $category = '균형교양';
+            }
+            elseif ($items[3] == '핵심'){
+                $category = '핵심교양';
+            }
+            elseif ($items[3] == '공교'){
+                $category = '공통교양';
+            }
+            
+            if (strpos($name, "(점검)") !== false) {
+                $name = substr($name, strpos($name, "(점검)") + strlen("(점검)"));
+            }
+
+            if (strpos($name, "(자연)") !== false) {
+                $pattern = "/\(자연\)/";
+                $name = preg_replace($pattern, "", $name);
+            } elseif (strpos($name, "(1영역)") !== false) {
+                $pattern = "/\(1영역\)/";
+                $name = preg_replace($pattern, "", $name);
+            } elseif (strpos($name, "(2영역)") !== false) {
+                $pattern = "/\(2영역\)/";
+                $name = preg_replace($pattern, "", $name);
+            } elseif (strpos($name, "(3영역)") !== false) {
+                $pattern = "/\(3영역\)/";
+                $name = preg_replace($pattern, "", $name);
+            } elseif (strpos($name, "(4영역)") !== false) {
+                $pattern = "/\(4영역\)/";
+                $name = preg_replace($pattern, "", $name);
+            } elseif (strpos($name, "(5영역)") !== false) {
+                $pattern = "/\(5영역\)/";
+                $name = preg_replace($pattern, "", $name);
+            } elseif (strpos($name, "(6영역)") !== false) {
+                $pattern = "/\(6영역\)/";
+                $name = preg_replace($pattern, "", $name);
+            }
+
+            $insert_query = "INSERT INTO `pre_subjects` (`category`, `subject_code`, `subject_name`, `credit`)
+                VALUES ('$category', $subject_code, '$name', '$items[4]')";
+            $result_insert = $db->query($insert_query);
+
+            if($result_insert){
+                $subjects_completed_id_sql = "SELECT `pre_subjects_id` FROM `pre_subjects` WHERE `subject_code` = '$subject_code'";
+                $result_pre = $db->query($subjects_completed_id_sql);
+                if ($result_pre && $result_pre->num_rows > 0){
+                    $row = $result_pre->fetch_assoc();
+                    $pre_subjects_id = intval($row['pre_subjects_id']);
+                    $query = "INSERT INTO `subjects_completed` (`user_id`, `pre_subjects_id`, `semester_completed`, `score`)
+                        VALUES ('$user_id', $pre_subjects_id, '$items[0]', '$score')";
+
+                    $result_completed = $db->query($query);
+                }
+            }
         }
     }
 }

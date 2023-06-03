@@ -189,3 +189,9 @@ main{
     border: none;
     width: 70px;
 }
+.red-score {
+    color: red !important;
+}
+.red-score select{
+    color: red !important;
+}

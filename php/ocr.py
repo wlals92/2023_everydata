@@ -6,9 +6,9 @@ import sys
 
 db = mysql.connector.connect(
             host="localhost",
-            port=3307,
+            # port=3307,
             user="root",
-            password="0000",
+            password="123456",
             database="everydata"
         )
 

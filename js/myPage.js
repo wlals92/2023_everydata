@@ -49,17 +49,19 @@ const semesters  = [];
     const data = await response.json();
     const semesterSelect = document.getElementById("semester-select");
     data.forEach((row) => {
-      const semesterObj = {
-        semester: row,
-        scores: []
-      };
-      if (row.endsWith('1') || row.endsWith('2')) {
-        semesters.push(semesterObj);
+      if (row.startsWith('20')) {
+        const semesterObj = {
+          semester: row,
+          scores: []
+        };
+        if (row.endsWith('1') || row.endsWith('2')) {
+          semesters.push(semesterObj);
+        }
+        const option = document.createElement("option");
+        option.value = row;
+        option.textContent = row;
+        semesterSelect.appendChild(option);
       }
-      const option = document.createElement("option");
-      option.value = row;
-      option.textContent = row;
-      semesterSelect.appendChild(option);
     });
     
   } catch (error) {
@@ -94,11 +96,24 @@ const rows = [];
           </select>
         </td>
       `;
+      if (row.score == 'F' || row.score == 'U') {
+        tr.classList.add('red-score');
+      }
+      else {
+        tr.classList.remove('red-score');
+      }
+
       const select = tr.querySelector(".score-select");
       select.addEventListener("change", function() {
         let selectedScore = this.value; // 선택된 성적 값 가져오기
         if (selectedScore == '선택'){
           selectedScore = null;
+        }
+        if (selectedScore == 'F' || selectedScore == 'U'){
+          tr.classList.add('red-score');
+        }
+        else {
+          tr.classList.remove('red-score');
         }
         const subjectId = row.subjects_completed_id;
         sendScoreUpdateToServer(subjectId, selectedScore);
