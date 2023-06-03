@@ -57,40 +57,6 @@ async function initializePage() {
 
 initializePage();
 
-// // 요일과 교시에 따라 필터링된 강의 목록을 표시하는 함수
-// function filterSubjectList() {
-//   // 선택된 요일과 교시를 가져옴
-//   const selectedDays = Array.from(document.querySelectorAll('.table-select_day:checked')).map(day => day.value);
-//   const selectedHours = Array.from(document.querySelectorAll('.table-select_hour:checked')).map(hour => hour.value);
-
-//   // 필터링된 강의 목록을 담을 배열
-//   let filteredSubjects = [];
-
-//   // 선택된 요일과 교시가 없는 경우, 전체 강의 목록을 표시
-//   if (selectedDays.length === 0 && selectedHours.length === 0) {
-//     filteredSubjects = tempSubjects;
-//   } else {
-//     // 강의 목록을 순회하면서 필터링
-//     tempSubjects.forEach(subject => {
-//       // 강의 시간 정보를 가져옴
-//       const subjectTimes = subject.time.split(', ');
-
-//       // 선택된 요일과 교시를 합쳐서 '월3'과 같은 형식의 문자열을 만듦
-//       const selectedTime = selectedDays.map(day => selectedHours.map(hour => day + hour)).flat();
-
-//       // 선택된 시간과 강의의 시간을 비교하여 필터링
-//       const hasMatchingTime = selectedTime.some(time => subjectTimes.includes(time));
-
-//       if (hasMatchingTime) {
-//         filteredSubjects.push(subject);
-//       }
-//     });
-//   }
-
-//   // 필터링된 강의 목록 표시
-//   displaySubjectList(filteredSubjects);
-// }
-
 
 // 이지민 작성 ---------------------------------------------------------------------------
 // 시간 형식 변환 : ex. 화2, 화3, 수1, 수2 -> 화2, 3, 수1, 2
