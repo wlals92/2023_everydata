@@ -237,7 +237,7 @@ form.addEventListener("submit", async function(event) {
                 body: new URLSearchParams(formData)
             });
 
-            if (response.ok) {
+            if (response.ok) {``
                 const data = await response.json();
                 if (data.duplicate === false) {
                     // 중복이 아닌 경우
