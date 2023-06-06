@@ -22,7 +22,7 @@ $minor = isset($_POST["minor"]) ? $_POST["minor"] : null;
 $file = isset($_FILES["file"]) ? $_FILES["file"] : null;
 
 if ($file !== null) {
-    $pdf_path = "./pdf/" . $id . ".pdf";
+    $pdf_path = "c:/Bitnami/wampstack-8.0.3-2/apache2/htdocs/pdf/" . $id . ".pdf";
     $save_path = "../pdf/" . $id . ".pdf";
     move_uploaded_file($file["tmp_name"], $save_path);
     $sql = "UPDATE user SET user_pw='$password', name='$name', academic_number='$student_id', status='$academic_status', curriculum_year='$curriculum_year', grade='$grade',  
@@ -32,6 +32,11 @@ if ($file !== null) {
         major='$major', double_major='$double_major', minor='$minor', subjects_completed_pdf=null where user_id = '$id'";
 }
 $db->query($sql);
+
+$sql_completed = "DELETE FROM subjects_completed WHERE user_id = '$id'";
+$db->query($sql_completed);
+$sql_credits = "DELETE FROM credits WHERE user_id = '$id'";
+$db->query($sql_credits);
 
 $_SESSION['name']=$name;
 $_SESSION['curriculum_year']=$curriculum_year;
