@@ -317,23 +317,26 @@ const addSubjectFromList = async (subjectId) => {
   if (subject) {
     const dayTimePairs = subject.lecture_time.split(",");
     let hasConflict = false;
+    let hasAdded = false;
     
     for (const dayTimePair of dayTimePairs) {
       const [day, time] = dayTimePair.split(/([^\uAC00-\uD7A3]+)/);
 
       const isAdded = await isAlreadyAdded(subject);
       if (isAdded) {
-        alert('이미 추가된 강의입니다.');
+        hasAdded = true;
+        window.alert('이미 추가된 강의입니다.');
+        break;
       } else {
         const isConflict = await isTimeConflict(day, time);
         if (isConflict) {
           hasConflict = true;
-          alert('해당 시간에 이미 다른 강의가 있습니다.');
+          window.alert('해당 시간에 이미 다른 강의가 있습니다.');
           break;
         }
       }
     }
-    if (!hasConflict) {
+    if (!hasConflict && !hasAdded) {
       addSubjectToServer(subject);
     }
   } else {

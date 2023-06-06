@@ -223,8 +223,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 curriculum_yearInput.value = userInfo[0].curriculum_year;
                 gradeInput.value = userInfo[0].grade;
                 majorInput.value = userInfo[0].major;
-                double_majorInput.value = userInfo[0].double_major;
-                minorInput.value = userInfo[0].minor;
+                if (userInfo[0].double_major == 'none' || userInfo[0].double_major == 'null' || userInfo[0].double_major == null){
+                    double_majorInput.value = 'null';
+                }else {
+                    double_majorInput.value = userInfo[0].double_major;
+                }
+                if (userInfo[0].minor == 'none' || userInfo[0].minor == 'null' || userInfo[0].minor == null){
+                    minorInput.value = 'null';
+                }else {
+                    minorInput.value = userInfo[0].minor;
+                }
             } else {
                 console.error('사용자 정보를 가져오는 도중 오류가 발생했습니다.');
             }
