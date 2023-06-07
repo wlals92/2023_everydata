@@ -70,7 +70,7 @@ document.getElementById("input-recommend_submit").addEventListener("click", func
 
 document.getElementById('input-recommend_submit').onclick = function() {
   // 필수 입력 항목이 모두 입력되었는지 확인
-  if (document.querySelector('input[name="day"]:checked') && document.getElementById('div-fill_credit').value && document.querySelectorAll('input[type="checkbox"]:checked').length > 0) {
+  if (document.querySelector('input[name="day"]:checked') && document.getElementById('div-fill_credit').value && (document.querySelectorAll('input[name="balanceClass"]:checked').length > 0 || document.querySelectorAll('input[name="CoreClass"]:checked').length > 0 || document.querySelectorAll('input[name="RootClass"]:checked').length > 0)) {
     // 필수 입력 항목이 모두 입력된 경우, 강의 추천 결과 페이지로 이동
     location.href='recommendResult.html';
   } else {
@@ -78,11 +78,13 @@ document.getElementById('input-recommend_submit').onclick = function() {
     var alertMessage = "";
     if (!document.querySelector('input[name="day"]:checked')) alertMessage += "1번 ";
     if (!document.getElementById('div-fill_credit').value) alertMessage += "2번 ";
-    if (document.querySelectorAll('input[name="balanceClass"]:checked').length === 0) alertMessage += "3번 ";
+    if (document.querySelectorAll('input[name="balanceClass"]:checked').length === 0 && document.querySelectorAll('input[name="CoreClass"]:checked').length === 0 && document.querySelectorAll('input[name="RootClass"]:checked').length === 0) alertMessage += "3번 ";
     alert(alertMessage.trim() + " 문항을 입력해주세요.");
     return false; // 폼 제출 방지
   }
 };
+
+
 
 
 // 여기서부터 이지민 작성 ----------------------------------------------------------------------------
